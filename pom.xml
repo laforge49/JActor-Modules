@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.agilewiki.jactor2</groupId>
+    <artifactId>jactor-modules</artifactId>
+    <version>0.0.1</version>
+    <packaging>pom</packaging>
+    <name>JActor-Modules</name>
+    <description>POJO Actors</description>
+    <url>https://github.com/laforge49/JActor2</url>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git@github.com:laforge49/JActor-Modules.git</connection>
+        <developerConnection>scm:git:git@github.com:laforge49/JActor-Modules.git</developerConnection>
+        <url>git@github.com:laforge49/JActor-Modules.git</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <id>laforge49</id>
+            <name>Bill La Forge</name>
+            <email>laforge49@gmail.com</email>
+        </developer>
+        <developer>
+            <id>skunkiferous</id>
+            <name>Sebastien Diot</name>
+        </developer>
+        <developer>
+            <id>dallaybatta</id>
+            <name>Vicky Kak</name>
+            <email>vicky.kak@gmail.com</email>
+        </developer>
+    </developers>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <modules>
+        <module>jactor2-modules</module>
+    </modules>
+</project>

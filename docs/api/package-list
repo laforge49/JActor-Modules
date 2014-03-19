@@ -1,5 +1,4 @@
 org.agilewiki.jactor2.modules
-org.agilewiki.jactor2.modules.facilities
 org.agilewiki.jactor2.modules.immutable
 org.agilewiki.jactor2.modules.impl
 org.agilewiki.jactor2.modules.pubSub

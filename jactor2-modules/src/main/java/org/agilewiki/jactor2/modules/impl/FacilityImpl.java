@@ -168,7 +168,7 @@ public class FacilityImpl extends NonBlockingReactorImpl {
             plantImpl.getInternalFacility().putPropertyAReq(MPlantImpl.FACILITY_PROPERTY_PREFIX + name,
                     null).signal();
         }
-        super.close();
+        super.fail(null);
     }
 
     public void stop() throws Exception {
@@ -191,7 +191,7 @@ public class FacilityImpl extends NonBlockingReactorImpl {
             plantImpl.getInternalFacility().putPropertyAReq(MPlantImpl.FACILITY_PROPERTY_PREFIX + name,
                     null).signal();
         }
-        super.close();
+        super.fail(null);
     }
 
     public void fail(final String reason) throws Exception {
@@ -214,7 +214,7 @@ public class FacilityImpl extends NonBlockingReactorImpl {
             plantImpl.getInternalFacility().putPropertyAReq(MPlantImpl.FACILITY_PROPERTY_PREFIX + name,
                     null).signal();
         }
-        super.close();
+        super.fail(reason);
     }
 
     /**

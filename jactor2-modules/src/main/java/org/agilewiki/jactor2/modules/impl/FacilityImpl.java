@@ -194,7 +194,7 @@ public class FacilityImpl extends NonBlockingReactorImpl {
         super.close();
     }
 
-    public void fail(final Object reason) throws Exception {
+    public void fail(final String reason) throws Exception {
         if (startedClosing()) {
             plantImpl.getInternalFacility().putPropertyAReq(MPlantImpl.failedKey(name), reason,
                     null).signal();

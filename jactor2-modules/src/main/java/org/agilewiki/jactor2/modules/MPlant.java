@@ -51,7 +51,7 @@ public class MPlant {
         return MPlantImpl.getSingleton().getFailed(name);
     }
 
-    public static void failFacility(final String _facilityName, final Object reason) throws Exception {
+    public static void failFacility(final String _facilityName, final String reason) throws Exception {
         MPlantImpl.getSingleton().failFacility(_facilityName, reason);
     }
 

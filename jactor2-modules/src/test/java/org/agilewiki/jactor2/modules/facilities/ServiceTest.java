@@ -44,6 +44,7 @@ public class ServiceTest extends TestCase {
                             });
                 }
             }.signal();
+            Thread.sleep(100);
             //serverReactor.close();     //this works
             serverFacility.close();  //this also works
         } finally {

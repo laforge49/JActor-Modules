@@ -3,20 +3,20 @@ package org.agilewiki.jactor2.modules.impl;
 import org.agilewiki.jactor2.core.plant.impl.PlantImpl;
 import org.agilewiki.jactor2.core.plant.PlantConfiguration;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
+import org.agilewiki.jactor2.core.reactors.Reactor;
 import org.agilewiki.jactor2.core.reactors.ReactorClosedException;
 import org.agilewiki.jactor2.core.requests.AsyncRequest;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.ExceptionHandler;
 import org.agilewiki.jactor2.modules.Facility;
 import org.agilewiki.jactor2.modules.FacilityAlreadyPresentException;
+import org.agilewiki.jactor2.modules.MPlant;
 import org.agilewiki.jactor2.modules.immutable.ImmutableProperties;
 import org.agilewiki.jactor2.modules.pubSub.RequestBus;
 import org.agilewiki.jactor2.modules.pubSub.SubscribeAReq;
 import org.agilewiki.jactor2.modules.transactions.properties.*;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.SortedMap;
+import java.util.*;
 
 public class MPlantImpl extends PlantImpl {
 
@@ -75,6 +75,8 @@ public class MPlantImpl extends PlantImpl {
         return (MPlantImpl) PlantImpl.getSingleton();
     }
 
+    private final Map<String, Facility> facilityRegistry = new TreeMap<>();
+
     private final PropertiesProcessor propertiesProcessor;
 
     public MPlantImpl() throws Exception {
@@ -94,6 +96,47 @@ public class MPlantImpl extends PlantImpl {
         long reactorPollMillis = _plantConfiguration.getRecovery().getReactorPollMillis();
         _plantConfiguration.getPlantScheduler().scheduleAtFixedRate(plantPoll(),
                 reactorPollMillis);
+    }
+
+    public AsyncRequest<Void> registerFacilityAReq(final Facility _facility) {
+        final Facility internalFacility = getInternalFacility();
+        return new AsyncRequest<Void>(internalFacility) {
+            final String facilityName = _facility.getName();
+            AsyncRequest<Void> dis = this;
+
+            AsyncResponseProcessor<Void> transactionResponseProcessor = new AsyncResponseProcessor<Void>() {
+                @Override
+                public void processAsyncResponse(Void _response) {
+                    facilityRegistry.put(facilityName, _facility);
+                    ImmutableProperties<Object> facilityProperties =
+                            propertiesProcessor.getImmutableState().subMap(FACILITY_PREFIX);
+                    Iterator<String> kit = facilityProperties.keySet().iterator();
+                    String postfix = "~"+FACILITY_DEPENDENCY_INFIX+facilityName;
+                    while (kit.hasNext()) {
+                        String pk = kit.next();
+                        if (!pk.endsWith(postfix))
+                            continue;
+                        String dependentName = pk.substring(FACILITY_PREFIX.length(), pk.length()-postfix.length());
+                        autoStartAReq(dependentName).signal();
+                    }
+                    dis.processAsyncResponse(null);
+                }
+            };
+
+            @Override
+            public void processAsyncRequest() {
+                if (facilityRegistry.containsKey(facilityName))
+                    throw new IllegalStateException("Facility already registered: " + facilityName);
+                final PropertiesProcessor propertiesProcessor = internalFacility.getPropertiesProcessor();
+                send(new PropertiesTransactionAReq(internalFacility, propertiesProcessor) {
+                    @Override
+                    protected void update(final PropertiesChangeManager _changeManager) throws Exception {
+                        _changeManager.put(failedKey(facilityName), null);
+                        _changeManager.put(stoppedKey(facilityName), null);
+                    }
+                }, transactionResponseProcessor);
+            }
+        };
     }
 
     private void validate() throws Exception {
@@ -307,7 +350,7 @@ public class MPlantImpl extends PlantImpl {
         facility.stop();
     }
 
-    public void failFacility(final String _facilityName, final Object reason) throws Exception {
+    public void failFacility(final String _facilityName, final String reason) throws Exception {
         FacilityImpl facility = getFacilityImpl(_facilityName);
         if (facility == null) {
             getInternalFacility().putPropertyAReq(failedKey(_facilityName), reason).signal();

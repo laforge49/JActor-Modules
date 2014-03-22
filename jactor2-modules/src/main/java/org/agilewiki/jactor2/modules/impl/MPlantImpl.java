@@ -97,6 +97,22 @@ public class MPlantImpl extends PlantImpl {
         _plantConfiguration.getPlantScheduler().scheduleAtFixedRate(plantPoll(),
                 reactorPollMillis);
     }
+
+    public AsyncRequest<Void> updateFacilityStatusAReq(final Facility _facility,
+                                                       final String _facilityName,
+                                                       final boolean _stop,
+                                                       final String _reasonForFailure) {
+        return new PropertiesTransactionAReq(getInternalFacility(),
+                MPlant.getInternalFacility().getPropertiesProcessor()) {
+            @Override
+            protected void update(final PropertiesChangeManager _changeManager) throws Exception {
+                _changeManager.put(MPlantImpl.FACILITY_PROPERTY_PREFIX + _facilityName, _facility);
+                _changeManager.put(MPlantImpl.stoppedKey(_facilityName), _stop);
+                _changeManager.put(MPlantImpl.failedKey(_facilityName), _reasonForFailure);
+            }
+        };
+    }
+
 /*
     public AsyncRequest<Void> registerFacilityAReq(final Facility _facility) {
         final Facility internalFacility = getInternalFacility();

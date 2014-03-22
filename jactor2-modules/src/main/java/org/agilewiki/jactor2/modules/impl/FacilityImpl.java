@@ -158,27 +158,14 @@ public class FacilityImpl extends NonBlockingReactorImpl {
         if ((plantImpl != null) &&
                 plantImpl.getInternalFacility().asFacilityImpl() != this &&
                 !plantImpl.getInternalFacility().asFacilityImpl().startedClosing()) {
-            updateStatusAReq(null, _stop, _reasonForFailure).signal();
+            plantImpl.updateFacilityStatusAReq(null, name, _stop, _reasonForFailure).signal();
         }
         super.fail(_reasonForFailure);
     }
 
     private AsyncRequest<Void> registerFacilityAReq() {
-        return updateStatusAReq(FacilityImpl.this.asFacility(), false, null);
-    }
-
-    private AsyncRequest<Void> updateStatusAReq(final Facility _facility,
-                                                final boolean _stop,
-                                                final String _reasonForFailure) {
-        return new PropertiesTransactionAReq(plantImpl.getInternalFacility(),
-                MPlant.getInternalFacility().getPropertiesProcessor()) {
-            @Override
-            protected void update(final PropertiesChangeManager _changeManager) throws Exception {
-                _changeManager.put(MPlantImpl.FACILITY_PROPERTY_PREFIX + name, _facility);
-                _changeManager.put(MPlantImpl.stoppedKey(name), _stop);
-                _changeManager.put(MPlantImpl.failedKey(name), _reasonForFailure);
-            }
-        };
+        final MPlantImpl plantImpl = MPlantImpl.getSingleton();
+        return plantImpl.updateFacilityStatusAReq(FacilityImpl.this.asFacility(), name, false, null);
     }
 
     /**

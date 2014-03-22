@@ -1,11 +1,10 @@
 package org.agilewiki.jactor2.modules.impl;
 
 import org.agilewiki.jactor2.core.closeable.Closeable;
-import org.agilewiki.jactor2.core.reactors.impl.NonBlockingReactorImpl;
 import org.agilewiki.jactor2.core.plant.impl.PlantImpl;
-import org.agilewiki.jactor2.core.reactors.impl.ReactorImpl;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
-import org.agilewiki.jactor2.core.reactors.ReactorClosedException;
+import org.agilewiki.jactor2.core.reactors.impl.NonBlockingReactorImpl;
+import org.agilewiki.jactor2.core.reactors.impl.ReactorImpl;
 import org.agilewiki.jactor2.core.requests.AsyncRequest;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.ExceptionHandler;
@@ -75,7 +74,7 @@ public class FacilityImpl extends NonBlockingReactorImpl {
                                     @Override
                                     public void processAsyncResponse(final String _failure) throws Exception {
                                         if (_failure == null) {
-                                            System.out.println("registered "+name);
+                                            System.out.println("registered " + name);
                                             dis.processAsyncResponse(null);
                                             return;
                                         }
@@ -89,17 +88,6 @@ public class FacilityImpl extends NonBlockingReactorImpl {
             @Override
             public void processAsyncRequest() throws Exception {
                 send(registerFacilityAReq(), registerResponseProcessor);
-            }
-        };
-    }
-
-    private AsyncRequest<Void> registerFacilityAReq() {
-        return new PropertiesTransactionAReq(asReactor(), MPlant.getInternalFacility().getPropertiesProcessor()) {
-            @Override
-            protected void update(final PropertiesChangeManager _changeManager) throws Exception {
-                _changeManager.put(MPlantImpl.FACILITY_PROPERTY_PREFIX + name, FacilityImpl.this.asFacility());
-                _changeManager.put(MPlantImpl.failedKey(name), null);
-                _changeManager.put(MPlantImpl.stoppedKey(name), null);
             }
         };
     }
@@ -160,30 +148,37 @@ public class FacilityImpl extends NonBlockingReactorImpl {
         if (_reasonForFailure != null && _stop)
             throw new IllegalArgumentException("can not both stop and fail");
         if (startedClosing()) {
-            if (_reasonForFailure != null)
-                plantImpl.getInternalFacility().putPropertyAReq(MPlantImpl.failedKey(name), null, _reasonForFailure).
-                        signal();
-            else if (_stop)
-                plantImpl.getInternalFacility().putPropertyAReq(MPlantImpl.stoppedKey(name), null, true).
-                        signal();
+            plantImpl.getInternalFacility().putPropertyAReq(MPlantImpl.failedKey(name), null, _reasonForFailure).
+                    signal();
+            plantImpl.getInternalFacility().putPropertyAReq(MPlantImpl.stoppedKey(name), null, true).
+                    signal();
             return;
         }
         final MPlantImpl plantImpl = MPlantImpl.getSingleton();
         if ((plantImpl != null) &&
                 plantImpl.getInternalFacility().asFacilityImpl() != this &&
                 !plantImpl.getInternalFacility().asFacilityImpl().startedClosing()) {
-            new PropertiesTransactionAReq(plantImpl.getInternalFacility(),
-                    plantImpl.getInternalFacility().getPropertiesProcessor()) {
-                protected void update(final PropertiesChangeManager _changeManager) {
-                    _changeManager.put(MPlantImpl.FACILITY_PROPERTY_PREFIX + name, null);
-                    _changeManager.put(MPlantImpl.failedKey(name), _reasonForFailure);
-                    _changeManager.put(MPlantImpl.stoppedKey(name), _stop);
-                }
-            }.signal();
-            plantImpl.getInternalFacility().putPropertyAReq(MPlantImpl.FACILITY_PROPERTY_PREFIX + name,
-                    null).signal();
+            updateStatusAReq(null, _stop, _reasonForFailure).signal();
         }
         super.fail(_reasonForFailure);
+    }
+
+    private AsyncRequest<Void> registerFacilityAReq() {
+        return updateStatusAReq(FacilityImpl.this.asFacility(), false, null);
+    }
+
+    private AsyncRequest<Void> updateStatusAReq(final Facility _facility,
+                                                final boolean _stop,
+                                                final String _reasonForFailure) {
+        return new PropertiesTransactionAReq(plantImpl.getInternalFacility(),
+                MPlant.getInternalFacility().getPropertiesProcessor()) {
+            @Override
+            protected void update(final PropertiesChangeManager _changeManager) throws Exception {
+                _changeManager.put(MPlantImpl.FACILITY_PROPERTY_PREFIX + name, _facility);
+                _changeManager.put(MPlantImpl.stoppedKey(name), _stop);
+                _changeManager.put(MPlantImpl.failedKey(name), _reasonForFailure);
+            }
+        };
     }
 
     /**

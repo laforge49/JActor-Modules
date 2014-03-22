@@ -97,7 +97,7 @@ public class MPlantImpl extends PlantImpl {
         _plantConfiguration.getPlantScheduler().scheduleAtFixedRate(plantPoll(),
                 reactorPollMillis);
     }
-
+/*
     public AsyncRequest<Void> registerFacilityAReq(final Facility _facility) {
         final Facility internalFacility = getInternalFacility();
         return new AsyncRequest<Void>(internalFacility) {
@@ -138,7 +138,7 @@ public class MPlantImpl extends PlantImpl {
             }
         };
     }
-
+*/
     private void validate() throws Exception {
         RequestBus<ImmutablePropertyChanges> validationBus = propertiesProcessor.validationBus;
         new SubscribeAReq<ImmutablePropertyChanges>(

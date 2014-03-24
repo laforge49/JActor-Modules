@@ -24,8 +24,6 @@ public class MPlantImpl extends PlantImpl {
 
     public static final String PLANT_NAME = "Plant";
 
-    public static final String FACILITY_PROPERTY_PREFIX = CORE_PREFIX+"facility_";
-
     public static final String FACILITY_PREFIX = "facility_";
 
     public static final String FACILITY_DEPENDENCY_INFIX = CORE_PREFIX+"dependency_";
@@ -99,35 +97,23 @@ public class MPlantImpl extends PlantImpl {
     }
 
     public AsyncRequest<Void> updateFacilityStatusAReq(final Facility _facility,
-                                                       final String _facilityName,
-                                                       final boolean _stop,
-                                                       final String _reasonForFailure) {
-        return new PropertiesTransactionAReq(getInternalFacility(),
-                MPlant.getInternalFacility().getPropertiesProcessor()) {
-            @Override
-            protected void update(final PropertiesChangeManager _changeManager) throws Exception {
-                _changeManager.put(MPlantImpl.FACILITY_PROPERTY_PREFIX + _facilityName, _facility);
-                _changeManager.put(MPlantImpl.stoppedKey(_facilityName), _stop);
-                _changeManager.put(MPlantImpl.failedKey(_facilityName), _reasonForFailure);
-            }
-        };
-    }
-
-/*
-    public AsyncRequest<Void> registerFacilityAReq(final Facility _facility) {
+                                                        final String _facilityName,
+                                                        final boolean _stop,
+                                                        final String _reasonForFailure) {
+        System.out.println(">>>>>>>>>>>>>>>>> "+_facilityName);
         final Facility internalFacility = getInternalFacility();
         return new AsyncRequest<Void>(internalFacility) {
-            final String facilityName = _facility.getName();
             AsyncRequest<Void> dis = this;
 
             AsyncResponseProcessor<Void> transactionResponseProcessor = new AsyncResponseProcessor<Void>() {
                 @Override
                 public void processAsyncResponse(Void _response) {
-                    facilityRegistry.put(facilityName, _facility);
+                    if (_facility != null)
+                        facilityRegistry.put(_facilityName, _facility);
                     ImmutableProperties<Object> facilityProperties =
                             propertiesProcessor.getImmutableState().subMap(FACILITY_PREFIX);
                     Iterator<String> kit = facilityProperties.keySet().iterator();
-                    String postfix = "~"+FACILITY_DEPENDENCY_INFIX+facilityName;
+                    String postfix = "~"+FACILITY_DEPENDENCY_INFIX + _facilityName;
                     while (kit.hasNext()) {
                         String pk = kit.next();
                         if (!pk.endsWith(postfix))
@@ -141,20 +127,22 @@ public class MPlantImpl extends PlantImpl {
 
             @Override
             public void processAsyncRequest() {
-                if (facilityRegistry.containsKey(facilityName))
-                    throw new IllegalStateException("Facility already registered: " + facilityName);
+                if (_facility == null) {
+                    facilityRegistry.remove(_facilityName);
+                } else if (facilityRegistry.containsKey(_facilityName))
+                    throw new IllegalStateException("Facility already registered: " + _facilityName);
                 final PropertiesProcessor propertiesProcessor = internalFacility.getPropertiesProcessor();
                 send(new PropertiesTransactionAReq(internalFacility, propertiesProcessor) {
                     @Override
                     protected void update(final PropertiesChangeManager _changeManager) throws Exception {
-                        _changeManager.put(failedKey(facilityName), null);
-                        _changeManager.put(stoppedKey(facilityName), null);
+                        _changeManager.put(stoppedKey(_facilityName), _stop);
+                        _changeManager.put(failedKey(_facilityName), _reasonForFailure);
                     }
                 }, transactionResponseProcessor);
             }
         };
     }
-*/
+
     private void validate() throws Exception {
         RequestBus<ImmutablePropertyChanges> validationBus = propertiesProcessor.validationBus;
         new SubscribeAReq<ImmutablePropertyChanges>(
@@ -168,17 +156,8 @@ public class MPlantImpl extends PlantImpl {
                 while (it.hasNext()) {
                     pc = it.next();
                     String key = pc.name;
-                    Object oldValue = pc.oldValue;
                     Object newValue = pc.newValue;
-                    if (key.startsWith(FACILITY_PROPERTY_PREFIX)) {
-                        if (newValue != null && !(newValue instanceof Facility))
-                            throw new IllegalArgumentException(key
-                                    + " not set to a Facility " + newValue);
-                        if (oldValue != null && newValue != null) {
-                            FacilityImpl facilityImpl = ((Facility) oldValue).asFacilityImpl();
-                            throw new FacilityAlreadyPresentException(facilityImpl.getName());
-                        }
-                    } else if (key.startsWith(FACILITY_PREFIX)) {
+                    if (key.startsWith(FACILITY_PREFIX)) {
                         String name1 = key.substring(FACILITY_PREFIX.length());
                         int i = name1.indexOf('~');
                         if (i == -1)
@@ -250,23 +229,7 @@ public class MPlantImpl extends PlantImpl {
                     PropertyChange pc = it.next();
                     String key = pc.name;
                     Object newValue = pc.newValue;
-                    if (key.startsWith(FACILITY_PROPERTY_PREFIX) && newValue != null) {
-                        if (pc.oldValue != null) {
-                            throw new IllegalStateException("facility already exists");
-                        }
-                        String facilityName = ((Facility) newValue).asFacilityImpl().getName();
-                        ImmutableProperties<Object> immutableProperties = _content.immutableProperties;
-                        ImmutableProperties<Object> facilityProperties = immutableProperties.subMap(FACILITY_PREFIX);
-                        Iterator<String> kit = facilityProperties.keySet().iterator();
-                        String postfix = "~"+FACILITY_DEPENDENCY_INFIX+facilityName;
-                        while (kit.hasNext()) {
-                            String pk = kit.next();
-                            if (!pk.endsWith(postfix))
-                                continue;
-                            String dependentName = pk.substring(FACILITY_PREFIX.length(), pk.length()-postfix.length());
-                            autoStartAReq(dependentName).signal();
-                        }
-                    } else if (key.startsWith(FACILITY_PREFIX)) {
+                    if (key.startsWith(FACILITY_PREFIX)) {
                         String name1 = key.substring(FACILITY_PREFIX.length());
                         int i = name1.indexOf('~');
                         if (i == -1)
@@ -442,7 +405,7 @@ public class MPlantImpl extends PlantImpl {
     }
 
     public FacilityImpl getFacilityImpl(String name) {
-        Facility facility = ((Facility) getProperty(FACILITY_PROPERTY_PREFIX + name));
+        Facility facility = facilityRegistry.get(name);
         if (facility == null)
             return null;
         return facility.asFacilityImpl();

@@ -49,6 +49,7 @@ public class ServiceTest extends TestCase {
             serverFacility.close();  //this also works
         } finally {
             Plant.close();
+            Thread.sleep(500);
         }
     }
 }

@@ -11,17 +11,18 @@ import java.util.Map;
 /**
  * Transaction-based updates to an immutable properties map.
  */
-public class PropertiesProcessor extends TransactionProcessor<PropertiesChangeManager, ImmutableProperties<Object>, ImmutablePropertyChanges> {
+public class PropertiesProcessor
+        extends TransactionProcessor<PropertiesChangeManager, ImmutableProperties, ImmutablePropertyChanges> {
 
-    static <V> ImmutableProperties<V> empty() {
+    static ImmutableProperties empty() {
         return HashTreePProperties.empty();
     }
 
-    static <V> ImmutableProperties<V> singleton(String key, V value) {
+    static ImmutableProperties singleton(String key, String value) {
         return HashTreePProperties.singleton(key, value);
     }
 
-    static <V> ImmutableProperties<V> from(Map<String, V> m) {
+    static ImmutableProperties from(Map<String, String> m) {
         return HashTreePProperties.from(m);
     }
 
@@ -32,7 +33,7 @@ public class PropertiesProcessor extends TransactionProcessor<PropertiesChangeMa
     }
 
     public PropertiesProcessor(final NonBlockingReactor _parentReactor,
-                               Map<String, Object> _initialState) {
+                               Map<String, String> _initialState) {
         super(_parentReactor, from(_initialState));
     }
 
@@ -59,7 +60,22 @@ public class PropertiesProcessor extends TransactionProcessor<PropertiesChangeMa
      * @param _newValue The new value.
      * @return The request.
      */
-    public AsyncRequest<Void> putAReq(final String _key, final Object _newValue) {
+    public AsyncRequest<Void> putAReq(final String _key, final String _newValue) {
+        return new PropertiesTransactionAReq(parentReactor, this) {
+            protected void update(final PropertiesChangeManager _changeManager) {
+                _changeManager.put(_key, _newValue);
+            }
+        };
+    }
+
+    /**
+     * A transactional put request.
+     *
+     * @param _key      The property name.
+     * @param _newValue The new value.
+     * @return The request.
+     */
+    public AsyncRequest<Void> putAReq(final String _key, final Boolean _newValue) {
         return new PropertiesTransactionAReq(parentReactor, this) {
             protected void update(final PropertiesChangeManager _changeManager) {
                 _changeManager.put(_key, _newValue);
@@ -76,10 +92,31 @@ public class PropertiesProcessor extends TransactionProcessor<PropertiesChangeMa
      * @param _newValue      The new value.
      * @return The request.
      */
-    public AsyncRequest<Void> compareAndSetAReq(final String _key, final Object _expectedValue, final Object _newValue) {
+    public AsyncRequest<Void> compareAndSetAReq(final String _key, final Boolean _expectedValue, final Boolean _newValue) {
         return new PropertiesTransactionAReq(parentReactor, this) {
             protected void update(final PropertiesChangeManager _changeManager) {
-                Object oldValue = _changeManager.getImmutableProperties().get("stdout");
+                boolean oldValue = _changeManager.getImmutableProperties().containsValue(_key);
+                boolean expectedValue = _expectedValue == null ? false : _expectedValue;
+                if ((oldValue == expectedValue)) {
+                    _changeManager.put(_key, _newValue);
+                }
+            }
+        };
+    }
+
+    /**
+     * A transactional compare and set request.
+     * A put is performed only if the old value was equal to the expected value.
+     *
+     * @param _key           The property name.
+     * @param _expectedValue The new value.
+     * @param _newValue      The new value.
+     * @return The request.
+     */
+    public AsyncRequest<Void> compareAndSetAReq(final String _key, final String _expectedValue, final String _newValue) {
+        return new PropertiesTransactionAReq(parentReactor, this) {
+            protected void update(final PropertiesChangeManager _changeManager) {
+                String oldValue = _changeManager.getImmutableProperties().get(_key);
                 if ((oldValue != null && oldValue.equals(_expectedValue) ||
                         (oldValue == null && _expectedValue == null))) {
                     _changeManager.put(_key, _newValue);

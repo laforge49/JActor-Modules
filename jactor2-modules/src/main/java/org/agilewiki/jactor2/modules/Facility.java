@@ -1,6 +1,6 @@
 package org.agilewiki.jactor2.modules;
 
-import org.agilewiki.jactor2.core.reactors.impl.NonBlockingReactorImpl;
+import org.agilewiki.jactor2.core.impl.mtReactors.NonBlockingReactorMtImpl;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 import org.agilewiki.jactor2.core.reactors.Reactor;
 import org.agilewiki.jactor2.core.requests.AsyncRequest;
@@ -47,7 +47,7 @@ public class Facility extends NonBlockingReactor {
     }
 
     @Override
-    protected FacilityImpl createReactorImpl(final NonBlockingReactorImpl _parentReactorImpl,
+    protected FacilityImpl createReactorImpl(final NonBlockingReactor _parentReactorImpl,
                                              final int _initialOutboxSize, final int _initialLocalQueueSize) {
         return new FacilityImpl(_initialOutboxSize, _initialLocalQueueSize);
     }
@@ -69,13 +69,24 @@ public class Facility extends NonBlockingReactor {
     }
 
     public AsyncRequest<Void> putPropertyAReq(final String _propertyName,
-                                              final Object _expectedValue,
-                                              final Object _propertyValue) {
+                                              final Boolean _expectedValue,
+                                              final Boolean _propertyValue) {
         return asFacilityImpl().putPropertyAReq(_propertyName, _expectedValue, _propertyValue);
     }
 
     public AsyncRequest<Void> putPropertyAReq(final String _propertyName,
-                                              final Object _propertyValue) {
+                                              final String _expectedValue,
+                                              final String _propertyValue) {
+        return asFacilityImpl().putPropertyAReq(_propertyName, _expectedValue, _propertyValue);
+    }
+
+    public AsyncRequest<Void> putPropertyAReq(final String _propertyName,
+                                              final String _propertyValue) {
+        return asFacilityImpl().putPropertyAReq(_propertyName, _propertyValue);
+    }
+
+    public AsyncRequest<Void> putPropertyAReq(final String _propertyName,
+                                              final Boolean _propertyValue) {
         return asFacilityImpl().putPropertyAReq(_propertyName, _propertyValue);
     }
 }

@@ -1,7 +1,7 @@
 package org.agilewiki.jactor2.modules.facilities;
 
 import junit.framework.TestCase;
-import org.agilewiki.jactor2.core.plant.Plant;
+import org.agilewiki.jactor2.core.impl.Plant;
 import org.agilewiki.jactor2.modules.MPlant;
 import org.agilewiki.jactor2.modules.immutable.ImmutableProperties;
 import org.agilewiki.jactor2.modules.transactions.properties.PropertiesProcessor;
@@ -16,7 +16,7 @@ public class AutoStartTest extends TestCase {
             MPlant.autoStartAReq("A", true).call();
             PropertiesProcessor propertiesProcessor = MPlant.getInternalFacility().getPropertiesProcessor();
             propertiesProcessor.getReactor().nullSReq().call(); //synchronize for the properties update
-            ImmutableProperties<Object> properties = propertiesProcessor.getImmutableState();
+            ImmutableProperties properties = propertiesProcessor.getImmutableState();
             System.out.println(properties);
             Thread.sleep(100); //give the activator a chance to run
         } finally {

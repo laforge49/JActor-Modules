@@ -1,6 +1,6 @@
 package org.agilewiki.jactor2.modules;
 
-import org.agilewiki.jactor2.core.plant.PlantConfiguration;
+import org.agilewiki.jactor2.core.impl.mtPlant.PlantConfiguration;
 import org.agilewiki.jactor2.core.requests.AsyncRequest;
 import org.agilewiki.jactor2.modules.impl.FacilityImpl;
 import org.agilewiki.jactor2.modules.impl.MPlantImpl;
@@ -72,7 +72,7 @@ public class MPlant {
     }
 
     public static AsyncRequest<Void> initialLocalMerssageQueueSizePropertyAReq(final String _facilityName, final Integer _value) {
-        return MPlantImpl.getSingleton().initialLocalMerssageQueueSizePropertyAReq(_facilityName, _value);
+        return MPlantImpl.getSingleton().initialLocalMessageQueueSizePropertyAReq(_facilityName, _value);
     }
 
     public static AsyncRequest<Void> initialBufferSizePropertyAReq(final String _facilityName, final Integer _value) {

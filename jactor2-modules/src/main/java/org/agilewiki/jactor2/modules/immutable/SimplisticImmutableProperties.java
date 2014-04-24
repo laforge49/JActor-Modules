@@ -27,17 +27,15 @@ import java.util.*;
  * [three, two]
  * </pre>
  *
- * @param <VALUE> The type of value.
  */
-public class SimplisticImmutableProperties<VALUE> implements ImmutableProperties<VALUE> {
+public class SimplisticImmutableProperties implements ImmutableProperties {
     /**
      * Make an empty ImmutableProperties instance.
      *
-     * @param <V> The type of value.
      * @return The empty instance.
      */
-    public static <V> ImmutableProperties<V> empty() {
-        return new SimplisticImmutableProperties<V>();
+    public static ImmutableProperties empty() {
+        return new SimplisticImmutableProperties();
     }
 
     /**
@@ -45,72 +43,70 @@ public class SimplisticImmutableProperties<VALUE> implements ImmutableProperties
      *
      * @param key   The key to be included.
      * @param value The value to be included.
-     * @param <V>   The type of value.
      * @return The instance with one key/value pair.
      */
-    public static <V> ImmutableProperties<V> singleton(String key, V value) {
-        return new SimplisticImmutableProperties<V>(key, value);
+    public static ImmutableProperties singleton(String key, String value) {
+        return new SimplisticImmutableProperties(key, value);
     }
 
     /**
      * Make an ImmutableProperties instance that includes a copy of a map.
      *
      * @param m   The map to be included.
-     * @param <V> The type of value.
      * @return The instance that includes the map.
      */
-    public static <V> ImmutableProperties<V> from(Map<String, V> m) {
-        return new SimplisticImmutableProperties<V>(m);
+    public static ImmutableProperties from(Map<String, String> m) {
+        return new SimplisticImmutableProperties(m);
     }
 
-    private final SortedMap<String, VALUE> base;
+    private final SortedMap<String, String> base;
 
     private SimplisticImmutableProperties() {
-        base = Collections.unmodifiableSortedMap(new TreeMap<String, VALUE>());
+        base = Collections.unmodifiableSortedMap(new TreeMap<String, String>());
     }
 
-    private SimplisticImmutableProperties(String key, VALUE value) {
-        TreeMap<String, VALUE> tm = new TreeMap<String, VALUE>();
+    private SimplisticImmutableProperties(String key, String value) {
+        TreeMap<String, String> tm = new TreeMap<String, String>();
         tm.put(key, value);
         base = Collections.unmodifiableSortedMap(tm);
     }
 
-    private SimplisticImmutableProperties(Map<String, VALUE> m) {
-        base = Collections.unmodifiableSortedMap(new TreeMap<String, VALUE>(m));
+    private SimplisticImmutableProperties(Map<String, String> m) {
+        base = Collections.unmodifiableSortedMap(new TreeMap<String, String>(m));
     }
 
-    private SimplisticImmutableProperties(SortedMap<String, VALUE> immutableMap) {
+    private SimplisticImmutableProperties(SortedMap<String, String> immutableMap) {
         base = Collections.unmodifiableSortedMap(immutableMap);
     }
 
     @Override
-    public ImmutableProperties<VALUE> minus(String key) {
-        TreeMap<String, VALUE> tm = new TreeMap<String, VALUE>(base);
+    public ImmutableProperties minus(String key) {
+        TreeMap<String, String> tm = new TreeMap<String, String>(base);
         tm.remove(key);
         return new SimplisticImmutableProperties(tm);
     }
 
     @Override
-    public ImmutableProperties<VALUE> plus(String key, VALUE value) {
-        TreeMap<String, VALUE> tm = new TreeMap<String, VALUE>(base);
+    public ImmutableProperties plus(String key, String value) {
+        TreeMap<String, String> tm = new TreeMap<String, String>(base);
         tm.put(key, value);
         return new SimplisticImmutableProperties(tm);
     }
 
     @Override
-    public ImmutableProperties<VALUE> plusAll(Map<String, VALUE> m) {
-        TreeMap<String, VALUE> tm = new TreeMap<String, VALUE>(base);
+    public ImmutableProperties plusAll(Map<String, String> m) {
+        TreeMap<String, String> tm = new TreeMap<String, String>(base);
         tm.putAll(m);
         return new SimplisticImmutableProperties(tm);
     }
 
     @Override
-    public ImmutableProperties<VALUE> subMap(String keyPrefix) {
+    public ImmutableProperties subMap(String keyPrefix) {
         return new SimplisticImmutableProperties(base.subMap(keyPrefix, keyPrefix + Character.MAX_VALUE));
     }
 
     @Override
-    public VALUE get(Object key) {
+    public String get(Object key) {
         return base.get(key);
     }
 
@@ -145,12 +141,12 @@ public class SimplisticImmutableProperties<VALUE> implements ImmutableProperties
     }
 
     @Override
-    public Collection<VALUE> values() {
+    public Collection<String> values() {
         return Collections.unmodifiableCollection(base.values());
     }
 
     @Override
-    public Set<Entry<String, VALUE>> entrySet() {
+    public Set<Entry<String, String>> entrySet() {
         return Collections.unmodifiableSet(base.entrySet());
     }
 
@@ -160,17 +156,17 @@ public class SimplisticImmutableProperties<VALUE> implements ImmutableProperties
     }
 
     @Deprecated
-    public VALUE put(String key, VALUE value) {
+    public String put(String key, String value) {
         throw new UnsupportedOperationException();
     }
 
     @Deprecated
-    public VALUE remove(Object key) {
+    public String remove(Object key) {
         throw new UnsupportedOperationException();
     }
 
     @Deprecated
-    public void putAll(Map<? extends String, ? extends VALUE> m) {
+    public void putAll(Map<? extends String, ? extends String> m) {
         throw new UnsupportedOperationException();
     }
 

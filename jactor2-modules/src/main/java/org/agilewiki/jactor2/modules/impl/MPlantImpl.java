@@ -1,16 +1,14 @@
 package org.agilewiki.jactor2.modules.impl;
 
-import org.agilewiki.jactor2.core.plant.impl.PlantImpl;
-import org.agilewiki.jactor2.core.plant.PlantConfiguration;
+import org.agilewiki.jactor2.core.impl.mtPlant.PlantConfiguration;
+import org.agilewiki.jactor2.core.impl.mtPlant.PlantMtImpl;
+import org.agilewiki.jactor2.core.plant.PlantImpl;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
-import org.agilewiki.jactor2.core.reactors.Reactor;
 import org.agilewiki.jactor2.core.reactors.ReactorClosedException;
 import org.agilewiki.jactor2.core.requests.AsyncRequest;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.ExceptionHandler;
 import org.agilewiki.jactor2.modules.Facility;
-import org.agilewiki.jactor2.modules.FacilityAlreadyPresentException;
-import org.agilewiki.jactor2.modules.MPlant;
 import org.agilewiki.jactor2.modules.immutable.ImmutableProperties;
 import org.agilewiki.jactor2.modules.pubSub.RequestBus;
 import org.agilewiki.jactor2.modules.pubSub.SubscribeAReq;
@@ -18,7 +16,7 @@ import org.agilewiki.jactor2.modules.transactions.properties.*;
 
 import java.util.*;
 
-public class MPlantImpl extends PlantImpl {
+public class MPlantImpl extends PlantMtImpl {
 
     public static final String CORE_PREFIX = "core.";
 
@@ -91,7 +89,7 @@ public class MPlantImpl extends PlantImpl {
         propertiesProcessor = getInternalFacility().getPropertiesProcessor();
         validate();
         changes();
-        long reactorPollMillis = _plantConfiguration.getRecovery().getReactorPollMillis();
+        int reactorPollMillis = _plantConfiguration.getRecovery().getReactorPollMillis();
         _plantConfiguration.getPlantScheduler().scheduleAtFixedRate(plantPoll(),
                 reactorPollMillis);
     }
@@ -110,7 +108,7 @@ public class MPlantImpl extends PlantImpl {
                 public void processAsyncResponse(Void _response) {
                     if (_facility != null)
                         facilityRegistry.put(_facilityName, _facility);
-                    ImmutableProperties<Object> facilityProperties =
+                    ImmutableProperties facilityProperties =
                             propertiesProcessor.getImmutableState().subMap(FACILITY_PREFIX);
                     Iterator<String> kit = facilityProperties.keySet().iterator();
                     String postfix = "~"+FACILITY_DEPENDENCY_INFIX + _facilityName;
@@ -297,7 +295,7 @@ public class MPlantImpl extends PlantImpl {
                     return;
                 }
                 String dependencyPrefix = dependencyPrefix(_facilityName);
-                ImmutableProperties<Object> dependencies =
+                ImmutableProperties dependencies =
                         propertiesProcessor.getImmutableState().subMap(dependencyPrefix);
                 Iterator<String> dit = dependencies.keySet().iterator();
                 while (dit.hasNext()) {
@@ -373,8 +371,8 @@ public class MPlantImpl extends PlantImpl {
         String prefix = FACILITY_PREFIX + _dependentName + "~" + FACILITY_DEPENDENCY_INFIX;
         if (getProperty(prefix + _dependencyName) != null)
             return true;
-        final ImmutableProperties<Object> immutableProperties = propertiesProcessor.getImmutableState();
-        final ImmutableProperties<Object> subMap = immutableProperties.subMap(prefix);
+        final ImmutableProperties immutableProperties = propertiesProcessor.getImmutableState();
+        final ImmutableProperties subMap = immutableProperties.subMap(prefix);
         final Collection<String> keys = subMap.keySet();
         if (keys.size() == 0)
             return false;
@@ -388,12 +386,12 @@ public class MPlantImpl extends PlantImpl {
         return false;
     }
 
-    public AsyncRequest<Void> initialLocalMerssageQueueSizePropertyAReq(final String _facilityName, final Integer _value) {
-        return propertiesProcessor.putAReq(initialLocalMessageQueueSizeKey(_facilityName), _value);
+    public AsyncRequest<Void> initialLocalMessageQueueSizePropertyAReq(final String _facilityName, final Integer _value) {
+        return propertiesProcessor.putAReq(initialLocalMessageQueueSizeKey(_facilityName), new Integer(_value).toString());
     }
 
     public AsyncRequest<Void> initialBufferSizePropertyAReq(final String _facilityName, final Integer _value) {
-        return propertiesProcessor.putAReq(initialBufferSizeKey(_facilityName), _value);
+        return propertiesProcessor.putAReq(initialBufferSizeKey(_facilityName), new Integer(_value).toString());
     }
 
     public AsyncRequest<Void> activatorPropertyAReq(final String _facilityName, final String _className) {
@@ -419,7 +417,7 @@ public class MPlantImpl extends PlantImpl {
         return (Boolean) getProperty(autoStartKey(name)) != null;
     }
 
-    public AsyncRequest<Void> failedAReq(final String _facilityName, final Object _newValue) {
+    public AsyncRequest<Void> failedAReq(final String _facilityName, final String _newValue) {
         return propertiesProcessor.putAReq(failedKey(_facilityName), _newValue);
     }
 
@@ -449,15 +447,15 @@ public class MPlantImpl extends PlantImpl {
                     @Override
                     protected void update(final PropertiesChangeManager _contentManager)
                             throws Exception {
-                        ImmutableProperties<Object> immutableProperties =
+                        ImmutableProperties immutableProperties =
                                 _contentManager.getImmutableProperties();
                         String prefix = FACILITY_PREFIX + _facilityName + ".";
-                        final ImmutableProperties<Object> subMap = immutableProperties.subMap(prefix);
+                        final ImmutableProperties subMap = immutableProperties.subMap(prefix);
                         final Collection<String> keys = subMap.keySet();
                         final Iterator<String> it = keys.iterator();
                         while (it.hasNext()) {
                             final String key = it.next();
-                            _contentManager.put(key, null);
+                            _contentManager.put(key, (String) null);
                         }
                     }
                 }, dis);

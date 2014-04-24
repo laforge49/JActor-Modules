@@ -29,19 +29,16 @@ import java.util.*;
  * [one, two]
  * [three, two]
  * </pre>
- *
- * @param <VALUE> The type of value.
  */
-public class HashTreePProperties<VALUE> implements ImmutableProperties<VALUE> {
+public class HashTreePProperties implements ImmutableProperties{
 
     /**
      * Make an empty ImmutableProperties instance.
      *
-     * @param <V> The type of value.
      * @return The empty instance.
      */
-    public static <V> ImmutableProperties<V> empty() {
-        return new HashTreePProperties<V>();
+    public static ImmutableProperties empty() {
+        return new HashTreePProperties();
     }
 
     /**
@@ -49,11 +46,10 @@ public class HashTreePProperties<VALUE> implements ImmutableProperties<VALUE> {
      *
      * @param key The key to be included.
      * @param value The value to be included.
-     * @param <V>   The type of value.
      * @return The instance with one key/value pair.
      */
-    public static <V> ImmutableProperties<V> singleton(String key, V value) {
-        return new HashTreePProperties<V>(key, value);
+    public static ImmutableProperties singleton(String key, String value) {
+        return new HashTreePProperties(key, value);
     }
 
     /**
@@ -63,49 +59,49 @@ public class HashTreePProperties<VALUE> implements ImmutableProperties<VALUE> {
      * @param <V>    The type of value.
      * @return The instance that includes the map.
      */
-    public static <V> ImmutableProperties<V> from(Map<String, V> m) {
-        return new HashTreePProperties<V>(m);
+    public static <V> ImmutableProperties from(Map<String, String> m) {
+        return new HashTreePProperties(m);
     }
 
-    private HashPMap<String, VALUE> base;
+    private HashPMap<String, String> base;
 
     private HashTreePProperties() {
         base = HashTreePMap.empty();
     }
 
-    private HashTreePProperties(String _key, VALUE _value) {
+    private HashTreePProperties(String _key, String _value) {
         base = HashTreePMap.singleton(_key, _value);
     }
 
-    private HashTreePProperties(Map<String, VALUE> _m) {
+    private HashTreePProperties(Map<String, String> _m) {
         base = HashTreePMap.from(_m);
     }
 
-    private HashTreePProperties(HashPMap<String, VALUE> immutableMap) {
+    private HashTreePProperties(HashPMap<String, String> immutableMap) {
         base = immutableMap;
     }
 
     @Override
-    public ImmutableProperties<VALUE> minus(String key) {
+    public ImmutableProperties minus(String key) {
         return new HashTreePProperties(base.minus(key));
     }
 
     @Override
-    public ImmutableProperties<VALUE> plus(String key, VALUE value) {
+    public ImmutableProperties plus(String key, String value) {
         return new HashTreePProperties(base.plus(key, value));
     }
 
     @Override
-    public ImmutableProperties<VALUE> plusAll(Map<String, VALUE> m) {
+    public ImmutableProperties plusAll(Map<String, String> m) {
         return new HashTreePProperties(base.plusAll(m));
     }
 
     @Override
-    public ImmutableProperties<VALUE> subMap(String keyPrefix) {
-        HashPMap<String, VALUE> hpm = HashTreePMap.empty();
-        Iterator<Entry<String, VALUE>> it = base.entrySet().iterator();
+    public ImmutableProperties subMap(String keyPrefix) {
+        HashPMap<String, String> hpm = HashTreePMap.empty();
+        Iterator<Entry<String, String>> it = base.entrySet().iterator();
         while (it.hasNext()) {
-            Entry<String, VALUE> e = it.next();
+            Entry<String, String> e = it.next();
             if (e.getKey().startsWith(keyPrefix))
                 hpm = hpm.plus(e.getKey(), e.getValue());
         }
@@ -113,7 +109,7 @@ public class HashTreePProperties<VALUE> implements ImmutableProperties<VALUE> {
     }
 
     @Override
-    public VALUE get(Object key) {
+    public String get(Object key) {
         return base.get(key);
     }
 
@@ -153,27 +149,27 @@ public class HashTreePProperties<VALUE> implements ImmutableProperties<VALUE> {
     }
 
     @Override
-    public Collection<VALUE> values() {
+    public Collection<String> values() {
         return base.values();
     }
 
     @Override
-    public Set<Entry<String, VALUE>> entrySet() {
+    public Set<Entry<String, String>> entrySet() {
         return base.entrySet();
     }
 
     @Deprecated
-    public VALUE put(String key, VALUE value) {
+    public String put(String key, String value) {
         throw new UnsupportedOperationException();
     }
 
     @Deprecated
-    public VALUE remove(Object key) {
+    public String remove(Object key) {
         throw new UnsupportedOperationException();
     }
 
     @Deprecated
-    public void putAll(Map<? extends String, ? extends VALUE> m) {
+    public void putAll(Map<? extends String, ? extends String> m) {
         throw new UnsupportedOperationException();
     }
 

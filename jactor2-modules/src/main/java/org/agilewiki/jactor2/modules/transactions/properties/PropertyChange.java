@@ -13,15 +13,15 @@ public class PropertyChange {
     /**
      * The old value of the property, or null.
      */
-    public final Object oldValue;
+    public final String oldValue;
 
     /**
      * The new value of the property, or null.
      */
-    public final Object newValue;
+    public final String newValue;
 
-    PropertyChange(final String _name, final Object _oldValue,
-                          final Object _newValue) {
+    PropertyChange(final String _name, final String _oldValue,
+                          final String _newValue) {
         name = _name;
         oldValue = _oldValue;
         newValue = _newValue;

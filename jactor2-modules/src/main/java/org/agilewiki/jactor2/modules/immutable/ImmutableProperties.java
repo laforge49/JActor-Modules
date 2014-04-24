@@ -4,19 +4,17 @@ import java.util.Map;
 import java.util.SortedSet;
 
 /**
- * ImmutableProperties is an immutable map with keys that are strings,
+ * ImmutableProperties is an immutable map with keys and values that are strings,
  * but with the addition of subMap and sortedKeySet methods.
- *
- * @param <VALUE> Tye type of property value, typically Object.
  */
-public interface ImmutableProperties<VALUE> extends Map<String, VALUE> {
+public interface ImmutableProperties extends Map<String, String> {
     /**
      * Make a virtual copy but with a key removed.
      *
      * @param key The key to be removed.
      * @return A virtual copy.
      */
-    ImmutableProperties<VALUE> minus(String key);
+    ImmutableProperties minus(String key);
 
     /**
      * Make a virtual copy but with the addition of a key/value pair.
@@ -25,7 +23,7 @@ public interface ImmutableProperties<VALUE> extends Map<String, VALUE> {
      * @param value The value to be added.
      * @return The virtual copy.
      */
-    ImmutableProperties<VALUE> plus(String key, VALUE value);
+    ImmutableProperties plus(String key, String value);
 
     /**
      * Make a virtual copy that includes the key/value pairs of another map.
@@ -33,7 +31,7 @@ public interface ImmutableProperties<VALUE> extends Map<String, VALUE> {
      * @param m    The map to be included.
      * @return The virtual copy.
      */
-    ImmutableProperties<VALUE> plusAll(Map<String, VALUE> m);
+    ImmutableProperties plusAll(Map<String, String> m);
 
     /**
      * Make an immutable subMap.
@@ -41,7 +39,7 @@ public interface ImmutableProperties<VALUE> extends Map<String, VALUE> {
      * @param keyPrefix The keys in the submap all start with this prefix.
      * @return An immutable subMap.
      */
-    ImmutableProperties<VALUE> subMap(String keyPrefix);
+    ImmutableProperties subMap(String keyPrefix);
 
     /**
      * Make an immutable SortedSet of the keys.
@@ -60,11 +58,11 @@ public interface ImmutableProperties<VALUE> extends Map<String, VALUE> {
      * An incompatible operation.
      */
     @Deprecated
-    public VALUE put(String key, VALUE value);
+    public String put(String key, String value);
 
     /**
      * An incompatible operation.
      */
     @Deprecated
-    public VALUE remove(Object key);
+    public String remove(Object key);
 }

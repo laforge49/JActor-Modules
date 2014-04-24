@@ -1,23 +1,12 @@
 package org.agilewiki.jactor2.modules;
 
 import org.agilewiki.jactor2.core.blades.BlockingBladeBase;
-import org.agilewiki.jactor2.core.plant.Plant;
+import org.agilewiki.jactor2.core.impl.Plant;
 import org.agilewiki.jactor2.core.reactors.BlockingReactor;
-import org.agilewiki.jactor2.core.reactors.CommonReactor;
 import org.agilewiki.jactor2.core.reactors.Reactor;
 import org.agilewiki.jactor2.core.requests.AsyncRequest;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.SyncRequest;
-import org.agilewiki.jactor2.modules.immutable.ImmutableProperties;
-import org.agilewiki.jactor2.modules.pubSub.RequestBus;
-import org.agilewiki.jactor2.modules.pubSub.SubscribeAReq;
-import org.agilewiki.jactor2.modules.transactions.properties.ImmutablePropertyChanges;
-import org.agilewiki.jactor2.modules.transactions.properties.PropertiesProcessor;
-import org.agilewiki.jactor2.modules.transactions.properties.PropertyChange;
-import org.agilewiki.jactor2.modules.transactions.properties.PropertyChangesFilter;
-
-import java.io.PrintStream;
-import java.util.Locale;
 
 /**
  * <p>
@@ -47,6 +36,8 @@ import java.util.Locale;
  * </pre>
  */
 public class Printer extends BlockingBladeBase {
+
+    private static Printer printer;
 
     public static AsyncRequest<Void> printlnAReq(final String _string) {
         return new AsyncRequest<Void>(Plant.getInternalReactor()) {
@@ -87,35 +78,6 @@ public class Printer extends BlockingBladeBase {
     static public AsyncRequest<Printer> stdoutAReq() {
         return new AsyncRequest<Printer>(Plant.getInternalReactor()) {
             AsyncResponseProcessor<Printer> dis = this;
-            PropertiesProcessor propertiesProcessor = MPlant.getInternalFacility().getPropertiesProcessor();
-            ImmutableProperties<Object> immutableProperties = propertiesProcessor.getImmutableState();
-            Printer printer = (Printer) immutableProperties.get("stdout");
-
-            AsyncResponseProcessor<Void> cnsResponseProcessor = new AsyncResponseProcessor<Void>() {
-                @Override
-                public void processAsyncResponse(Void _response) throws Exception {
-                    immutableProperties = propertiesProcessor.getImmutableState();
-                    Printer printer2 = (Printer) immutableProperties.get("stdout");
-                    if (printer != printer2) {
-                        dis.processAsyncResponse(printer2);
-                        return;
-                    }
-                    RequestBus<ImmutablePropertyChanges> validationBus = propertiesProcessor.validationBus;
-                    send(new SubscribeAReq<ImmutablePropertyChanges>(
-                            validationBus,
-                            (CommonReactor) getTargetReactor(),
-                            new PropertyChangesFilter("stdout")) {
-                        @Override
-                        protected void processContent(ImmutablePropertyChanges _changes) {
-                            PropertyChange propertyChange = _changes.readOnlyChanges.get("stdout");
-                            if (propertyChange == null)
-                                return;
-                            if (propertyChange.oldValue != null)
-                                throw new IllegalStateException("stdout property can not be changed");
-                        }
-                    }, dis, printer);
-                }
-            };
 
             @Override
             public void processAsyncRequest() throws Exception {
@@ -123,46 +85,22 @@ public class Printer extends BlockingBladeBase {
                     dis.processAsyncResponse(printer);
                     return;
                 }
-                printer = new Printer(new BlockingReactor());
-                send(propertiesProcessor.compareAndSetAReq("stdout", null, printer), cnsResponseProcessor);
+                printer = new Printer();
+                dis.processAsyncResponse(printer);
             }
         };
     }
 
-    public final PrintStream printStream;
-
-    public final Locale locale;
-
     /**
      * Create a Printer blades.
-     *
-     * @param _reactor The reactor used by the blocking blade.
      */
-    public Printer(final BlockingReactor _reactor) throws Exception {
-        this(_reactor, System.out);
-    }
-
-    /**
-     * Create a Printer blades.
-     *
-     * @param _reactor     The reactor used by the blocking blade.
-     * @param _printStream Where to print the string.
-     */
-    public Printer(final BlockingReactor _reactor,
-            final PrintStream _printStream) throws Exception {
-        this(_reactor, _printStream, null);
-    }
-
-    public Printer(final BlockingReactor _reactor,
-            final PrintStream _printStream, final Locale _locale)
-            throws Exception {
-        printStream = _printStream;
-        locale = _locale;
+    private Printer() throws Exception {
+        super(new BlockingReactor());
     }
 
     public void println(final Reactor _sourceReactor, final String _string) {
         directCheck(_sourceReactor);
-        printStream.println(_string);
+        System.out.println(_string);
     }
 
     /**
@@ -175,7 +113,7 @@ public class Printer extends BlockingBladeBase {
         return new SyncBladeRequest<Void>() {
             @Override
             public Void processSyncRequest() throws Exception {
-                printStream.println(_string);
+                System.out.println(_string);
                 return null;
             }
         };
@@ -184,7 +122,7 @@ public class Printer extends BlockingBladeBase {
     public void printf(final Reactor _sourceReactor, final String _format,
                        final Object... _args) {
         directCheck(_sourceReactor);
-        printStream.print(String.format(locale, _format, _args));
+        System.out.print(String.format(_format, _args));
     }
 
     /**
@@ -199,7 +137,7 @@ public class Printer extends BlockingBladeBase {
         return new SyncBladeRequest<Void>() {
             @Override
             public Void processSyncRequest() throws Exception {
-                printStream.print(String.format(locale, _format, _args));
+                System.out.print(String.format(_format, _args));
                 return null;
             }
         };

@@ -13,7 +13,7 @@ import org.agilewiki.jactor2.modules.transactions.TransactionAReq;
  * </p>
  */
 public class PropertiesTransactionAReq
-        extends TransactionAReq<PropertiesChangeManager, ImmutableProperties<Object>, ImmutablePropertyChanges> {
+        extends TransactionAReq<PropertiesChangeManager, ImmutableProperties, ImmutablePropertyChanges> {
 
     /**
      * Create a transaction request.

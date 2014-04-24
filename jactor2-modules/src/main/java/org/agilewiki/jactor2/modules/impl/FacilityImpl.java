@@ -1,10 +1,11 @@
 package org.agilewiki.jactor2.modules.impl;
 
 import org.agilewiki.jactor2.core.closeable.Closeable;
-import org.agilewiki.jactor2.core.plant.impl.PlantImpl;
+import org.agilewiki.jactor2.core.impl.mtReactors.NonBlockingReactorMtImpl;
+import org.agilewiki.jactor2.core.impl.mtReactors.ReactorMtImpl;
+import org.agilewiki.jactor2.core.plant.PlantImpl;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
-import org.agilewiki.jactor2.core.reactors.impl.NonBlockingReactorImpl;
-import org.agilewiki.jactor2.core.reactors.impl.ReactorImpl;
+import org.agilewiki.jactor2.core.reactors.ReactorImpl;
 import org.agilewiki.jactor2.core.requests.AsyncRequest;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.ExceptionHandler;
@@ -21,7 +22,7 @@ import java.lang.reflect.Constructor;
 import java.util.Iterator;
 import java.util.SortedMap;
 
-public class FacilityImpl extends NonBlockingReactorImpl {
+public class FacilityImpl extends NonBlockingReactorMtImpl {
     protected PropertiesProcessor propertiesProcessor;
 
     private String name;
@@ -31,7 +32,7 @@ public class FacilityImpl extends NonBlockingReactorImpl {
     private FacilityImpl plantFacilityImpl;
 
     public FacilityImpl(final int _initialOutboxSize, final int _initialLocalQueueSize) {
-        super(PlantImpl.getSingleton().getInternalReactor() == null ? null : PlantImpl.getSingleton().getInternalReactor().asReactorImpl(),
+        super(PlantImpl.getSingleton().getInternalReactor() == null ? null : PlantImpl.getSingleton().getInternalReactor(),
                 _initialOutboxSize, _initialLocalQueueSize);
         plantImpl = MPlantImpl.getSingleton();
     }
@@ -44,7 +45,7 @@ public class FacilityImpl extends NonBlockingReactorImpl {
         tracePropertyChangesAReq().signal();
         String dependencyPrefix = MPlantImpl.dependencyPrefix(name);
         PropertiesProcessor plantProperties = plantFacilityImpl.getPropertiesProcessor();
-        ImmutableProperties<Object> dependencies =
+        ImmutableProperties dependencies =
                 plantProperties.getImmutableState().subMap(dependencyPrefix);
         Iterator<String> dit = dependencies.keySet().iterator();
         while (dit.hasNext()) {
@@ -179,13 +180,24 @@ public class FacilityImpl extends NonBlockingReactorImpl {
     }
 
     public AsyncRequest<Void> putPropertyAReq(final String _propertyName,
-                                              final Object _propertyValue) {
+                                              final Boolean _propertyValue) {
         return propertiesProcessor.putAReq(_propertyName, _propertyValue);
     }
 
     public AsyncRequest<Void> putPropertyAReq(final String _propertyName,
-                                              final Object _expectedValue,
-                                              final Object _propertyValue) {
+                                              final String _propertyValue) {
+        return propertiesProcessor.putAReq(_propertyName, _propertyValue);
+    }
+
+    public AsyncRequest<Void> putPropertyAReq(final String _propertyName,
+                                              final Boolean _expectedValue,
+                                              final Boolean _propertyValue) {
+        return propertiesProcessor.compareAndSetAReq(_propertyName, _expectedValue, _propertyValue);
+    }
+
+    public AsyncRequest<Void> putPropertyAReq(final String _propertyName,
+                                              final String _expectedValue,
+                                              final String _propertyValue) {
         return propertiesProcessor.compareAndSetAReq(_propertyName, _expectedValue, _propertyValue);
     }
 
@@ -247,9 +259,9 @@ public class FacilityImpl extends NonBlockingReactorImpl {
         Iterator<Closeable> it = getCloseableSet().iterator();
         while (it.hasNext()) {
             Closeable closeable = it.next();
-            if (!(closeable instanceof ReactorImpl))
+            if (!(closeable instanceof ReactorMtImpl))
                 continue;
-            ReactorImpl reactor = (ReactorImpl) closeable;
+            ReactorMtImpl reactor = (ReactorMtImpl) closeable;
             reactor.reactorPoll();
         }
         reactorPoll();

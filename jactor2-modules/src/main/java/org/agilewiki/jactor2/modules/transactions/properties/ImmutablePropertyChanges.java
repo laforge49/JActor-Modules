@@ -12,7 +12,7 @@ public class ImmutablePropertyChanges {
     /**
      * The new version of the immutable properties map.
      */
-    public final ImmutableProperties<Object> immutableProperties;
+    public final ImmutableProperties immutableProperties;
 
     /**
      * An unmodifiable sorted map of the property changes.

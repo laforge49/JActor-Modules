@@ -1,7 +1,7 @@
 package org.agilewiki.jactor2.modules.transactions.properties;
 
 import junit.framework.TestCase;
-import org.agilewiki.jactor2.core.plant.Plant;
+import org.agilewiki.jactor2.core.impl.Plant;
 import org.agilewiki.jactor2.core.reactors.CommonReactor;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 import org.agilewiki.jactor2.modules.MPlant;
@@ -53,7 +53,7 @@ public class PTest extends TestCase {
                 }
             }.call();
 
-            ImmutableProperties<Object> immutableState = propertiesProcessor.getImmutableState();
+            ImmutableProperties immutableState = propertiesProcessor.getImmutableState();
             assertEquals(0, immutableState.size());
 
             propertiesProcessor.putAReq("1", "first").call();
@@ -77,7 +77,7 @@ public class PTest extends TestCase {
             immutableState = propertiesProcessor.getImmutableState();
             assertEquals(1, immutableState.size());
 
-            propertiesProcessor.putAReq("1", null).call();
+            propertiesProcessor.putAReq("1", (String) null).call();
             immutableState = propertiesProcessor.getImmutableState();
             assertEquals(0, immutableState.size());
         } finally {

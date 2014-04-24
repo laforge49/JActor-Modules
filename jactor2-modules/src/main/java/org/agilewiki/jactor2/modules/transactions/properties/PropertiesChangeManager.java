@@ -56,7 +56,9 @@ public class PropertiesChangeManager implements AutoCloseable {
         if (_key == null)
             throw new IllegalArgumentException("key may not be null");
         String oldValue = immutableProperties.get(_key);
-        if (oldValue.equals(_newValue))
+        if (oldValue == _newValue)
+            return;
+        if (oldValue != null && oldValue.equals(_newValue))
             return;
         if (_newValue == null)
             immutableProperties = immutableProperties.minus(_key);

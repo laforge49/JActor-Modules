@@ -414,7 +414,7 @@ public class MPlantImpl extends PlantMtImpl {
     }
 
     public boolean isAutoStart(String name) {
-        return (Boolean) getProperty(autoStartKey(name)) != null;
+        return getProperty(autoStartKey(name)) != null;
     }
 
     public AsyncRequest<Void> failedAReq(final String _facilityName, final String _newValue) {

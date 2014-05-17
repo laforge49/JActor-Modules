@@ -1,5 +1,8 @@
 package org.agilewiki.jactor2.modules.immutable;
 
+import org.agilewiki.jactor2.modules.properties.immutable.ImmutableProperties;
+import org.agilewiki.jactor2.modules.properties.immutable.SimplisticImmutableProperties;
+
 public class SimplisticImmutablePropertiesSample {
     public static void main(final String[] args) {
         ImmutableProperties ip = SimplisticImmutableProperties.empty();

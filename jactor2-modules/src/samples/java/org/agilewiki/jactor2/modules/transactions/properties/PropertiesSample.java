@@ -1,9 +1,12 @@
 package org.agilewiki.jactor2.modules.transactions.properties;
 
-import org.agilewiki.jactor2.core.plant.Plant;
+import org.agilewiki.jactor2.core.impl.Plant;
 import org.agilewiki.jactor2.core.reactors.CommonReactor;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 import org.agilewiki.jactor2.modules.MPlant;
+import org.agilewiki.jactor2.modules.properties.transactions.ImmutablePropertyChanges;
+import org.agilewiki.jactor2.modules.properties.transactions.PropertyChange;
+import org.agilewiki.jactor2.modules.properties.transactions.PropertyChangesFilter;
 import org.agilewiki.jactor2.modules.pubSub.RequestBus;
 import org.agilewiki.jactor2.modules.pubSub.SubscribeAReq;
 
@@ -40,11 +43,11 @@ public class PropertiesSample {
             try {
                 propertiesProcessor.putAReq("pie", "apple").call();
                 propertiesProcessor.putAReq("pie", "peach").call();
-                propertiesProcessor.putAReq("pie", null).call();
+                propertiesProcessor.putAReq("pie", (String) null).call();
                 propertiesProcessor.putAReq("fruit", "pear").call();
                 propertiesProcessor.putAReq("fruit", "orange").call();
                 propertiesProcessor.putAReq("immutable.fudge", "fun").call();
-                propertiesProcessor.putAReq("immutable.fudge", null).call();
+                propertiesProcessor.putAReq("immutable.fudge", (String) null).call(); //raises exception
             } catch (final Exception e) {
                 System.out.println(e.getMessage());
             }

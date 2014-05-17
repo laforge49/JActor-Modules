@@ -1,4 +1,4 @@
-package org.agilewiki.jactor2.modules.immutable;
+package org.agilewiki.jactor2.modules.properties.immutable;
 
 import java.util.*;
 

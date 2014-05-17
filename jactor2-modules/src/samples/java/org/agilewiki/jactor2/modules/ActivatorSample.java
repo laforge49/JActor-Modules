@@ -1,6 +1,6 @@
 package org.agilewiki.jactor2.modules;
 
-import org.agilewiki.jactor2.core.plant.Plant;
+import org.agilewiki.jactor2.core.impl.Plant;
 
 public class ActivatorSample {
     public static void main(String[] args) throws Exception {

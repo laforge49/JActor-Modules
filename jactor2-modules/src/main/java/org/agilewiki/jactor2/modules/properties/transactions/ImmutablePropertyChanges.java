@@ -1,6 +1,6 @@
-package org.agilewiki.jactor2.modules.transactions.properties;
+package org.agilewiki.jactor2.modules.properties.transactions;
 
-import org.agilewiki.jactor2.modules.immutable.ImmutableProperties;
+import org.agilewiki.jactor2.modules.properties.immutable.ImmutableProperties;
 
 import java.util.SortedMap;
 
@@ -19,8 +19,8 @@ public class ImmutablePropertyChanges {
      */
     public final SortedMap<String, PropertyChange> readOnlyChanges;
 
-    ImmutablePropertyChanges(final PropertiesChangeManager propertiesChangeManager) {
-        immutableProperties = propertiesChangeManager.immutableProperties;
+    public ImmutablePropertyChanges(final PropertiesChangeManager propertiesChangeManager) {
+        immutableProperties = propertiesChangeManager.getImmutableProperties();
         readOnlyChanges = propertiesChangeManager.readOnlyChanges;
     }
 }

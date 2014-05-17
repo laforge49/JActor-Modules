@@ -1,5 +1,8 @@
 package org.agilewiki.jactor2.modules.immutable;
 
+import org.agilewiki.jactor2.modules.properties.immutable.HashTreePProperties;
+import org.agilewiki.jactor2.modules.properties.immutable.ImmutableProperties;
+
 public class HashTreePPropertiesSample {
     public static void main(final String[] args) {
         ImmutableProperties ip = HashTreePProperties.empty();

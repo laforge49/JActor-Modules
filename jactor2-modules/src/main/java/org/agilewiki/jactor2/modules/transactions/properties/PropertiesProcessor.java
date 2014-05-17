@@ -2,8 +2,10 @@ package org.agilewiki.jactor2.modules.transactions.properties;
 
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 import org.agilewiki.jactor2.core.requests.AsyncRequest;
-import org.agilewiki.jactor2.modules.immutable.HashTreePProperties;
-import org.agilewiki.jactor2.modules.immutable.ImmutableProperties;
+import org.agilewiki.jactor2.modules.properties.immutable.HashTreePProperties;
+import org.agilewiki.jactor2.modules.properties.immutable.ImmutableProperties;
+import org.agilewiki.jactor2.modules.properties.transactions.ImmutablePropertyChanges;
+import org.agilewiki.jactor2.modules.properties.transactions.PropertiesChangeManager;
 import org.agilewiki.jactor2.modules.transactions.TransactionProcessor;
 
 import java.util.Map;
@@ -50,7 +52,7 @@ public class PropertiesProcessor
 
     @Override
     protected void newImmutableState() {
-        immutableState = propertiesChangeManager.immutableProperties;
+        immutableState = propertiesChangeManager.getImmutableProperties();
     }
 
     /**

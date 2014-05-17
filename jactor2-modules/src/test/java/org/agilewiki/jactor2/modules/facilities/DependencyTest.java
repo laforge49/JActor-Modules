@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 import org.agilewiki.jactor2.core.impl.Plant;
 import org.agilewiki.jactor2.modules.Facility;
 import org.agilewiki.jactor2.modules.MPlant;
-import org.agilewiki.jactor2.modules.immutable.ImmutableProperties;
+import org.agilewiki.jactor2.modules.properties.immutable.ImmutableProperties;
 import org.agilewiki.jactor2.modules.transactions.properties.PropertiesProcessor;
 
 public class DependencyTest extends TestCase {

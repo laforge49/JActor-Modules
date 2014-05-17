@@ -1,6 +1,6 @@
-package org.agilewiki.jactor2.modules.transactions.properties;
+package org.agilewiki.jactor2.modules.properties.transactions;
 
-import org.agilewiki.jactor2.modules.immutable.ImmutableProperties;
+import org.agilewiki.jactor2.modules.properties.immutable.ImmutableProperties;
 
 import java.util.Collections;
 import java.util.SortedMap;
@@ -22,7 +22,7 @@ public class PropertiesChangeManager implements AutoCloseable {
 
     private boolean closed;
 
-    PropertiesChangeManager(final ImmutableProperties _immutableProperties) {
+    public PropertiesChangeManager(final ImmutableProperties _immutableProperties) {
         immutableProperties = _immutableProperties;
     }
 

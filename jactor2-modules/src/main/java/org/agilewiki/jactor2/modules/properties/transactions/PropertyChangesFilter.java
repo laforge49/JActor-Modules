@@ -1,4 +1,4 @@
-package org.agilewiki.jactor2.modules.transactions.properties;
+package org.agilewiki.jactor2.modules.properties.transactions;
 
 import org.agilewiki.jactor2.modules.pubSub.Filter;
 

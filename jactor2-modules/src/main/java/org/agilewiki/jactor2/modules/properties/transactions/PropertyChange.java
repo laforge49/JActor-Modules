@@ -1,4 +1,4 @@
-package org.agilewiki.jactor2.modules.transactions.properties;
+package org.agilewiki.jactor2.modules.properties.transactions;
 
 /**
  * Represents a change made to a property in the immutable properties map.
@@ -20,7 +20,7 @@ public class PropertyChange {
      */
     public final String newValue;
 
-    PropertyChange(final String _name, final String _oldValue,
+    public PropertyChange(final String _name, final String _oldValue,
                           final String _newValue) {
         name = _name;
         oldValue = _oldValue;

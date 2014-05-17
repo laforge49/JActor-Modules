@@ -3,12 +3,14 @@ package org.agilewiki.jactor2.modules.properties.transactions;
 import org.agilewiki.jactor2.core.blades.transactions.ImmutableReference;
 import org.agilewiki.jactor2.core.reactors.IsolationReactor;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
+import org.agilewiki.jactor2.core.reactors.Reactor;
 import org.agilewiki.jactor2.modules.properties.immutable.HashTreePProperties;
 import org.agilewiki.jactor2.modules.properties.immutable.ImmutableProperties;
+import org.agilewiki.jactor2.modules.pubSub.RequestBus;
 
 import java.util.Map;
 
-public class PropertyReference extends ImmutableReference<ImmutableProperties> {
+public class PropertiesReference extends ImmutableReference<ImmutableProperties> implements PropertiesSource {
 
     public static ImmutableProperties empty() {
         return HashTreePProperties.empty();
@@ -22,15 +24,26 @@ public class PropertyReference extends ImmutableReference<ImmutableProperties> {
         return HashTreePProperties.from(m);
     }
 
-    PropertiesChangeManager propertiesChangeManager;
+    /**
+     * The RequestBus used to validate the changes made by a transaction.
+     */
+    public final RequestBus<ImmutablePropertyChanges> validationBus;
+
+    /**
+     * The RequestBus used to signal the changes made by a validated transaction.
+     */
+    public final RequestBus<ImmutablePropertyChanges> changeBus;
 
     /**
      * Create an ImmutableReference blade.
      *
      * @param _immutable    The immutable data structure to be operated on.
      */
-    public PropertyReference(final ImmutableProperties _immutable) {
+    public PropertiesReference(final ImmutableProperties _immutable) {
         super(_immutable);
+        NonBlockingReactor parentReactor = (NonBlockingReactor) getReactor().getParentReactor();
+        validationBus = new RequestBus<ImmutablePropertyChanges>(parentReactor);
+        changeBus = new RequestBus<ImmutablePropertyChanges>(parentReactor);
     }
 
     /**
@@ -39,8 +52,11 @@ public class PropertyReference extends ImmutableReference<ImmutableProperties> {
      * @param _immutable    The immutable data structure to be operated on.
      * @param _reactor      The blade's reactor.
      */
-    public PropertyReference(final ImmutableProperties _immutable, final IsolationReactor _reactor) {
+    public PropertiesReference(final ImmutableProperties _immutable, final IsolationReactor _reactor) {
         super(_immutable, _reactor);
+        NonBlockingReactor parentReactor = (NonBlockingReactor) _reactor.getParentReactor();
+        validationBus = new RequestBus<ImmutablePropertyChanges>(parentReactor);
+        changeBus = new RequestBus<ImmutablePropertyChanges>(parentReactor);
     }
 
     /**
@@ -49,8 +65,10 @@ public class PropertyReference extends ImmutableReference<ImmutableProperties> {
      * @param _immutable    The immutable data structure to be operated on.
      * @param _parentReactor    The parent of the blade's reactor.
      */
-    public PropertyReference(final ImmutableProperties _immutable, final NonBlockingReactor _parentReactor) {
+    public PropertiesReference(final ImmutableProperties _immutable, final NonBlockingReactor _parentReactor) {
         super(_immutable, _parentReactor);
+        validationBus = new RequestBus<ImmutablePropertyChanges>(_parentReactor);
+        changeBus = new RequestBus<ImmutablePropertyChanges>(_parentReactor);
     }
 
     public String toString() {

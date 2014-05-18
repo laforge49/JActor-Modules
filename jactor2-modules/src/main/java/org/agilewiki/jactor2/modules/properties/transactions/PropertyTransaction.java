@@ -50,6 +50,7 @@ abstract public class PropertyTransaction extends SyncTransaction<ImmutablePrope
                 @Override
                 public void processAsyncResponse(Void _response) throws Exception {
                     PropertyTransaction.super.updateImmutableReference(_immutableReference);
+                    propertiesChangeManager.close();
                     send(propertiesReference.changeBus.sendsContentAReq(immutablePropertyChanges),
                             dis, immutable);
                 }
@@ -67,8 +68,16 @@ abstract public class PropertyTransaction extends SyncTransaction<ImmutablePrope
 
             @Override
             public void processAsyncRequest() throws Exception {
-                send(PropertyTransaction.super.applyAReq(_immutableReference), superResponseProcessor);
+                propertiesChangeManager = new PropertiesChangeManager(propertiesReference.getImmutable());
+                eval(_immutableReference, this, superResponseProcessor);
             }
         };
+    }
+
+    @Override
+    protected void applySourceTransaction(final Transaction _transaction) {
+        super.applySourceTransaction(_transaction);
+        PropertyTransaction propertiesSource = (PropertyTransaction) _transaction;
+        propertiesChangeManager = propertiesSource.getPropertiesChangeManager();
     }
 }

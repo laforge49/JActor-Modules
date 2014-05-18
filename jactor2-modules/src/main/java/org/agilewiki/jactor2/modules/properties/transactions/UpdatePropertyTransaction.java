@@ -72,15 +72,9 @@ public class UpdatePropertyTransaction extends PropertyTransaction {
     @Override
     protected void update(ImmutableSource<ImmutableProperties> source) throws Exception {
         if (propertyValue == null)
-            immutable = immutable.minus(propertyName);
+            immutable = source.getImmutable().minus(propertyName);
         else
-            immutable = immutable.plus(propertyName, propertyValue);
-        if (source instanceof PropertiesReference)
-            propertiesChangeManager = new PropertiesChangeManager(immutable);
-        else {
-            PropertyTransaction propertiesSource = (PropertyTransaction) source;
-            propertiesChangeManager = propertiesSource.getPropertiesChangeManager();
-        }
+            immutable = source.getImmutable().plus(propertyName, propertyValue);
         propertiesChangeManager.put(propertyName, propertyValue);
     }
 

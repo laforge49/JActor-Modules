@@ -3,7 +3,6 @@ package org.agilewiki.jactor2.modules.properties.transactions;
 import org.agilewiki.jactor2.core.blades.transactions.ImmutableReference;
 import org.agilewiki.jactor2.core.reactors.IsolationReactor;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
-import org.agilewiki.jactor2.core.reactors.Reactor;
 import org.agilewiki.jactor2.modules.properties.immutable.HashTreePProperties;
 import org.agilewiki.jactor2.modules.properties.immutable.ImmutableProperties;
 import org.agilewiki.jactor2.modules.pubSub.RequestBus;
@@ -33,6 +32,13 @@ public class PropertiesReference extends ImmutableReference<ImmutableProperties>
      * The RequestBus used to signal the changes made by a validated transaction.
      */
     public final RequestBus<ImmutablePropertyChanges> changeBus;
+
+    public PropertiesReference() {
+        super(empty());
+        NonBlockingReactor parentReactor = (NonBlockingReactor) getReactor().getParentReactor();
+        validationBus = new RequestBus<ImmutablePropertyChanges>(parentReactor);
+        changeBus = new RequestBus<ImmutablePropertyChanges>(parentReactor);
+    }
 
     /**
      * Create an ImmutableReference blade.

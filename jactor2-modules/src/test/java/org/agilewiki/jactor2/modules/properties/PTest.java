@@ -69,6 +69,21 @@ public class PTest extends TestCase {
             assertEquals(1, immutableState.size());
             immutableState = propertiesReference.getImmutable();
             assertEquals(1, immutableState.size());
+
+            String msg = null;
+            try {
+                new UpdatePropertyTransaction("fudge", "second").applyAReq(propertiesReference).call();
+            } catch (final Exception e) {
+                msg = e.getMessage();
+            }
+            assertEquals("no way", msg);
+            assertEquals(1, immutableState.size());
+            immutableState = propertiesReference.getImmutable();
+            assertEquals(1, immutableState.size());
+
+            new UpdatePropertyTransaction("1", (String) null).applyAReq(propertiesReference).call();
+            immutableState = propertiesReference.getImmutable();
+            assertEquals(0, immutableState.size());
         } finally {
             Plant.close();
         }

@@ -34,10 +34,7 @@ public class PropertiesReference extends ImmutableReference<ImmutableProperties>
     public final RequestBus<ImmutablePropertyChanges> changeBus;
 
     public PropertiesReference() {
-        super(empty());
-        NonBlockingReactor parentReactor = (NonBlockingReactor) getReactor().getParentReactor();
-        validationBus = new RequestBus<ImmutablePropertyChanges>(parentReactor);
-        changeBus = new RequestBus<ImmutablePropertyChanges>(parentReactor);
+        this(empty());
     }
 
     /**
@@ -55,6 +52,15 @@ public class PropertiesReference extends ImmutableReference<ImmutableProperties>
     /**
      * Create an ImmutableReference blade.
      *
+     * @param _reactor      The blade's reactor.
+     */
+    public PropertiesReference(final IsolationReactor _reactor) {
+        this(empty(), _reactor);
+    }
+
+    /**
+     * Create an ImmutableReference blade.
+     *
      * @param _immutable    The immutable data structure to be operated on.
      * @param _reactor      The blade's reactor.
      */
@@ -63,6 +69,15 @@ public class PropertiesReference extends ImmutableReference<ImmutableProperties>
         NonBlockingReactor parentReactor = (NonBlockingReactor) _reactor.getParentReactor();
         validationBus = new RequestBus<ImmutablePropertyChanges>(parentReactor);
         changeBus = new RequestBus<ImmutablePropertyChanges>(parentReactor);
+    }
+
+    /**
+     * Create an ImmutableReference blade.
+     *
+     * @param _parentReactor    The parent of the blade's reactor.
+     */
+    public PropertiesReference(final NonBlockingReactor _parentReactor) {
+        this(empty(), _parentReactor);
     }
 
     /**

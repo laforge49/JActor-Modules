@@ -19,11 +19,11 @@ public class DependencyTest extends TestCase {
                     .call();
             final Facility c = MPlant.createFacilityAReq("C")
                     .call();
-            PropertiesProcessor propertiesProcessor = MPlant.getInternalFacility().getPropertiesProcessor();
+            PropertiesProcessor propertiesProcessor = MPlant.getInternalFacility().getPropertiesReference();
             ImmutableProperties properties = propertiesProcessor.getImmutableState();
             System.out.println("before: "+properties);
             MPlant.purgeFacilitySReq("A").call();
-            MPlant.getInternalFacility().getPropertiesProcessor().getReactor().nullSReq().call(); //synchronize for the properties update
+            MPlant.getInternalFacility().getPropertiesReference().getReactor().nullSReq().call(); //synchronize for the properties update
             properties = propertiesProcessor.getImmutableState();
             System.out.println("after: "+properties);
         } finally {

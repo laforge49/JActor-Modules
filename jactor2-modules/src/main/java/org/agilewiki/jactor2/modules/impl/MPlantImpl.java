@@ -10,9 +10,7 @@ import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.ExceptionHandler;
 import org.agilewiki.jactor2.modules.Facility;
 import org.agilewiki.jactor2.modules.properties.immutable.ImmutableProperties;
-import org.agilewiki.jactor2.modules.properties.transactions.ImmutablePropertyChanges;
-import org.agilewiki.jactor2.modules.properties.transactions.PropertiesChangeManager;
-import org.agilewiki.jactor2.modules.properties.transactions.PropertyChange;
+import org.agilewiki.jactor2.modules.properties.transactions.*;
 import org.agilewiki.jactor2.modules.pubSub.RequestBus;
 import org.agilewiki.jactor2.modules.pubSub.SubscribeAReq;
 import org.agilewiki.jactor2.modules.transactions.properties.*;
@@ -76,7 +74,7 @@ public class MPlantImpl extends PlantMtImpl {
 
     private final Map<String, Facility> facilityRegistry = new TreeMap<>();
 
-    private final PropertiesProcessor propertiesProcessor;
+    private final PropertiesReference propertiesReference;
 
     public MPlantImpl() throws Exception {
         this(new PlantConfiguration());
@@ -89,7 +87,7 @@ public class MPlantImpl extends PlantMtImpl {
     public MPlantImpl(final PlantConfiguration _plantConfiguration) throws Exception {
         super(_plantConfiguration);
         getInternalFacility().asFacilityImpl().setName(PLANT_NAME);
-        propertiesProcessor = getInternalFacility().getPropertiesProcessor();
+        propertiesReference = getInternalFacility().getPropertiesReference();
         validate();
         changes();
         int reactorPollMillis = _plantConfiguration.getRecovery().getReactorPollMillis();
@@ -112,7 +110,7 @@ public class MPlantImpl extends PlantMtImpl {
                     if (_facility != null)
                         facilityRegistry.put(_facilityName, _facility);
                     ImmutableProperties facilityProperties =
-                            propertiesProcessor.getImmutableState().subMap(FACILITY_PREFIX);
+                            propertiesReference.getImmutable().subMap(FACILITY_PREFIX);
                     Iterator<String> kit = facilityProperties.keySet().iterator();
                     String postfix = "~"+FACILITY_DEPENDENCY_INFIX + _facilityName;
                     while (kit.hasNext()) {
@@ -132,20 +130,16 @@ public class MPlantImpl extends PlantMtImpl {
                     facilityRegistry.remove(_facilityName);
                 } else if (facilityRegistry.containsKey(_facilityName))
                     throw new IllegalStateException("Facility already registered: " + _facilityName);
-                final PropertiesProcessor propertiesProcessor = internalFacility.getPropertiesProcessor();
-                send(new PropertiesTransactionAReq(internalFacility, propertiesProcessor) {
-                    @Override
-                    protected void update(final PropertiesChangeManager _changeManager) throws Exception {
-                        _changeManager.put(stoppedKey(_facilityName), _stop);
-                        _changeManager.put(failedKey(_facilityName), _reasonForFailure);
-                    }
-                }, transactionResponseProcessor);
+                final PropertiesReference propertiesReference = internalFacility.getPropertiesReference();
+                UpdatePropertyTransaction t0 = new UpdatePropertyTransaction(stoppedKey(_facilityName), _stop);
+                UpdatePropertyTransaction t1 = new UpdatePropertyTransaction(failedKey(_facilityName), _reasonForFailure, t0);
+                send(t1.applyAReq(propertiesReference), transactionResponseProcessor, null);
             }
         };
     }
 
     private void validate() throws Exception {
-        RequestBus<ImmutablePropertyChanges> validationBus = propertiesProcessor.validationBus;
+        RequestBus<ImmutablePropertyChanges> validationBus = propertiesReference.validationBus;
         new SubscribeAReq<ImmutablePropertyChanges>(
                 validationBus,
                 getInternalFacility()) {
@@ -218,7 +212,7 @@ public class MPlantImpl extends PlantMtImpl {
     }
 
     public void changes() throws Exception {
-        RequestBus<ImmutablePropertyChanges> changeBus = propertiesProcessor.changeBus;
+        RequestBus<ImmutablePropertyChanges> changeBus = propertiesReference.changeBus;
         new SubscribeAReq<ImmutablePropertyChanges>(
                 changeBus,
                 getInternalFacility()) {
@@ -299,7 +293,7 @@ public class MPlantImpl extends PlantMtImpl {
                 }
                 String dependencyPrefix = dependencyPrefix(_facilityName);
                 ImmutableProperties dependencies =
-                        propertiesProcessor.getImmutableState().subMap(dependencyPrefix);
+                        propertiesReference.getImmutable().subMap(dependencyPrefix);
                 Iterator<String> dit = dependencies.keySet().iterator();
                 while (dit.hasNext()) {
                     String d = dit.next();
@@ -365,7 +359,7 @@ public class MPlantImpl extends PlantMtImpl {
                 if (hasDependency(_dependencyName, _dependentName))
                     throw new IllegalArgumentException(
                             "this would create a cyclic dependency");
-                send(propertiesProcessor.putAReq(dependencyPropertyName, true), dis);
+                send(getInternalFacility().putPropertyAReq(dependencyPropertyName, true), dis, null);
             }
         };
     }
@@ -374,7 +368,7 @@ public class MPlantImpl extends PlantMtImpl {
         String prefix = FACILITY_PREFIX + _dependentName + "~" + FACILITY_DEPENDENCY_INFIX;
         if (getProperty(prefix + _dependencyName) != null)
             return true;
-        final ImmutableProperties immutableProperties = propertiesProcessor.getImmutableState();
+        final ImmutableProperties immutableProperties = propertiesReference.getImmutable();
         final ImmutableProperties subMap = immutableProperties.subMap(prefix);
         final Collection<String> keys = subMap.keySet();
         if (keys.size() == 0)
@@ -389,16 +383,21 @@ public class MPlantImpl extends PlantMtImpl {
         return false;
     }
 
-    public AsyncRequest<Void> initialLocalMessageQueueSizePropertyAReq(final String _facilityName, final Integer _value) {
-        return propertiesProcessor.putAReq(initialLocalMessageQueueSizeKey(_facilityName), new Integer(_value).toString());
+    public AsyncRequest<ImmutableProperties> initialLocalMessageQueueSizePropertyAReq(final String _facilityName,
+                                                                                      final Integer _value) {
+        return getInternalFacility().putPropertyAReq(initialLocalMessageQueueSizeKey(_facilityName),
+                new Integer(_value).toString());
     }
 
-    public AsyncRequest<Void> initialBufferSizePropertyAReq(final String _facilityName, final Integer _value) {
-        return propertiesProcessor.putAReq(initialBufferSizeKey(_facilityName), new Integer(_value).toString());
+    public AsyncRequest<ImmutableProperties> initialBufferSizePropertyAReq(final String _facilityName,
+                                                                           final Integer _value) {
+        return getInternalFacility().putPropertyAReq(initialBufferSizeKey(_facilityName),
+                new Integer(_value).toString());
     }
 
-    public AsyncRequest<Void> activatorPropertyAReq(final String _facilityName, final String _className) {
-        return propertiesProcessor.putAReq(activatorKey(_facilityName), _className);
+    public AsyncRequest<ImmutableProperties> activatorPropertyAReq(final String _facilityName,
+                                                                   final String _className) {
+        return getInternalFacility().putPropertyAReq(activatorKey(_facilityName), _className);
     }
 
     public String getActivatorClassName(final String _facilityName) {
@@ -412,24 +411,24 @@ public class MPlantImpl extends PlantMtImpl {
         return facility.asFacilityImpl();
     }
 
-    public AsyncRequest<Void> autoStartAReq(final String _facilityName, final boolean _newValue) {
-        return propertiesProcessor.putAReq(autoStartKey(_facilityName), _newValue ? true : null);
+    public AsyncRequest<ImmutableProperties> autoStartAReq(final String _facilityName, final boolean _newValue) {
+        return getInternalFacility().putPropertyAReq(autoStartKey(_facilityName), _newValue);
     }
 
     public boolean isAutoStart(String name) {
         return getProperty(autoStartKey(name)) != null;
     }
 
-    public AsyncRequest<Void> failedAReq(final String _facilityName, final String _newValue) {
-        return propertiesProcessor.putAReq(failedKey(_facilityName), _newValue);
+    public AsyncRequest<ImmutableProperties> failedAReq(final String _facilityName, final String _newValue) {
+        return getInternalFacility().putPropertyAReq(failedKey(_facilityName), _newValue);
     }
 
     public Object getFailed(String name) {
         return getProperty(failedKey(name));
     }
 
-    public AsyncRequest<Void> stoppedAReq(final String _facilityName, final boolean _newValue) {
-        return propertiesProcessor.putAReq(stoppedKey(_facilityName), _newValue ? true : null);
+    public AsyncRequest<ImmutableProperties> stoppedAReq(final String _facilityName, final boolean _newValue) {
+        return getInternalFacility().putPropertyAReq(stoppedKey(_facilityName), _newValue);
     }
 
     public boolean isStopped(String name) {
@@ -445,8 +444,8 @@ public class MPlantImpl extends PlantMtImpl {
                 FacilityImpl facility = getFacilityImpl(_facilityName);
                 if (facility != null)
                     facility.close();
-                send(new PropertiesTransactionAReq(propertiesProcessor.parentReactor,
-                        propertiesProcessor) {
+                send(new PropertiesTransactionAReq(propertiesReference.parentReactor,
+                        propertiesReference) {
                     @Override
                     protected void update(final PropertiesChangeManager _contentManager)
                             throws Exception {

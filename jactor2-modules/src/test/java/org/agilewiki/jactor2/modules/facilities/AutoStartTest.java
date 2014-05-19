@@ -14,7 +14,7 @@ public class AutoStartTest extends TestCase {
             MPlant.dependencyPropertyAReq("B", "A").call();
             MPlant.autoStartAReq("B", true).call();
             MPlant.autoStartAReq("A", true).call();
-            PropertiesProcessor propertiesProcessor = MPlant.getInternalFacility().getPropertiesProcessor();
+            PropertiesProcessor propertiesProcessor = MPlant.getInternalFacility().getPropertiesReference();
             propertiesProcessor.getReactor().nullSReq().call(); //synchronize for the properties update
             ImmutableProperties properties = propertiesProcessor.getImmutableState();
             System.out.println(properties);

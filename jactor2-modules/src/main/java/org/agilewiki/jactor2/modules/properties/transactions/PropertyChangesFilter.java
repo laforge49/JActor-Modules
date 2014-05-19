@@ -1,6 +1,6 @@
 package org.agilewiki.jactor2.modules.properties.transactions;
 
-import org.agilewiki.jactor2.modules.pubSub.Filter;
+import org.agilewiki.jactor2.modules.filters.Filter;
 
 import java.util.Iterator;
 import java.util.SortedMap;

@@ -14,7 +14,9 @@ import org.agilewiki.jactor2.modules.Facility;
 import org.agilewiki.jactor2.modules.MPlant;
 import org.agilewiki.jactor2.modules.properties.immutable.ImmutableProperties;
 import org.agilewiki.jactor2.modules.properties.transactions.ImmutablePropertyChanges;
+import org.agilewiki.jactor2.modules.properties.transactions.PropertiesReference;
 import org.agilewiki.jactor2.modules.properties.transactions.PropertyChange;
+import org.agilewiki.jactor2.modules.properties.transactions.UpdatePropertyTransaction;
 import org.agilewiki.jactor2.modules.pubSub.SubscribeAReq;
 import org.agilewiki.jactor2.modules.pubSub.Subscription;
 import org.agilewiki.jactor2.modules.transactions.properties.*;
@@ -24,7 +26,7 @@ import java.util.Iterator;
 import java.util.SortedMap;
 
 public class FacilityImpl extends NonBlockingReactorMtImpl {
-    protected PropertiesProcessor propertiesProcessor;
+    protected PropertiesReference propertiesReference;
 
     private String name;
 
@@ -42,12 +44,12 @@ public class FacilityImpl extends NonBlockingReactorMtImpl {
         validateName(_name);
         name = _name;
         plantFacilityImpl = plantImpl.getInternalFacility().asFacilityImpl();
-        propertiesProcessor = new PropertiesProcessor(this.getFacility());
+        propertiesReference = new PropertiesReference(this.getFacility());
         tracePropertyChangesAReq().signal();
         String dependencyPrefix = MPlantImpl.dependencyPrefix(name);
-        PropertiesProcessor plantProperties = plantFacilityImpl.getPropertiesProcessor();
+        PropertiesReference plantProperties = plantFacilityImpl.getPropertiesReference();
         ImmutableProperties dependencies =
-                plantProperties.getImmutableState().subMap(dependencyPrefix);
+                plantProperties.getImmutable().subMap(dependencyPrefix);
         Iterator<String> dit = dependencies.keySet().iterator();
         while (dit.hasNext()) {
             String d = dit.next();
@@ -106,8 +108,8 @@ public class FacilityImpl extends NonBlockingReactorMtImpl {
         return name;
     }
 
-    public PropertiesProcessor getPropertiesProcessor() {
-        return propertiesProcessor;
+    public PropertiesReference getPropertiesReference() {
+        return propertiesReference;
     }
 
     protected void validateName(final String _name) throws Exception {
@@ -177,29 +179,33 @@ public class FacilityImpl extends NonBlockingReactorMtImpl {
      * @return The property value, or null.
      */
     public Object getProperty(final String propertyName) {
-        return propertiesProcessor.getImmutableState().get(propertyName);
+        return propertiesReference.getImmutable().get(propertyName);
     }
 
-    public AsyncRequest<Void> putPropertyAReq(final String _propertyName,
+    public AsyncRequest<ImmutableProperties> putPropertyAReq(final String _propertyName,
                                               final Boolean _propertyValue) {
-        return propertiesProcessor.putAReq(_propertyName, _propertyValue);
+        return new UpdatePropertyTransaction(_propertyName, _propertyValue).
+                applyAReq(propertiesReference);
     }
 
-    public AsyncRequest<Void> putPropertyAReq(final String _propertyName,
+    public AsyncRequest<ImmutableProperties> putPropertyAReq(final String _propertyName,
                                               final String _propertyValue) {
-        return propertiesProcessor.putAReq(_propertyName, _propertyValue);
+        return new UpdatePropertyTransaction(_propertyName, _propertyValue).
+                applyAReq(propertiesReference);
     }
 
-    public AsyncRequest<Void> putPropertyAReq(final String _propertyName,
+    public AsyncRequest<ImmutableProperties> putPropertyAReq(final String _propertyName,
                                               final Boolean _expectedValue,
                                               final Boolean _propertyValue) {
-        return propertiesProcessor.compareAndSetAReq(_propertyName, _expectedValue, _propertyValue);
+        return new UpdatePropertyTransaction(_propertyName, _propertyValue, _expectedValue).
+                applyAReq(propertiesReference);
     }
 
-    public AsyncRequest<Void> putPropertyAReq(final String _propertyName,
+    public AsyncRequest<ImmutableProperties> putPropertyAReq(final String _propertyName,
                                               final String _expectedValue,
                                               final String _propertyValue) {
-        return propertiesProcessor.compareAndSetAReq(_propertyName, _expectedValue, _propertyValue);
+        return new UpdatePropertyTransaction(_propertyName, _propertyValue, _expectedValue).
+                applyAReq(propertiesReference);
     }
 
     protected ClassLoader getClassLoader() throws Exception {
@@ -236,7 +242,7 @@ public class FacilityImpl extends NonBlockingReactorMtImpl {
     }
 
     public AsyncRequest<Subscription<ImmutablePropertyChanges>> tracePropertyChangesAReq() {
-        return new SubscribeAReq<ImmutablePropertyChanges>(propertiesProcessor.changeBus, asReactor()) {
+        return new SubscribeAReq<ImmutablePropertyChanges>(propertiesReference.changeBus, asReactor()) {
             @Override
             protected void processContent(final ImmutablePropertyChanges _content)
                     throws Exception {

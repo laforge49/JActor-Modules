@@ -12,7 +12,7 @@ public class StoppedTest extends TestCase {
             MPlant.activatorPropertyAReq("A", "org.agilewiki.jactor2.modules.facilities.SampleActivator").call();
             MPlant.stopFacility("A");
             MPlant.autoStartAReq("A", true).call();
-            PropertiesProcessor propertiesProcessor = MPlant.getInternalFacility().getPropertiesProcessor();
+            PropertiesProcessor propertiesProcessor = MPlant.getInternalFacility().getPropertiesReference();
             propertiesProcessor.getReactor().nullSReq().call(); //synchronize for the properties update
             System.out.println("before"+propertiesProcessor.getImmutableState());
             MPlant.clearStoppedAReq("A").call();

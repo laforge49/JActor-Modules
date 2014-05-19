@@ -1,11 +1,12 @@
 package org.agilewiki.jactor2.modules;
 
-import org.agilewiki.jactor2.core.impl.mtReactors.NonBlockingReactorMtImpl;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 import org.agilewiki.jactor2.core.reactors.Reactor;
 import org.agilewiki.jactor2.core.requests.AsyncRequest;
 import org.agilewiki.jactor2.modules.impl.FacilityImpl;
 import org.agilewiki.jactor2.modules.impl.MPlantImpl;
+import org.agilewiki.jactor2.modules.properties.immutable.ImmutableProperties;
+import org.agilewiki.jactor2.modules.properties.transactions.PropertiesReference;
 import org.agilewiki.jactor2.modules.transactions.properties.PropertiesProcessor;
 
 public class Facility extends NonBlockingReactor {
@@ -60,32 +61,32 @@ public class Facility extends NonBlockingReactor {
         return asFacilityImpl().getName();
     }
 
-    public PropertiesProcessor getPropertiesProcessor() {
-        return asFacilityImpl().getPropertiesProcessor();
+    public PropertiesReference getPropertiesReference() {
+        return asFacilityImpl().getPropertiesReference();
     }
 
     public Object getProperty(final String propertyName) {
         return asFacilityImpl().getProperty(propertyName);
     }
 
-    public AsyncRequest<Void> putPropertyAReq(final String _propertyName,
+    public AsyncRequest<ImmutableProperties> putPropertyAReq(final String _propertyName,
                                               final Boolean _expectedValue,
                                               final Boolean _propertyValue) {
-        return asFacilityImpl().putPropertyAReq(_propertyName, _expectedValue, _propertyValue);
+        return asFacilityImpl().putPropertyAReq(_propertyName, _propertyValue, _expectedValue);
     }
 
-    public AsyncRequest<Void> putPropertyAReq(final String _propertyName,
+    public AsyncRequest<ImmutableProperties> putPropertyAReq(final String _propertyName,
                                               final String _expectedValue,
                                               final String _propertyValue) {
-        return asFacilityImpl().putPropertyAReq(_propertyName, _expectedValue, _propertyValue);
+        return asFacilityImpl().putPropertyAReq(_propertyName, _propertyValue, _expectedValue);
     }
 
-    public AsyncRequest<Void> putPropertyAReq(final String _propertyName,
+    public AsyncRequest<ImmutableProperties> putPropertyAReq(final String _propertyName,
                                               final String _propertyValue) {
         return asFacilityImpl().putPropertyAReq(_propertyName, _propertyValue);
     }
 
-    public AsyncRequest<Void> putPropertyAReq(final String _propertyName,
+    public AsyncRequest<ImmutableProperties> putPropertyAReq(final String _propertyName,
                                               final Boolean _propertyValue) {
         return asFacilityImpl().putPropertyAReq(_propertyName, _propertyValue);
     }

@@ -1,4 +1,4 @@
-package org.agilewiki.jactor2.modules.pubSub;
+package org.agilewiki.jactor2.modules.filters;
 
 /**
  * Used when all content is of interest.

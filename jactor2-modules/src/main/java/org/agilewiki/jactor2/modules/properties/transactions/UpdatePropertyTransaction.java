@@ -24,7 +24,6 @@ public class UpdatePropertyTransaction extends PropertyTransaction {
      */
     public UpdatePropertyTransaction(final String _propertyName,
                                      final String _propertyValue) {
-        super(null);
         propertyName = _propertyName;
         propertyValue = _propertyValue;
         expecting = false;
@@ -41,7 +40,6 @@ public class UpdatePropertyTransaction extends PropertyTransaction {
     public UpdatePropertyTransaction(final String _propertyName,
                                      final String _propertyValue,
                                      final String _expectedValue) {
-        super(null);
         propertyName = _propertyName;
         propertyValue = _propertyValue;
         expecting = true;
@@ -56,7 +54,6 @@ public class UpdatePropertyTransaction extends PropertyTransaction {
      */
     public UpdatePropertyTransaction(final String _propertyName,
                                      final boolean _propertyValue) {
-        super(null);
         propertyName = _propertyName;
         propertyValue = _propertyValue ? "TRUE" : null;
         expecting = false;
@@ -73,7 +70,6 @@ public class UpdatePropertyTransaction extends PropertyTransaction {
     public UpdatePropertyTransaction(final String _propertyName,
                                      final boolean _propertyValue,
                                      final boolean _expectedValue) {
-        super(null);
         propertyName = _propertyName;
         propertyValue = _propertyValue ? "TRUE" : null;
         expecting = true;

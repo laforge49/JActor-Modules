@@ -9,6 +9,7 @@ import org.agilewiki.jactor2.core.requests.AsyncRequest;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.ExceptionHandler;
 import org.agilewiki.jactor2.modules.Facility;
+import org.agilewiki.jactor2.modules.filters.PrefixFilter;
 import org.agilewiki.jactor2.modules.properties.immutable.ImmutableProperties;
 import org.agilewiki.jactor2.modules.properties.transactions.*;
 import org.agilewiki.jactor2.modules.pubSub.RequestBus;
@@ -435,33 +436,9 @@ public class MPlantImpl extends PlantMtImpl {
         return (Boolean) getProperty(stoppedKey(name)) != null;
     }
 
-    public AsyncRequest<Void> purgeFacilitySReq(final String _facilityName) {
-        return new AsyncRequest<Void>(getInternalReactor()) {
-            AsyncResponseProcessor<Void> dis = this;
-
-            @Override
-            public void processAsyncRequest() throws Exception {
-                FacilityImpl facility = getFacilityImpl(_facilityName);
-                if (facility != null)
-                    facility.close();
-                send(new PropertiesTransactionAReq(propertiesReference.parentReactor,
-                        propertiesReference) {
-                    @Override
-                    protected void update(final PropertiesChangeManager _contentManager)
-                            throws Exception {
-                        ImmutableProperties immutableProperties =
-                                _contentManager.getImmutableProperties();
-                        String prefix = FACILITY_PREFIX + _facilityName + ".";
-                        final ImmutableProperties subMap = immutableProperties.subMap(prefix);
-                        final Collection<String> keys = subMap.keySet();
-                        final Iterator<String> it = keys.iterator();
-                        while (it.hasNext()) {
-                            final String key = it.next();
-                            _contentManager.put(key, (String) null);
-                        }
-                    }
-                }, dis);
-            }
-        };
+    public AsyncRequest<ImmutableProperties> purgeFacilitySReq(final String _facilityName) {
+        String prefix = FACILITY_PREFIX + _facilityName + ".";
+        PrefixFilter filter = new PrefixFilter(prefix);
+        return new RemovePropertiesTransaction(filter).applyAReq(propertiesReference);
     }
 }

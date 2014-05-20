@@ -13,7 +13,7 @@ public class ActivatorFailure {
             } catch (ReactorClosedException e) {
                 Facility facility = MPlant.getInternalFacility();
                 facility.nullSReq().call(); //synchronize for the properties update
-                System.out.println(facility.getPropertiesReference().getImmutableState());
+                System.out.println(facility.getPropertiesReference().getImmutable());
             }
         } finally {
             Plant.close();

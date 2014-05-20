@@ -19,7 +19,6 @@ import org.agilewiki.jactor2.modules.properties.transactions.PropertyChange;
 import org.agilewiki.jactor2.modules.properties.transactions.UpdatePropertyTransaction;
 import org.agilewiki.jactor2.modules.pubSub.SubscribeAReq;
 import org.agilewiki.jactor2.modules.pubSub.Subscription;
-import org.agilewiki.jactor2.modules.transactions.properties.*;
 
 import java.lang.reflect.Constructor;
 import java.util.Iterator;

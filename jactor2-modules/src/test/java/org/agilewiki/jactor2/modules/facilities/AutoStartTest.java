@@ -5,7 +5,6 @@ import org.agilewiki.jactor2.core.impl.Plant;
 import org.agilewiki.jactor2.modules.MPlant;
 import org.agilewiki.jactor2.modules.properties.immutable.ImmutableProperties;
 import org.agilewiki.jactor2.modules.properties.transactions.PropertiesReference;
-import org.agilewiki.jactor2.modules.transactions.properties.PropertiesProcessor;
 
 public class AutoStartTest extends TestCase {
     public void test() throws Exception {

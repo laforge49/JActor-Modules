@@ -5,7 +5,6 @@ import org.agilewiki.jactor2.core.requests.AsyncRequest;
 import org.agilewiki.jactor2.modules.impl.FacilityImpl;
 import org.agilewiki.jactor2.modules.impl.MPlantImpl;
 import org.agilewiki.jactor2.modules.properties.immutable.ImmutableProperties;
-import org.agilewiki.jactor2.modules.properties.transactions.PropertiesReference;
 
 public class MPlant {
 

@@ -4,7 +4,6 @@ import junit.framework.TestCase;
 import org.agilewiki.jactor2.core.impl.Plant;
 import org.agilewiki.jactor2.modules.MPlant;
 import org.agilewiki.jactor2.modules.properties.transactions.PropertiesReference;
-import org.agilewiki.jactor2.modules.transactions.properties.PropertiesProcessor;
 
 public class StoppedTest extends TestCase {
     public void test() throws Exception {

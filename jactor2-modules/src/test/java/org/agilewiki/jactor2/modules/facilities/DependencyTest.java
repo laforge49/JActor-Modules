@@ -6,7 +6,6 @@ import org.agilewiki.jactor2.modules.Facility;
 import org.agilewiki.jactor2.modules.MPlant;
 import org.agilewiki.jactor2.modules.properties.immutable.ImmutableProperties;
 import org.agilewiki.jactor2.modules.properties.transactions.PropertiesReference;
-import org.agilewiki.jactor2.modules.transactions.properties.PropertiesProcessor;
 
 public class DependencyTest extends TestCase {
     public void test() throws Exception {

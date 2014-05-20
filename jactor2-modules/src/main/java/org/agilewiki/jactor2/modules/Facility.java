@@ -7,7 +7,6 @@ import org.agilewiki.jactor2.modules.impl.FacilityImpl;
 import org.agilewiki.jactor2.modules.impl.MPlantImpl;
 import org.agilewiki.jactor2.modules.properties.immutable.ImmutableProperties;
 import org.agilewiki.jactor2.modules.properties.transactions.PropertiesReference;
-import org.agilewiki.jactor2.modules.transactions.properties.PropertiesProcessor;
 
 public class Facility extends NonBlockingReactor {
     public static AsyncRequest<Facility> createFacilityAReq(final String _name) throws Exception {

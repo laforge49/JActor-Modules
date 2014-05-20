@@ -75,6 +75,12 @@ abstract public class PropertyTransaction extends SyncTransaction<ImmutablePrope
     }
 
     @Override
+    protected void applySourceReference(final ImmutableReference<ImmutableProperties> _propertiesReference) {
+        super.applySourceReference(_propertiesReference);
+        propertiesChangeManager = new PropertiesChangeManager(_propertiesReference.getImmutable());
+    }
+
+    @Override
     protected void applySourceTransaction(final Transaction _transaction) {
         super.applySourceTransaction(_transaction);
         PropertyTransaction propertiesSource = (PropertyTransaction) _transaction;

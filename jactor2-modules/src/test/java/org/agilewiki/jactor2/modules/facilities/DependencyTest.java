@@ -5,6 +5,7 @@ import org.agilewiki.jactor2.core.impl.Plant;
 import org.agilewiki.jactor2.modules.Facility;
 import org.agilewiki.jactor2.modules.MPlant;
 import org.agilewiki.jactor2.modules.properties.immutable.ImmutableProperties;
+import org.agilewiki.jactor2.modules.properties.transactions.PropertiesReference;
 import org.agilewiki.jactor2.modules.transactions.properties.PropertiesProcessor;
 
 public class DependencyTest extends TestCase {
@@ -19,12 +20,12 @@ public class DependencyTest extends TestCase {
                     .call();
             final Facility c = MPlant.createFacilityAReq("C")
                     .call();
-            PropertiesProcessor propertiesProcessor = MPlant.getInternalFacility().getPropertiesReference();
-            ImmutableProperties properties = propertiesProcessor.getImmutableState();
+            PropertiesReference propertiesReference = MPlant.getInternalFacility().getPropertiesReference();
+            ImmutableProperties properties = propertiesReference.getImmutable();
             System.out.println("before: "+properties);
             MPlant.purgeFacilitySReq("A").call();
             MPlant.getInternalFacility().getPropertiesReference().getReactor().nullSReq().call(); //synchronize for the properties update
-            properties = propertiesProcessor.getImmutableState();
+            properties = propertiesReference.getImmutable();
             System.out.println("after: "+properties);
         } finally {
             Plant.close();

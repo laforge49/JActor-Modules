@@ -3,6 +3,7 @@ package org.agilewiki.jactor2.modules.facilities;
 import junit.framework.TestCase;
 import org.agilewiki.jactor2.core.impl.Plant;
 import org.agilewiki.jactor2.modules.MPlant;
+import org.agilewiki.jactor2.modules.properties.transactions.PropertiesReference;
 import org.agilewiki.jactor2.modules.transactions.properties.PropertiesProcessor;
 
 public class FailedTest extends TestCase {
@@ -12,12 +13,12 @@ public class FailedTest extends TestCase {
             MPlant.activatorPropertyAReq("A", "org.agilewiki.jactor2.modules.facilities.SampleActivator").call();
             MPlant.failFacility("A", "inhibit");
             MPlant.autoStartAReq("A", true).call();
-            PropertiesProcessor propertiesProcessor = MPlant.getInternalFacility().getPropertiesReference();
-            propertiesProcessor.getReactor().nullSReq().call(); //synchronize for the properties update
-            System.out.println("before"+propertiesProcessor.getImmutableState());
+            PropertiesReference propertiesReference = MPlant.getInternalFacility().getPropertiesReference();
+            propertiesReference.getReactor().nullSReq().call(); //synchronize for the properties update
+            System.out.println("before"+propertiesReference.getImmutable());
             MPlant.clearFailedAReq("A").call();
-            propertiesProcessor.getReactor().nullSReq().call(); //synchronize for the properties update
-            System.out.println("after"+propertiesProcessor.getImmutableState());
+            propertiesReference.getReactor().nullSReq().call(); //synchronize for the properties update
+            System.out.println("after"+propertiesReference.getImmutable());
             Thread.sleep(100); //give the activator a chance to run
         } finally {
             Plant.close();

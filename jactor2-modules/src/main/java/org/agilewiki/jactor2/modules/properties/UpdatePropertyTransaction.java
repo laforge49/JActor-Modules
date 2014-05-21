@@ -1,7 +1,7 @@
-package org.agilewiki.jactor2.modules.properties.transactions;
+package org.agilewiki.jactor2.modules.properties;
 
+import org.agilewiki.jactor2.core.blades.transactions.ISMap;
 import org.agilewiki.jactor2.core.blades.transactions.ImmutableSource;
-import org.agilewiki.jactor2.modules.properties.immutable.ImmutableProperties;
 
 /**
  * Composable transaction to update a property.
@@ -154,7 +154,7 @@ public class UpdatePropertyTransaction extends PropertyTransaction {
      * @param source The Transaction or ImmutableReference holding the immutable to be operated on.
      */
     @Override
-    protected void update(ImmutableSource<ImmutableProperties> source) throws Exception {
+    protected void update(ImmutableSource<ISMap<String>> source) throws Exception {
         if (propertyValue == null)
             immutable = source.getImmutable().minus(propertyName);
         else
@@ -163,7 +163,7 @@ public class UpdatePropertyTransaction extends PropertyTransaction {
     }
 
     @Override
-    protected boolean precheck(final ImmutableProperties _immutableProperties) {
+    protected boolean precheck(final ISMap<String> _immutableProperties) {
         String old = _immutableProperties.get(propertyName);
         return !expecting || (expectedValue == null && old == null) ||
                 (expectedValue != null && expectedValue.equals(old));

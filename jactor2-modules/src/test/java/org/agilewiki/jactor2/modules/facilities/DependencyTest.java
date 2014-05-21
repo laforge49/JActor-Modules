@@ -1,11 +1,11 @@
 package org.agilewiki.jactor2.modules.facilities;
 
 import junit.framework.TestCase;
+import org.agilewiki.jactor2.core.blades.transactions.ISMap;
 import org.agilewiki.jactor2.core.impl.Plant;
 import org.agilewiki.jactor2.modules.Facility;
 import org.agilewiki.jactor2.modules.MPlant;
-import org.agilewiki.jactor2.modules.properties.immutable.ImmutableProperties;
-import org.agilewiki.jactor2.modules.properties.transactions.PropertiesReference;
+import org.agilewiki.jactor2.modules.properties.PropertiesReference;
 
 public class DependencyTest extends TestCase {
     public void test() throws Exception {
@@ -20,7 +20,7 @@ public class DependencyTest extends TestCase {
             final Facility c = MPlant.createFacilityAReq("C")
                     .call();
             PropertiesReference propertiesReference = MPlant.getInternalFacility().getPropertiesReference();
-            ImmutableProperties properties = propertiesReference.getImmutable();
+            ISMap<String> properties = propertiesReference.getImmutable();
             System.out.println("before: "+properties);
             MPlant.purgeFacilitySReq("A").call();
             MPlant.getInternalFacility().getPropertiesReference().getReactor().nullSReq().call(); //synchronize for the properties update

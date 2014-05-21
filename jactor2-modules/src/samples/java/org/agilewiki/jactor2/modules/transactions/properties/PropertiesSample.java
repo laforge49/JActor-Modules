@@ -4,9 +4,7 @@ import org.agilewiki.jactor2.core.impl.Plant;
 import org.agilewiki.jactor2.core.reactors.CommonReactor;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 import org.agilewiki.jactor2.modules.MPlant;
-import org.agilewiki.jactor2.modules.properties.transactions.ImmutablePropertyChanges;
-import org.agilewiki.jactor2.modules.properties.transactions.PropertyChange;
-import org.agilewiki.jactor2.modules.properties.transactions.PropertyChangesFilter;
+import org.agilewiki.jactor2.modules.properties.*;
 import org.agilewiki.jactor2.modules.pubSub.RequestBus;
 import org.agilewiki.jactor2.modules.pubSub.SubscribeAReq;
 
@@ -17,9 +15,9 @@ public class PropertiesSample {
     public static void main(final String[] _args) throws Exception {
         new MPlant();
         try {
-            PropertiesProcessor propertiesProcessor = new PropertiesProcessor(Plant.getInternalReactor());
+            PropertiesReference propertiesReference = new PropertiesReference(Plant.getInternalReactor());
             final CommonReactor reactor = new NonBlockingReactor();
-            RequestBus<ImmutablePropertyChanges> validationBus = propertiesProcessor.validationBus;
+            RequestBus<ImmutablePropertyChanges> validationBus = propertiesReference.validationBus;
 
             new SubscribeAReq<ImmutablePropertyChanges>(
                     validationBus,
@@ -41,17 +39,17 @@ public class PropertiesSample {
             }.call();
 
             try {
-                propertiesProcessor.putAReq("pie", "apple").call();
-                propertiesProcessor.putAReq("pie", "peach").call();
-                propertiesProcessor.putAReq("pie", (String) null).call();
-                propertiesProcessor.putAReq("fruit", "pear").call();
-                propertiesProcessor.putAReq("fruit", "orange").call();
-                propertiesProcessor.putAReq("immutable.fudge", "fun").call();
-                propertiesProcessor.putAReq("immutable.fudge", (String) null).call(); //raises exception
+                new UpdatePropertyTransaction("pie", "apple").applyAReq(propertiesReference).call();
+                new UpdatePropertyTransaction("pie", "peach").applyAReq(propertiesReference).call();
+                new UpdatePropertyTransaction("pie", (String) null).applyAReq(propertiesReference).call();
+                new UpdatePropertyTransaction("fruit", "pear").applyAReq(propertiesReference).call();
+                new UpdatePropertyTransaction("fruit", "orange").applyAReq(propertiesReference).call();
+                new UpdatePropertyTransaction("immutable.fudge", "fun").applyAReq(propertiesReference).call();
+                new UpdatePropertyTransaction("immutable.fudge", (String) null).applyAReq(propertiesReference).call(); //raises exception
             } catch (final Exception e) {
                 System.out.println(e.getMessage());
             }
-            System.out.println(propertiesProcessor.getImmutableState().sortedKeySet());
+            System.out.println(propertiesReference.getImmutable().sortedKeySet());
         } finally {
             Plant.close();
         }

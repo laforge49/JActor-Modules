@@ -1,4 +1,4 @@
-package org.agilewiki.jactor2.modules.properties.transactions;
+package org.agilewiki.jactor2.modules.properties;
 
 import org.agilewiki.jactor2.modules.filters.Filter;
 

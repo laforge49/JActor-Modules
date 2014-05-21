@@ -1,6 +1,6 @@
-package org.agilewiki.jactor2.modules.properties.transactions;
+package org.agilewiki.jactor2.modules.properties;
 
-import org.agilewiki.jactor2.modules.properties.immutable.ImmutableProperties;
+import org.agilewiki.jactor2.core.blades.transactions.ISMap;
 
 import java.util.Collections;
 import java.util.SortedMap;
@@ -11,7 +11,7 @@ import java.util.TreeMap;
  */
 public class PropertiesChangeManager implements AutoCloseable {
 
-    ImmutableProperties immutableProperties;
+    ISMap<String> immutableProperties;
 
     final TreeMap<String, PropertyChange> changes = new TreeMap<String, PropertyChange>();
 
@@ -22,7 +22,7 @@ public class PropertiesChangeManager implements AutoCloseable {
 
     private boolean closed;
 
-    public PropertiesChangeManager(final ImmutableProperties _immutableProperties) {
+    public PropertiesChangeManager(final ISMap<String> _immutableProperties) {
         immutableProperties = _immutableProperties;
     }
 
@@ -31,7 +31,7 @@ public class PropertiesChangeManager implements AutoCloseable {
      *
      * @return The latest version of the immutable properties map.
      */
-    public ImmutableProperties getImmutableProperties() {
+    public ISMap<String> getImmutableProperties() {
         return immutableProperties;
     }
 

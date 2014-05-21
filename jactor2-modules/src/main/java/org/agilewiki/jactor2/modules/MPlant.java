@@ -1,10 +1,10 @@
 package org.agilewiki.jactor2.modules;
 
+import org.agilewiki.jactor2.core.blades.transactions.ISMap;
 import org.agilewiki.jactor2.core.impl.mtPlant.PlantConfiguration;
 import org.agilewiki.jactor2.core.requests.AsyncRequest;
 import org.agilewiki.jactor2.modules.impl.FacilityImpl;
 import org.agilewiki.jactor2.modules.impl.MPlantImpl;
-import org.agilewiki.jactor2.modules.properties.immutable.ImmutableProperties;
 
 public class MPlant {
 
@@ -28,7 +28,7 @@ public class MPlant {
         return MPlantImpl.getSingleton().getActivatorClassName(_facilityName);
     }
 
-    public static AsyncRequest<ImmutableProperties> activatorPropertyAReq(final String _facilityName, final String _className) {
+    public static AsyncRequest<ISMap<String>> activatorPropertyAReq(final String _facilityName, final String _className) {
         return MPlantImpl.getSingleton().activatorPropertyAReq(_facilityName, _className);
     }
 
@@ -36,7 +36,7 @@ public class MPlant {
         return MPlantImpl.getSingleton().isAutoStart(name);
     }
 
-    public static AsyncRequest<ImmutableProperties> autoStartAReq(final String _facilityName, final boolean _newValue) {
+    public static AsyncRequest<ISMap<String>> autoStartAReq(final String _facilityName, final boolean _newValue) {
         return MPlantImpl.getSingleton().autoStartAReq(_facilityName, _newValue);
     }
 
@@ -44,7 +44,7 @@ public class MPlant {
         return MPlantImpl.getSingleton().dependencyPropertyAReq(_dependentName, _dependencyName);
     }
 
-    public static AsyncRequest<ImmutableProperties> purgeFacilitySReq(final String _facilityName) {
+    public static AsyncRequest<ISMap<String>> purgeFacilitySReq(final String _facilityName) {
         return MPlantImpl.getSingleton().purgeFacilitySReq(_facilityName);
     }
 
@@ -56,7 +56,7 @@ public class MPlant {
         MPlantImpl.getSingleton().failFacility(_facilityName, reason);
     }
 
-    public static AsyncRequest<ImmutableProperties> clearFailedAReq(final String _facilityName) {
+    public static AsyncRequest<ISMap<String>> clearFailedAReq(final String _facilityName) {
         return MPlantImpl.getSingleton().failedAReq(_facilityName, null);
     }
 
@@ -68,15 +68,15 @@ public class MPlant {
         MPlantImpl.getSingleton().stopFacility(_facilityName);
     }
 
-    public static AsyncRequest<ImmutableProperties> clearStoppedAReq(final String _facilityName) {
+    public static AsyncRequest<ISMap<String>> clearStoppedAReq(final String _facilityName) {
         return MPlantImpl.getSingleton().stoppedAReq(_facilityName, false);
     }
 
-    public static AsyncRequest<ImmutableProperties> initialLocalMerssageQueueSizePropertyAReq(final String _facilityName, final Integer _value) {
+    public static AsyncRequest<ISMap<String>> initialLocalMerssageQueueSizePropertyAReq(final String _facilityName, final Integer _value) {
         return MPlantImpl.getSingleton().initialLocalMessageQueueSizePropertyAReq(_facilityName, _value);
     }
 
-    public static AsyncRequest<ImmutableProperties> initialBufferSizePropertyAReq(final String _facilityName, final Integer _value) {
+    public static AsyncRequest<ISMap<String>> initialBufferSizePropertyAReq(final String _facilityName, final Integer _value) {
         return MPlantImpl.getSingleton().initialBufferSizePropertyAReq(_facilityName, _value);
     }
 

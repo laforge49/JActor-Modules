@@ -1,5 +1,6 @@
 package org.agilewiki.jactor2.modules.impl;
 
+import org.agilewiki.jactor2.core.blades.transactions.ISMap;
 import org.agilewiki.jactor2.core.impl.mtPlant.PlantConfiguration;
 import org.agilewiki.jactor2.core.impl.mtPlant.PlantMtImpl;
 import org.agilewiki.jactor2.core.plant.PlantImpl;
@@ -10,8 +11,7 @@ import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.ExceptionHandler;
 import org.agilewiki.jactor2.modules.Facility;
 import org.agilewiki.jactor2.modules.filters.PrefixFilter;
-import org.agilewiki.jactor2.modules.properties.immutable.ImmutableProperties;
-import org.agilewiki.jactor2.modules.properties.transactions.*;
+import org.agilewiki.jactor2.modules.properties.*;
 import org.agilewiki.jactor2.modules.pubSub.RequestBus;
 import org.agilewiki.jactor2.modules.pubSub.SubscribeAReq;
 
@@ -109,7 +109,7 @@ public class MPlantImpl extends PlantMtImpl {
                 public void processAsyncResponse(Void _response) {
                     if (_facility != null)
                         facilityRegistry.put(_facilityName, _facility);
-                    ImmutableProperties facilityProperties =
+                    ISMap<String> facilityProperties =
                             propertiesReference.getImmutable().subMap(FACILITY_PREFIX);
                     Iterator<String> kit = facilityProperties.keySet().iterator();
                     String postfix = "~"+FACILITY_DEPENDENCY_INFIX + _facilityName;
@@ -292,7 +292,7 @@ public class MPlantImpl extends PlantMtImpl {
                     return;
                 }
                 String dependencyPrefix = dependencyPrefix(_facilityName);
-                ImmutableProperties dependencies =
+                ISMap<String> dependencies =
                         propertiesReference.getImmutable().subMap(dependencyPrefix);
                 Iterator<String> dit = dependencies.keySet().iterator();
                 while (dit.hasNext()) {
@@ -368,8 +368,8 @@ public class MPlantImpl extends PlantMtImpl {
         String prefix = FACILITY_PREFIX + _dependentName + "~" + FACILITY_DEPENDENCY_INFIX;
         if (getProperty(prefix + _dependencyName) != null)
             return true;
-        final ImmutableProperties immutableProperties = propertiesReference.getImmutable();
-        final ImmutableProperties subMap = immutableProperties.subMap(prefix);
+        final ISMap<String> immutableProperties = propertiesReference.getImmutable();
+        final ISMap<String> subMap = immutableProperties.subMap(prefix);
         final Collection<String> keys = subMap.keySet();
         if (keys.size() == 0)
             return false;
@@ -383,19 +383,19 @@ public class MPlantImpl extends PlantMtImpl {
         return false;
     }
 
-    public AsyncRequest<ImmutableProperties> initialLocalMessageQueueSizePropertyAReq(final String _facilityName,
+    public AsyncRequest<ISMap<String>> initialLocalMessageQueueSizePropertyAReq(final String _facilityName,
                                                                                       final Integer _value) {
         return getInternalFacility().putPropertyAReq(initialLocalMessageQueueSizeKey(_facilityName),
                 new Integer(_value).toString());
     }
 
-    public AsyncRequest<ImmutableProperties> initialBufferSizePropertyAReq(final String _facilityName,
+    public AsyncRequest<ISMap<String>> initialBufferSizePropertyAReq(final String _facilityName,
                                                                            final Integer _value) {
         return getInternalFacility().putPropertyAReq(initialBufferSizeKey(_facilityName),
                 new Integer(_value).toString());
     }
 
-    public AsyncRequest<ImmutableProperties> activatorPropertyAReq(final String _facilityName,
+    public AsyncRequest<ISMap<String>> activatorPropertyAReq(final String _facilityName,
                                                                    final String _className) {
         return getInternalFacility().putPropertyAReq(activatorKey(_facilityName), _className);
     }
@@ -411,7 +411,7 @@ public class MPlantImpl extends PlantMtImpl {
         return facility.asFacilityImpl();
     }
 
-    public AsyncRequest<ImmutableProperties> autoStartAReq(final String _facilityName, final boolean _newValue) {
+    public AsyncRequest<ISMap<String>> autoStartAReq(final String _facilityName, final boolean _newValue) {
         return getInternalFacility().putPropertyAReq(autoStartKey(_facilityName), _newValue);
     }
 
@@ -419,7 +419,7 @@ public class MPlantImpl extends PlantMtImpl {
         return getProperty(autoStartKey(name)) != null;
     }
 
-    public AsyncRequest<ImmutableProperties> failedAReq(final String _facilityName, final String _newValue) {
+    public AsyncRequest<ISMap<String>> failedAReq(final String _facilityName, final String _newValue) {
         return getInternalFacility().putPropertyAReq(failedKey(_facilityName), _newValue);
     }
 
@@ -427,7 +427,7 @@ public class MPlantImpl extends PlantMtImpl {
         return getProperty(failedKey(name));
     }
 
-    public AsyncRequest<ImmutableProperties> stoppedAReq(final String _facilityName, final boolean _newValue) {
+    public AsyncRequest<ISMap<String>> stoppedAReq(final String _facilityName, final boolean _newValue) {
         return getInternalFacility().putPropertyAReq(stoppedKey(_facilityName), _newValue);
     }
 
@@ -435,7 +435,7 @@ public class MPlantImpl extends PlantMtImpl {
         return (Boolean) getProperty(stoppedKey(name)) != null;
     }
 
-    public AsyncRequest<ImmutableProperties> purgeFacilitySReq(final String _facilityName) {
+    public AsyncRequest<ISMap<String>> purgeFacilitySReq(final String _facilityName) {
         String prefix = FACILITY_PREFIX + _facilityName + ".";
         PrefixFilter filter = new PrefixFilter(prefix);
         return new RemovePropertiesTransaction(filter).applyAReq(propertiesReference);

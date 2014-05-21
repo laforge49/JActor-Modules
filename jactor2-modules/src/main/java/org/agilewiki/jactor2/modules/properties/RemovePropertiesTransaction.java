@@ -1,8 +1,8 @@
-package org.agilewiki.jactor2.modules.properties.transactions;
+package org.agilewiki.jactor2.modules.properties;
 
+import org.agilewiki.jactor2.core.blades.transactions.ISMap;
 import org.agilewiki.jactor2.core.blades.transactions.ImmutableSource;
 import org.agilewiki.jactor2.modules.filters.Filter;
-import org.agilewiki.jactor2.modules.properties.immutable.ImmutableProperties;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -36,8 +36,8 @@ public class RemovePropertiesTransaction extends PropertyTransaction {
     }
 
     @Override
-    protected void update(ImmutableSource<ImmutableProperties> source) throws Exception {
-        ImmutableProperties immutableProperties = source.getImmutable();
+    protected void update(ImmutableSource<ISMap<String>> source) throws Exception {
+        ISMap<String> immutableProperties = source.getImmutable();
         removed = new HashSet<String>();
         Set<String> keys = immutableProperties.keySet();
         Iterator<String> it = keys.iterator();

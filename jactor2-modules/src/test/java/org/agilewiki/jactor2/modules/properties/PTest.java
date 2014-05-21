@@ -1,15 +1,11 @@
 package org.agilewiki.jactor2.modules.properties;
 
 import junit.framework.TestCase;
+import org.agilewiki.jactor2.core.blades.transactions.ISMap;
 import org.agilewiki.jactor2.core.impl.Plant;
 import org.agilewiki.jactor2.core.reactors.CommonReactor;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 import org.agilewiki.jactor2.modules.MPlant;
-import org.agilewiki.jactor2.modules.properties.immutable.ImmutableProperties;
-import org.agilewiki.jactor2.modules.properties.transactions.ImmutablePropertyChanges;
-import org.agilewiki.jactor2.modules.properties.transactions.PropertiesReference;
-import org.agilewiki.jactor2.modules.properties.transactions.PropertyChange;
-import org.agilewiki.jactor2.modules.properties.transactions.UpdatePropertyTransaction;
 import org.agilewiki.jactor2.modules.pubSub.RequestBus;
 import org.agilewiki.jactor2.modules.pubSub.SubscribeAReq;
 
@@ -57,7 +53,7 @@ public class PTest extends TestCase {
                 }
             }.call();
 
-            ImmutableProperties immutableState = propertiesReference.getImmutable();
+            ISMap<String> immutableState = propertiesReference.getImmutable();
             assertEquals(0, immutableState.size());
 
             new UpdatePropertyTransaction("1", "first").applyAReq(propertiesReference).call();

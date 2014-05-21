@@ -1,5 +1,6 @@
 package org.agilewiki.jactor2.modules.impl;
 
+import org.agilewiki.jactor2.core.blades.transactions.ISMap;
 import org.agilewiki.jactor2.core.closeable.Closeable;
 import org.agilewiki.jactor2.core.impl.mtReactors.NonBlockingReactorMtImpl;
 import org.agilewiki.jactor2.core.impl.mtReactors.ReactorMtImpl;
@@ -12,11 +13,10 @@ import org.agilewiki.jactor2.modules.Activator;
 import org.agilewiki.jactor2.modules.DependencyNotPresentException;
 import org.agilewiki.jactor2.modules.Facility;
 import org.agilewiki.jactor2.modules.MPlant;
-import org.agilewiki.jactor2.modules.properties.immutable.ImmutableProperties;
-import org.agilewiki.jactor2.modules.properties.transactions.ImmutablePropertyChanges;
-import org.agilewiki.jactor2.modules.properties.transactions.PropertiesReference;
-import org.agilewiki.jactor2.modules.properties.transactions.PropertyChange;
-import org.agilewiki.jactor2.modules.properties.transactions.UpdatePropertyTransaction;
+import org.agilewiki.jactor2.modules.properties.ImmutablePropertyChanges;
+import org.agilewiki.jactor2.modules.properties.PropertiesReference;
+import org.agilewiki.jactor2.modules.properties.PropertyChange;
+import org.agilewiki.jactor2.modules.properties.UpdatePropertyTransaction;
 import org.agilewiki.jactor2.modules.pubSub.SubscribeAReq;
 import org.agilewiki.jactor2.modules.pubSub.Subscription;
 
@@ -47,7 +47,7 @@ public class FacilityImpl extends NonBlockingReactorMtImpl {
         tracePropertyChangesAReq().signal();
         String dependencyPrefix = MPlantImpl.dependencyPrefix(name);
         PropertiesReference plantProperties = plantFacilityImpl.getPropertiesReference();
-        ImmutableProperties dependencies =
+        ISMap<String> dependencies =
                 plantProperties.getImmutable().subMap(dependencyPrefix);
         Iterator<String> dit = dependencies.keySet().iterator();
         while (dit.hasNext()) {
@@ -181,26 +181,26 @@ public class FacilityImpl extends NonBlockingReactorMtImpl {
         return propertiesReference.getImmutable().get(propertyName);
     }
 
-    public AsyncRequest<ImmutableProperties> putPropertyAReq(final String _propertyName,
+    public AsyncRequest<ISMap<String>> putPropertyAReq(final String _propertyName,
                                               final Boolean _propertyValue) {
         return new UpdatePropertyTransaction(_propertyName, _propertyValue).
                 applyAReq(propertiesReference);
     }
 
-    public AsyncRequest<ImmutableProperties> putPropertyAReq(final String _propertyName,
+    public AsyncRequest<ISMap<String>> putPropertyAReq(final String _propertyName,
                                               final String _propertyValue) {
         return new UpdatePropertyTransaction(_propertyName, _propertyValue).
                 applyAReq(propertiesReference);
     }
 
-    public AsyncRequest<ImmutableProperties> putPropertyAReq(final String _propertyName,
+    public AsyncRequest<ISMap<String>> putPropertyAReq(final String _propertyName,
                                               final Boolean _expectedValue,
                                               final Boolean _propertyValue) {
         return new UpdatePropertyTransaction(_propertyName, _propertyValue, _expectedValue).
                 applyAReq(propertiesReference);
     }
 
-    public AsyncRequest<ImmutableProperties> putPropertyAReq(final String _propertyName,
+    public AsyncRequest<ISMap<String>> putPropertyAReq(final String _propertyName,
                                               final String _expectedValue,
                                               final String _propertyValue) {
         return new UpdatePropertyTransaction(_propertyName, _propertyValue, _expectedValue).

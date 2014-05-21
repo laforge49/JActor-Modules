@@ -1,16 +1,16 @@
-package org.agilewiki.jactor2.modules.properties.transactions;
+package org.agilewiki.jactor2.modules.properties;
 
+import org.agilewiki.jactor2.core.blades.transactions.ISMap;
 import org.agilewiki.jactor2.core.blades.transactions.ImmutableReference;
 import org.agilewiki.jactor2.core.blades.transactions.SyncTransaction;
 import org.agilewiki.jactor2.core.blades.transactions.Transaction;
 import org.agilewiki.jactor2.core.requests.AsyncRequest;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
-import org.agilewiki.jactor2.modules.properties.immutable.ImmutableProperties;
 
 /**
  * Base class for property transactions.
  */
-abstract public class PropertyTransaction extends SyncTransaction<ImmutableProperties> implements PropertiesSource {
+abstract public class PropertyTransaction extends SyncTransaction<ISMap<String>> implements PropertiesSource {
 
     protected PropertiesChangeManager propertiesChangeManager;
 
@@ -36,12 +36,12 @@ abstract public class PropertyTransaction extends SyncTransaction<ImmutablePrope
         return propertiesChangeManager;
     }
 
-    protected void updateImmutableReference(final ImmutableReference<ImmutableProperties> _immutableReference) {
+    protected void updateImmutableReference(final ImmutableReference<ISMap<String>> _immutableReference) {
     }
 
-    public AsyncRequest<ImmutableProperties> applyAReq(final ImmutableReference<ImmutableProperties> _immutableReference) {
-        return new AsyncRequest<ImmutableProperties>(_immutableReference.getReactor()) {
-            private AsyncResponseProcessor<ImmutableProperties> dis = this;
+    public AsyncRequest<ISMap<String>> applyAReq(final ImmutableReference<ISMap<String>> _immutableReference) {
+        return new AsyncRequest<ISMap<String>>(_immutableReference.getReactor()) {
+            private AsyncResponseProcessor<ISMap<String>> dis = this;
 
             private PropertiesReference propertiesReference = (PropertiesReference) _immutableReference;
 
@@ -56,10 +56,10 @@ abstract public class PropertyTransaction extends SyncTransaction<ImmutablePrope
                 }
             };
 
-            private AsyncResponseProcessor<ImmutableProperties> superResponseProcessor =
-                    new AsyncResponseProcessor<ImmutableProperties>() {
+            private AsyncResponseProcessor<ISMap<String>> superResponseProcessor =
+                    new AsyncResponseProcessor<ISMap<String>>() {
                 @Override
-                public void processAsyncResponse(ImmutableProperties _response) throws Exception {
+                public void processAsyncResponse(ISMap<String> _response) throws Exception {
                     immutablePropertyChanges = new ImmutablePropertyChanges(propertiesChangeManager);
                     send(propertiesReference.validationBus.sendsContentAReq(immutablePropertyChanges),
                             validationResponseProcessor);
@@ -75,7 +75,7 @@ abstract public class PropertyTransaction extends SyncTransaction<ImmutablePrope
     }
 
     @Override
-    protected void applySourceReference(final ImmutableReference<ImmutableProperties> _propertiesReference) {
+    protected void applySourceReference(final ImmutableReference<ISMap<String>> _propertiesReference) {
         super.applySourceReference(_propertiesReference);
         propertiesChangeManager = new PropertiesChangeManager(_propertiesReference.getImmutable());
     }

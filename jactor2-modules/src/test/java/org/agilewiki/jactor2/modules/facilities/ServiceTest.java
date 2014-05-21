@@ -9,20 +9,20 @@ import org.agilewiki.jactor2.core.requests.AsyncRequest;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.ExceptionHandler;
 import org.agilewiki.jactor2.core.requests.Request;
-import org.agilewiki.jactor2.modules.Facility;
+import org.agilewiki.jactor2.modules.MFacility;
 import org.agilewiki.jactor2.modules.MPlant;
 
 public class ServiceTest extends TestCase {
     public void test() throws Exception {
         new MPlant();
-        final Facility clientFacility = MPlant.createFacilityAReq("Client")
+        final MFacility clientMFacility = MPlant.createFacilityAReq("Client")
                 .call();
-        final Facility serverFacility = MPlant.createFacilityAReq("Server")
+        final MFacility serverMFacility = MPlant.createFacilityAReq("Server")
                 .call();
         try {
-            NonBlockingReactor serverReactor = new NonBlockingReactor(serverFacility);
+            NonBlockingReactor serverReactor = new NonBlockingReactor(serverMFacility);
             final Server server = new Server(serverReactor);
-            NonBlockingReactor clientReactor = new NonBlockingReactor(clientFacility);
+            NonBlockingReactor clientReactor = new NonBlockingReactor(clientMFacility);
             final Client client = new Client(clientReactor, server);
             NonBlockingReactor testReactor = new NonBlockingReactor();
             new AsyncRequest<Void>(testReactor) {
@@ -46,7 +46,7 @@ public class ServiceTest extends TestCase {
             }.signal();
             Thread.sleep(100);
             //serverReactor.close();     //this works
-            serverFacility.close();  //this also works
+            serverMFacility.close();  //this also works
         } finally {
             Plant.close();
             Thread.sleep(500);

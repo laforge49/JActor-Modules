@@ -40,7 +40,7 @@ public class Printer extends BlockingBladeBase {
     private static Printer printer;
 
     public static AsyncRequest<Void> printlnAReq(final String _string) {
-        return new AsyncRequest<Void>(Plant.getInternalReactor()) {
+        return new AsyncRequest<Void>(Plant.getInternalFacility()) {
             AsyncResponseProcessor<Void> dis = this;
 
             @Override
@@ -58,7 +58,7 @@ public class Printer extends BlockingBladeBase {
     }
 
     public static AsyncRequest<Void> printfAReq(final String _format, final Object... _args) {
-        return new AsyncRequest<Void>(Plant.getInternalReactor()) {
+        return new AsyncRequest<Void>(Plant.getInternalFacility()) {
             AsyncResponseProcessor<Void> dis = this;
 
             @Override
@@ -76,7 +76,7 @@ public class Printer extends BlockingBladeBase {
     }
 
     static public AsyncRequest<Printer> stdoutAReq() {
-        return new AsyncRequest<Printer>(Plant.getInternalReactor()) {
+        return new AsyncRequest<Printer>(Plant.getInternalFacility()) {
             AsyncResponseProcessor<Printer> dis = this;
 
             @Override

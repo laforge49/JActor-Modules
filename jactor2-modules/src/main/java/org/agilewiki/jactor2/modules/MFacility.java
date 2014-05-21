@@ -1,15 +1,16 @@
 package org.agilewiki.jactor2.modules;
 
 import org.agilewiki.jactor2.core.blades.transactions.ISMap;
+import org.agilewiki.jactor2.core.reactors.Facility;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 import org.agilewiki.jactor2.core.reactors.Reactor;
 import org.agilewiki.jactor2.core.requests.AsyncRequest;
-import org.agilewiki.jactor2.modules.impl.FacilityImpl;
+import org.agilewiki.jactor2.modules.impl.MFacilityImpl;
 import org.agilewiki.jactor2.modules.impl.MPlantImpl;
 import org.agilewiki.jactor2.modules.properties.PropertiesReference;
 
-public class Facility extends NonBlockingReactor {
-    public static AsyncRequest<Facility> createFacilityAReq(final String _name) throws Exception {
+public class MFacility extends Facility {
+    public static AsyncRequest<MFacility> createMFacilityAReq(final String _name) throws Exception {
         MPlantImpl plantImpl = MPlantImpl.getSingleton();
         final int initialBufferSize;
         Integer v = (Integer) plantImpl.getProperty(MPlantImpl.initialBufferSizeKey(_name));
@@ -23,37 +24,37 @@ public class Facility extends NonBlockingReactor {
             initialLocalQueueSize = v;
         else
             initialLocalQueueSize = plantImpl.getInternalFacility().asFacilityImpl().getInitialLocalQueueSize();
-        final Facility facility = new Facility(initialBufferSize, initialLocalQueueSize);
-        facility.asFacilityImpl().setName(_name);
-        return new AsyncRequest<Facility>(facility) {
+        final MFacility MFacility = new MFacility(initialBufferSize, initialLocalQueueSize);
+        MFacility.asFacilityImpl().setName(_name);
+        return new AsyncRequest<MFacility>(MFacility) {
             @Override
             public void processAsyncRequest() throws Exception {
-                send(facility.asFacilityImpl().startFacilityAReq(), this, facility);
+                send(MFacility.asFacilityImpl().startFacilityAReq(), this, MFacility);
             }
         };
     }
 
-    public static Facility asFacility(final Reactor _reactor) {
-        if (_reactor instanceof Facility)
-            return (Facility) _reactor;
-        return asFacility(_reactor.getParentReactor());
+    public static MFacility asMFacility(final Reactor _reactor) {
+        if (_reactor instanceof MFacility)
+            return (MFacility) _reactor;
+        return asMFacility(_reactor.getParentReactor());
     }
 
-    public Facility() {
+    public MFacility() {
     }
 
-    private Facility(final int _initialOutboxSize, final int _initialLocalQueueSize) throws Exception {
+    private MFacility(final int _initialOutboxSize, final int _initialLocalQueueSize) throws Exception {
         super(_initialOutboxSize, _initialLocalQueueSize);
     }
 
     @Override
-    protected FacilityImpl createReactorImpl(final NonBlockingReactor _parentReactorImpl,
+    protected MFacilityImpl createReactorImpl(final NonBlockingReactor _parentReactorImpl,
                                              final int _initialOutboxSize, final int _initialLocalQueueSize) {
-        return new FacilityImpl(_initialOutboxSize, _initialLocalQueueSize);
+        return new MFacilityImpl(_initialOutboxSize, _initialLocalQueueSize);
     }
 
-    public FacilityImpl asFacilityImpl() {
-        return (FacilityImpl) asReactorImpl();
+    public MFacilityImpl asFacilityImpl() {
+        return (MFacilityImpl) asReactorImpl();
     }
 
     public String getName() {

@@ -4,7 +4,7 @@ package org.agilewiki.jactor2.modules.facilities;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 import org.agilewiki.jactor2.core.requests.AsyncRequest;
 import org.agilewiki.jactor2.modules.Activator;
-import org.agilewiki.jactor2.modules.Facility;
+import org.agilewiki.jactor2.modules.MFacility;
 
 public class SampleActivator extends Activator {
 
@@ -17,7 +17,7 @@ public class SampleActivator extends Activator {
         return new AsyncBladeRequest<Void>() {
             @Override
             public void processAsyncRequest() {
-                System.out.println("activated: "+((Facility)getReactor()).getName());
+                System.out.println("activated: "+((MFacility)getReactor()).getName());
                 this.processAsyncResponse(null);
             }
         };

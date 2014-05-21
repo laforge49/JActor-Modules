@@ -9,11 +9,11 @@ public class ActivatorFailure {
         try {
             MPlant.activatorPropertyAReq("a", "NoSuchActivator").call();
             try {
-                Facility.createFacilityAReq("a").call();
+                MFacility.createMFacilityAReq("a").call();
             } catch (ReactorClosedException e) {
-                Facility facility = MPlant.getInternalFacility();
-                facility.nullSReq().call(); //synchronize for the properties update
-                System.out.println(facility.getPropertiesReference().getImmutable());
+                MFacility MFacility = MPlant.getInternalFacility();
+                MFacility.nullSReq().call(); //synchronize for the properties update
+                System.out.println(MFacility.getPropertiesReference().getImmutable());
             }
         } finally {
             Plant.close();

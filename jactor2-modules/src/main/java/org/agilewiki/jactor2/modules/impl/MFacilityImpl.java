@@ -11,7 +11,7 @@ import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.ExceptionHandler;
 import org.agilewiki.jactor2.modules.Activator;
 import org.agilewiki.jactor2.modules.DependencyNotPresentException;
-import org.agilewiki.jactor2.modules.Facility;
+import org.agilewiki.jactor2.modules.MFacility;
 import org.agilewiki.jactor2.modules.MPlant;
 import org.agilewiki.jactor2.modules.properties.ImmutablePropertyChanges;
 import org.agilewiki.jactor2.modules.properties.PropertiesReference;
@@ -24,17 +24,17 @@ import java.lang.reflect.Constructor;
 import java.util.Iterator;
 import java.util.SortedMap;
 
-public class FacilityImpl extends NonBlockingReactorMtImpl {
+public class MFacilityImpl extends NonBlockingReactorMtImpl {
     protected PropertiesReference propertiesReference;
 
     private String name;
 
     private MPlantImpl plantImpl;
 
-    private FacilityImpl plantFacilityImpl;
+    private MFacilityImpl plantMFacilityImpl;
 
-    public FacilityImpl(final int _initialOutboxSize, final int _initialLocalQueueSize) {
-        super(PlantImpl.getSingleton().getInternalReactor() == null ? null : PlantImpl.getSingleton().getInternalReactor(),
+    public MFacilityImpl(final int _initialOutboxSize, final int _initialLocalQueueSize) {
+        super(PlantImpl.getSingleton().getInternalFacility() == null ? null : PlantImpl.getSingleton().getInternalFacility(),
                 _initialOutboxSize, _initialLocalQueueSize);
         plantImpl = MPlantImpl.getSingleton();
     }
@@ -42,18 +42,18 @@ public class FacilityImpl extends NonBlockingReactorMtImpl {
     public void setName(final String _name) throws Exception {
         validateName(_name);
         name = _name;
-        plantFacilityImpl = plantImpl.getInternalFacility().asFacilityImpl();
+        plantMFacilityImpl = plantImpl.getInternalFacility().asFacilityImpl();
         propertiesReference = new PropertiesReference(this.getFacility());
         tracePropertyChangesAReq().signal();
         String dependencyPrefix = MPlantImpl.dependencyPrefix(name);
-        PropertiesReference plantProperties = plantFacilityImpl.getPropertiesReference();
+        PropertiesReference plantProperties = plantMFacilityImpl.getPropertiesReference();
         ISMap<String> dependencies =
                 plantProperties.getImmutable().subMap(dependencyPrefix);
         Iterator<String> dit = dependencies.keySet().iterator();
         while (dit.hasNext()) {
             String d = dit.next();
             String dependencyName = d.substring(dependencyPrefix.length());
-            FacilityImpl dependency = plantImpl.getFacilityImpl(dependencyName);
+            MFacilityImpl dependency = plantImpl.getFacilityImpl(dependencyName);
             if (dependency == null)
                 throw new DependencyNotPresentException(dependencyName);
             dependency.addCloseable(this);
@@ -68,7 +68,7 @@ public class FacilityImpl extends NonBlockingReactorMtImpl {
                     new AsyncResponseProcessor<Void>() {
                         @Override
                         public void processAsyncResponse(Void _response) {
-                            parentReactor.addCloseable(FacilityImpl.this);
+                            parentReactor.addCloseable(MFacilityImpl.this);
                             String activatorClassName = MPlant.getActivatorClassName(name);
                             if (activatorClassName == null)
                                 dis.processAsyncResponse(null);
@@ -95,12 +95,12 @@ public class FacilityImpl extends NonBlockingReactorMtImpl {
         };
     }
 
-    public Facility asFacility() {
-        return (Facility) asReactor();
+    public MFacility asFacility() {
+        return (MFacility) asReactor();
     }
 
-    public Facility getFacility() {
-        return (Facility) getReactor();
+    public MFacility getFacility() {
+        return (MFacility) getReactor();
     }
 
     public String getName() {
@@ -168,7 +168,7 @@ public class FacilityImpl extends NonBlockingReactorMtImpl {
 
     private AsyncRequest<Void> registerFacilityAReq() {
         final MPlantImpl plantImpl = MPlantImpl.getSingleton();
-        return plantImpl.updateFacilityStatusAReq(FacilityImpl.this.asFacility(), name, false, null);
+        return plantImpl.updateFacilityStatusAReq(MFacilityImpl.this.asFacility(), name, false, null);
     }
 
     /**

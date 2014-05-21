@@ -3,25 +3,25 @@ package org.agilewiki.jactor2.modules;
 import org.agilewiki.jactor2.core.blades.transactions.ISMap;
 import org.agilewiki.jactor2.core.impl.mtPlant.PlantConfiguration;
 import org.agilewiki.jactor2.core.requests.AsyncRequest;
-import org.agilewiki.jactor2.modules.impl.FacilityImpl;
+import org.agilewiki.jactor2.modules.impl.MFacilityImpl;
 import org.agilewiki.jactor2.modules.impl.MPlantImpl;
 
 public class MPlant {
 
-    public static Facility getInternalFacility() {
+    public static MFacility getInternalFacility() {
         return MPlantImpl.getSingleton().getInternalFacility();
     }
 
-    public static Facility getFacility(String name) {
-        FacilityImpl facilityImpl = MPlantImpl.getSingleton().getFacilityImpl(name);
-        if (facilityImpl == null)
+    public static MFacility getFacility(String name) {
+        MFacilityImpl MFacilityImpl = MPlantImpl.getSingleton().getFacilityImpl(name);
+        if (MFacilityImpl == null)
             return null;
-        return facilityImpl.asFacility();
+        return MFacilityImpl.asFacility();
     }
 
-    public static AsyncRequest<Facility> createFacilityAReq(final String _name)
+    public static AsyncRequest<MFacility> createFacilityAReq(final String _name)
             throws Exception {
-        return Facility.createFacilityAReq(_name);
+        return MFacility.createMFacilityAReq(_name);
     }
 
     public static String getActivatorClassName(final String _facilityName) {

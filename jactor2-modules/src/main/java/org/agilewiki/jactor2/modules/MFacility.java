@@ -24,12 +24,11 @@ public class MFacility extends Facility {
             initialLocalQueueSize = v;
         else
             initialLocalQueueSize = plantImpl.getInternalFacility().asFacilityImpl().getInitialLocalQueueSize();
-        final MFacility MFacility = new MFacility(initialBufferSize, initialLocalQueueSize);
-        MFacility.asFacilityImpl().setName(_name);
-        return new AsyncRequest<MFacility>(MFacility) {
+        final MFacility mFacility = new MFacility(_name, initialBufferSize, initialLocalQueueSize);
+        return new AsyncRequest<MFacility>(mFacility) {
             @Override
             public void processAsyncRequest() throws Exception {
-                send(MFacility.asFacilityImpl().startFacilityAReq(), this, MFacility);
+                send(mFacility.asFacilityImpl().startFacilityAReq(), this, mFacility);
             }
         };
     }
@@ -40,11 +39,13 @@ public class MFacility extends Facility {
         return asMFacility(_reactor.getParentReactor());
     }
 
-    public MFacility() {
+    private MFacility(final String _name, final int _initialOutboxSize, final int _initialLocalQueueSize) throws Exception {
+        super(_name, _initialOutboxSize, _initialLocalQueueSize);
+        asFacilityImpl().nameSet(name);
     }
 
-    private MFacility(final int _initialOutboxSize, final int _initialLocalQueueSize) throws Exception {
-        super(_initialOutboxSize, _initialLocalQueueSize);
+    public MFacility(final String _name, Void _parentReactor, final int _initialOutboxSize, final int _initialLocalQueueSize) throws Exception {
+        super(_name, null, _initialOutboxSize, _initialLocalQueueSize);
     }
 
     @Override

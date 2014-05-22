@@ -6,6 +6,7 @@ import org.agilewiki.jactor2.core.impl.mtReactors.NonBlockingReactorMtImpl;
 import org.agilewiki.jactor2.core.impl.mtReactors.ReactorMtImpl;
 import org.agilewiki.jactor2.core.plant.PlantImpl;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
+import org.agilewiki.jactor2.core.reactors.Reactor;
 import org.agilewiki.jactor2.core.requests.AsyncRequest;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.ExceptionHandler;
@@ -27,11 +28,11 @@ import java.util.SortedMap;
 public class MFacilityImpl extends NonBlockingReactorMtImpl {
     protected PropertiesReference propertiesReference;
 
-    private String name;
-
     private MPlantImpl plantImpl;
 
     private MFacilityImpl plantMFacilityImpl;
+
+    private String name;
 
     public MFacilityImpl(final int _initialOutboxSize, final int _initialLocalQueueSize) {
         super(PlantImpl.getSingleton().getInternalFacility() == null ? null : PlantImpl.getSingleton().getInternalFacility(),
@@ -39,11 +40,15 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
         plantImpl = MPlantImpl.getSingleton();
     }
 
-    public void setName(final String _name) throws Exception {
-        validateName(_name);
-        name = _name;
-        plantMFacilityImpl = plantImpl.getInternalFacility().asFacilityImpl();
+    public void initialize(final Reactor _reactor) throws Exception{
+        super.initialize(_reactor);
         propertiesReference = new PropertiesReference(this.getFacility());
+    }
+
+    public void nameSet(final String _name) throws Exception {
+        name = _name;
+        validateName(name);
+        plantMFacilityImpl = plantImpl.getInternalFacility().asFacilityImpl();
         tracePropertyChangesAReq().signal();
         String dependencyPrefix = MPlantImpl.dependencyPrefix(name);
         PropertiesReference plantProperties = plantMFacilityImpl.getPropertiesReference();
@@ -126,9 +131,9 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
             throw new IllegalArgumentException("name may not contain ~: "
                     + _name);
         }
-        if (_name.equals(MPlantImpl.PLANT_NAME)) {
+        if (_name.equals(MPlantImpl.PLANT_INTERNAL_FACILITY_NAME)) {
             if (getParentReactor() != null)
-                throw new IllegalArgumentException("name may not be " + MPlantImpl.PLANT_NAME);
+                throw new IllegalArgumentException("name may not be " + MPlantImpl.PLANT_INTERNAL_FACILITY_NAME);
         } else if (MPlant.getFacility(_name) != null) {
             throw new IllegalStateException("facility by that name already exists");
         }

@@ -33,7 +33,7 @@ public class PropertiesReference extends ImmutableReference<ISMap<String>> imple
      */
     public final RequestBus<ImmutablePropertyChanges> changeBus;
 
-    public PropertiesReference() {
+    public PropertiesReference() throws Exception {
         this(empty());
     }
 
@@ -42,7 +42,7 @@ public class PropertiesReference extends ImmutableReference<ISMap<String>> imple
      *
      * @param _immutable    The immutable data structure to be operated on.
      */
-    public PropertiesReference(final ISMap<String> _immutable) {
+    public PropertiesReference(final ISMap<String> _immutable) throws Exception {
         super(_immutable);
         NonBlockingReactor parentReactor = (NonBlockingReactor) getReactor().getParentReactor();
         validationBus = new RequestBus<ImmutablePropertyChanges>(parentReactor);
@@ -76,7 +76,7 @@ public class PropertiesReference extends ImmutableReference<ISMap<String>> imple
      *
      * @param _parentReactor    The parent of the blade's reactor.
      */
-    public PropertiesReference(final NonBlockingReactor _parentReactor) {
+    public PropertiesReference(final NonBlockingReactor _parentReactor) throws Exception {
         this(empty(), _parentReactor);
     }
 
@@ -86,7 +86,7 @@ public class PropertiesReference extends ImmutableReference<ISMap<String>> imple
      * @param _immutable    The immutable data structure to be operated on.
      * @param _parentReactor    The parent of the blade's reactor.
      */
-    public PropertiesReference(final ISMap<String> _immutable, final NonBlockingReactor _parentReactor) {
+    public PropertiesReference(final ISMap<String> _immutable, final NonBlockingReactor _parentReactor) throws Exception {
         super(_immutable, _parentReactor);
         validationBus = new RequestBus<ImmutablePropertyChanges>(_parentReactor);
         changeBus = new RequestBus<ImmutablePropertyChanges>(_parentReactor);

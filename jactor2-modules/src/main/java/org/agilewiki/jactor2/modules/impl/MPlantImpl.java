@@ -4,6 +4,7 @@ import org.agilewiki.jactor2.core.blades.transactions.ISMap;
 import org.agilewiki.jactor2.core.impl.mtPlant.PlantConfiguration;
 import org.agilewiki.jactor2.core.impl.mtPlant.PlantMtImpl;
 import org.agilewiki.jactor2.core.plant.PlantImpl;
+import org.agilewiki.jactor2.core.reactors.Facility;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 import org.agilewiki.jactor2.core.reactors.ReactorClosedException;
 import org.agilewiki.jactor2.core.requests.AsyncRequest;
@@ -20,8 +21,6 @@ import java.util.*;
 public class MPlantImpl extends PlantMtImpl {
 
     public static final String CORE_PREFIX = "core.";
-
-    public static final String PLANT_NAME = "Plant";
 
     public static final String FACILITY_PREFIX = "facility_";
 
@@ -86,7 +85,6 @@ public class MPlantImpl extends PlantMtImpl {
 
     public MPlantImpl(final PlantConfiguration _plantConfiguration) throws Exception {
         super(_plantConfiguration);
-        getInternalFacility().asFacilityImpl().setName(PLANT_NAME);
         propertiesReference = getInternalFacility().getPropertiesReference();
         validate();
         changes();
@@ -166,7 +164,7 @@ public class MPlantImpl extends PlantMtImpl {
                                         "the dependency properties can not change while a facility is running ");
                             }
                             name2 = name2.substring(FACILITY_DEPENDENCY_INFIX.length());
-                            if (PLANT_NAME.equals(name1))
+                            if (PLANT_INTERNAL_FACILITY_NAME.equals(name1))
                                 throw new UnsupportedOperationException("a plant can not have a dependency");
                             if (hasDependency(name2, key))
                                 throw new IllegalArgumentException(
@@ -176,7 +174,7 @@ public class MPlantImpl extends PlantMtImpl {
                                 throw new IllegalStateException(
                                         "the initial local message queue size property can not change while a facility is running ");
                             }
-                            if (PLANT_NAME.equals(name1))
+                            if (PLANT_INTERNAL_FACILITY_NAME.equals(name1))
                                 throw new UnsupportedOperationException(
                                         "a plant can not have an initial local message queue size property");
                             if (newValue != null && !(newValue instanceof Integer))
@@ -187,7 +185,7 @@ public class MPlantImpl extends PlantMtImpl {
                                 throw new IllegalStateException(
                                         "the initial buffer size property can not change while a facility is running ");
                             }
-                            if (PLANT_NAME.equals(name1))
+                            if (PLANT_INTERNAL_FACILITY_NAME.equals(name1))
                                 throw new UnsupportedOperationException(
                                         "a plant can not have an initial buffer size property");
                             if (newValue != null && !(newValue instanceof Integer))
@@ -198,7 +196,7 @@ public class MPlantImpl extends PlantMtImpl {
                                 throw new IllegalStateException(
                                         "the activator property can not change while a facility is running ");
                             }
-                            if (PLANT_NAME.equals(name1))
+                            if (PLANT_INTERNAL_FACILITY_NAME.equals(name1))
                                 throw new UnsupportedOperationException(
                                         "a plant can not have an activator property");
                             if (newValue != null && !(newValue instanceof String))
@@ -256,8 +254,10 @@ public class MPlantImpl extends PlantMtImpl {
         return getInternalFacility().getProperty(propertyName);
     }
 
-    protected MFacility createInternalFacility() {
-        return new MFacility();
+    protected MFacility createInternalFacility() throws Exception {
+        return new MFacility(PLANT_INTERNAL_FACILITY_NAME, null,
+                getPlantConfiguration().getInitialBufferSize(),
+                getPlantConfiguration().getInitialLocalMessageQueueSize());
     }
 
     private Runnable plantPoll() {
@@ -348,9 +348,9 @@ public class MPlantImpl extends PlantMtImpl {
                     throw new IllegalArgumentException(
                             "the dependency name may not be null");
                 }
-                if (PLANT_NAME.equals(_dependencyName))
+                if (PLANT_INTERNAL_FACILITY_NAME.equals(_dependencyName))
                     dis.processAsyncResponse(null);
-                if (PLANT_NAME.equals(_dependentName))
+                if (PLANT_INTERNAL_FACILITY_NAME.equals(_dependentName))
                     throw new IllegalArgumentException("Plant may not have a dependency");
                 dependencyPropertyName = dependencyPrefix(_dependentName) + name;
                 if (getProperty(dependencyPropertyName) != null) {
@@ -433,7 +433,7 @@ public class MPlantImpl extends PlantMtImpl {
     }
 
     public boolean isStopped(String name) {
-        return (Boolean) getProperty(stoppedKey(name)) != null;
+        return getProperty(stoppedKey(name)) != null;
     }
 
     public AsyncRequest<ISMap<String>> purgeFacilitySReq(final String _facilityName) {

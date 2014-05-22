@@ -47,7 +47,6 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
 
     public void nameSet(final String _name) throws Exception {
         name = _name;
-        validateName(name);
         plantMFacilityImpl = plantImpl.getInternalFacility().asFacilityImpl();
         tracePropertyChangesAReq().signal();
         String dependencyPrefix = MPlantImpl.dependencyPrefix(name);
@@ -114,29 +113,6 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
 
     public PropertiesReference getPropertiesReference() {
         return propertiesReference;
-    }
-
-    protected void validateName(final String _name) throws Exception {
-        if (_name == null) {
-            throw new IllegalArgumentException("name may not be null");
-        }
-        if (_name.length() == 0) {
-            throw new IllegalArgumentException("name may not be empty");
-        }
-        if (_name.contains(" ")) {
-            throw new IllegalArgumentException("name may not contain spaces: "
-                    + _name);
-        }
-        if (_name.contains("~")) {
-            throw new IllegalArgumentException("name may not contain ~: "
-                    + _name);
-        }
-        if (_name.equals(MPlantImpl.PLANT_INTERNAL_FACILITY_NAME)) {
-            if (getParentReactor() != null)
-                throw new IllegalArgumentException("name may not be " + MPlantImpl.PLANT_INTERNAL_FACILITY_NAME);
-        } else if (MPlant.getFacility(_name) != null) {
-            throw new IllegalStateException("facility by that name already exists");
-        }
     }
 
     @Override

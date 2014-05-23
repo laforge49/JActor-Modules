@@ -104,7 +104,7 @@ public class MPlantImpl extends PlantMtImpl {
                 @Override
                 public void processAsyncResponse(Void _response) {
                     if (_Mfacility != null)
-                        internalMFacility.registerBlade(_facilityName, _Mfacility, internalMFacility);
+                        internalMFacility.registerBlade(_Mfacility, internalMFacility);
                     ISMap<String> facilityProperties =
                             propertiesReference.getImmutable().subMap(FACILITY_PREFIX);
                     Iterator<String> kit = facilityProperties.keySet().iterator();

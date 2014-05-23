@@ -5,7 +5,7 @@ import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 import org.agilewiki.jactor2.core.requests.AsyncRequest;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.SyncRequest;
-import org.agilewiki.jactor2.modules.filters.Filter;
+import org.agilewiki.jactor2.core.blades.filters.Filter;
 
 import java.util.Collections;
 import java.util.Iterator;

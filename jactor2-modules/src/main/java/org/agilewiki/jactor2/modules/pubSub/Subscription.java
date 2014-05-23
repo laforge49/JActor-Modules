@@ -6,8 +6,8 @@ import org.agilewiki.jactor2.core.closeable.CloseableImpl;
 import org.agilewiki.jactor2.core.impl.mtCloseable.CloseableMtImpl;
 import org.agilewiki.jactor2.core.reactors.CommonReactor;
 import org.agilewiki.jactor2.core.requests.AsyncRequest;
-import org.agilewiki.jactor2.modules.filters.Filter;
-import org.agilewiki.jactor2.modules.filters.NullFilter;
+import org.agilewiki.jactor2.core.blades.filters.Filter;
+import org.agilewiki.jactor2.core.blades.filters.NullFilter;
 
 /**
  * A subscription allows a subscriber to receive content of interest from a RequestBus.

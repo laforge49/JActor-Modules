@@ -2,7 +2,7 @@ package org.agilewiki.jactor2.modules.properties;
 
 import org.agilewiki.jactor2.core.blades.transactions.ISMap;
 import org.agilewiki.jactor2.core.blades.transactions.ImmutableSource;
-import org.agilewiki.jactor2.modules.filters.Filter;
+import org.agilewiki.jactor2.core.blades.filters.Filter;
 
 import java.util.HashSet;
 import java.util.Iterator;

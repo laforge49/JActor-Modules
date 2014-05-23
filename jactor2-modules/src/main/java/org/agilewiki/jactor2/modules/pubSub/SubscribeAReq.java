@@ -3,7 +3,7 @@ package org.agilewiki.jactor2.modules.pubSub;
 import org.agilewiki.jactor2.core.reactors.CommonReactor;
 import org.agilewiki.jactor2.core.requests.AsyncRequest;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
-import org.agilewiki.jactor2.modules.filters.Filter;
+import org.agilewiki.jactor2.core.blades.filters.Filter;
 
 /**
  * A request to subscribe to the content published by a RequestBus.

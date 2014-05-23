@@ -1,6 +1,6 @@
 package org.agilewiki.jactor2.modules.properties;
 
-import org.agilewiki.jactor2.modules.filters.Filter;
+import org.agilewiki.jactor2.core.blades.filters.Filter;
 
 import java.util.Iterator;
 import java.util.SortedMap;

@@ -33,10 +33,10 @@ public class MFacility extends Facility {
         };
     }
 
-    public static MFacility asMFacility(final Reactor _reactor) {
+    public static MFacility getMFacility(final Reactor _reactor) {
         if (_reactor instanceof MFacility)
             return (MFacility) _reactor;
-        return asMFacility(_reactor.getParentReactor());
+        return getMFacility(_reactor.getParentReactor());
     }
 
     private MFacility(final String _name, final int _initialOutboxSize, final int _initialLocalQueueSize) throws Exception {

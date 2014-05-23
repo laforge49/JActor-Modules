@@ -57,7 +57,7 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
         while (dit.hasNext()) {
             String d = dit.next();
             String dependencyName = d.substring(dependencyPrefix.length());
-            MFacilityImpl dependency = plantImpl.getFacilityImpl(dependencyName);
+            MFacilityImpl dependency = plantImpl.getMFacilityImpl(dependencyName);
             if (dependency == null)
                 throw new DependencyNotPresentException(dependencyName);
             dependency.addCloseable(this);
@@ -99,7 +99,7 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
         };
     }
 
-    public MFacility asFacility() {
+    public MFacility asMFacility() {
         return (MFacility) asReactor();
     }
 
@@ -149,7 +149,7 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
 
     private AsyncRequest<Void> registerFacilityAReq() {
         final MPlantImpl plantImpl = MPlantImpl.getSingleton();
-        return plantImpl.updateFacilityStatusAReq(MFacilityImpl.this.asFacility(), name, false, null);
+        return plantImpl.updateFacilityStatusAReq(MFacilityImpl.this.asMFacility(), name, false, null);
     }
 
     /**

@@ -1,11 +1,11 @@
 package org.agilewiki.jactor2.modules.impl;
 
+import org.agilewiki.jactor2.core.blades.NamedBlade;
 import org.agilewiki.jactor2.core.blades.transactions.ISMap;
 import org.agilewiki.jactor2.core.impl.mtPlant.PlantConfiguration;
 import org.agilewiki.jactor2.core.impl.mtPlant.PlantMtImpl;
 import org.agilewiki.jactor2.core.plant.PlantImpl;
 import org.agilewiki.jactor2.core.reactors.Facility;
-import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 import org.agilewiki.jactor2.core.reactors.ReactorClosedException;
 import org.agilewiki.jactor2.core.requests.AsyncRequest;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
@@ -71,8 +71,6 @@ public class MPlantImpl extends PlantMtImpl {
         return (MPlantImpl) PlantImpl.getSingleton();
     }
 
-    private final Map<String, MFacility> facilityRegistry = new TreeMap<>();
-
     private final PropertiesReference propertiesReference;
 
     public MPlantImpl() throws Exception {
@@ -93,7 +91,7 @@ public class MPlantImpl extends PlantMtImpl {
                 reactorPollMillis);
     }
 
-    public AsyncRequest<Void> updateFacilityStatusAReq(final MFacility _M_facility,
+    public AsyncRequest<Void> updateFacilityStatusAReq(final MFacility _Mfacility,
                                                         final String _facilityName,
                                                         final boolean _stop,
                                                         final String _reasonForFailure) {
@@ -105,8 +103,8 @@ public class MPlantImpl extends PlantMtImpl {
             AsyncResponseProcessor<Void> transactionResponseProcessor = new AsyncResponseProcessor<Void>() {
                 @Override
                 public void processAsyncResponse(Void _response) {
-                    if (_M_facility != null)
-                        facilityRegistry.put(_facilityName, _M_facility);
+                    if (_Mfacility != null)
+                        internalMFacility.registerBlade(_facilityName, _Mfacility, internalMFacility);
                     ISMap<String> facilityProperties =
                             propertiesReference.getImmutable().subMap(FACILITY_PREFIX);
                     Iterator<String> kit = facilityProperties.keySet().iterator();
@@ -124,9 +122,9 @@ public class MPlantImpl extends PlantMtImpl {
 
             @Override
             public void processAsyncRequest() {
-                if (_M_facility == null) {
-                    facilityRegistry.remove(_facilityName);
-                } else if (facilityRegistry.containsKey(_facilityName))
+                if (_Mfacility == null) {
+                    internalMFacility.unregisterBlade(_facilityName, internalMFacility);
+                } else if (internalMFacility.isRegisteredBlade(_facilityName))
                     throw new IllegalStateException("Facility already registered: " + _facilityName);
                 final PropertiesReference propertiesReference = internalMFacility.getPropertiesReference();
                 UpdatePropertyTransaction t0 = new UpdatePropertyTransaction(stoppedKey(_facilityName), _stop);
@@ -157,7 +155,7 @@ public class MPlantImpl extends PlantMtImpl {
                             throw new UnsupportedOperationException("undeliminated facility");
                         String name2 = name1.substring(i + 1);
                         name1 = name1.substring(0, i);
-                        MFacilityImpl facility0 = getFacilityImpl(name1);
+                        MFacilityImpl facility0 = getMFacilityImpl(name1);
                         if (name2.startsWith(FACILITY_DEPENDENCY_INFIX)) {
                             if (facility0 != null) {
                                 throw new IllegalStateException(
@@ -276,7 +274,7 @@ public class MPlantImpl extends PlantMtImpl {
         return new AsyncRequest<String>(getInternalFacility()) {
             @Override
             public void processAsyncRequest() throws Exception {
-                if (getFacilityImpl(_facilityName) != null) {
+                if (getMFacilityImpl(_facilityName) != null) {
                     processAsyncResponse(null);
                     return;
                 }
@@ -299,7 +297,7 @@ public class MPlantImpl extends PlantMtImpl {
                 while (dit.hasNext()) {
                     String d = dit.next();
                     String dependencyName = d.substring(dependencyPrefix.length());
-                    if (getFacilityImpl(dependencyName) == null)
+                    if (getMFacilityImpl(dependencyName) == null)
                         processAsyncResponse(null);
                 }
                 setExceptionHandler(new ExceptionHandler<String>() {
@@ -317,7 +315,7 @@ public class MPlantImpl extends PlantMtImpl {
     }
 
     public void stopFacility(final String _facilityName) throws Exception {
-        MFacilityImpl facility = getFacilityImpl(_facilityName);
+        MFacilityImpl facility = getMFacilityImpl(_facilityName);
         if (facility == null) {
             getInternalFacility().putPropertyAReq(stoppedKey(_facilityName), true).signal();
             return;
@@ -326,7 +324,7 @@ public class MPlantImpl extends PlantMtImpl {
     }
 
     public void failFacility(final String _facilityName, final String reason) throws Exception {
-        MFacilityImpl facility = getFacilityImpl(_facilityName);
+        MFacilityImpl facility = getMFacilityImpl(_facilityName);
         if (facility == null) {
             getInternalFacility().putPropertyAReq(failedKey(_facilityName), reason).signal();
             return;
@@ -405,10 +403,13 @@ public class MPlantImpl extends PlantMtImpl {
         return (String) getProperty(activatorKey(_facilityName));
     }
 
-    public MFacilityImpl getFacilityImpl(String name) {
-        MFacility MFacility = facilityRegistry.get(name);
-        if (MFacility == null)
+    public MFacilityImpl getMFacilityImpl(String name) {
+        NamedBlade blade = getInternalFacility().getBlade(name);
+        if (blade == null)
             return null;
+        if (!(blade instanceof Facility))
+            throw new IllegalArgumentException("not the name of an MFacility");
+        MFacility MFacility = (MFacility) blade;
         return MFacility.asFacilityImpl();
     }
 

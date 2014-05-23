@@ -13,10 +13,10 @@ public class MPlant {
     }
 
     public static MFacility getFacility(String name) {
-        MFacilityImpl MFacilityImpl = MPlantImpl.getSingleton().getFacilityImpl(name);
+        MFacilityImpl MFacilityImpl = MPlantImpl.getSingleton().getMFacilityImpl(name);
         if (MFacilityImpl == null)
             return null;
-        return MFacilityImpl.asFacility();
+        return MFacilityImpl.asMFacility();
     }
 
     public static AsyncRequest<MFacility> createFacilityAReq(final String _name)

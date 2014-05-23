@@ -13,8 +13,8 @@ import org.agilewiki.jactor2.core.requests.ExceptionHandler;
 import org.agilewiki.jactor2.modules.MFacility;
 import org.agilewiki.jactor2.core.blades.filters.PrefixFilter;
 import org.agilewiki.jactor2.modules.properties.*;
-import org.agilewiki.jactor2.modules.pubSub.RequestBus;
-import org.agilewiki.jactor2.modules.pubSub.SubscribeAReq;
+import org.agilewiki.jactor2.core.blades.pubSub.RequestBus;
+import org.agilewiki.jactor2.core.blades.pubSub.SubscribeAReq;
 
 import java.util.*;
 

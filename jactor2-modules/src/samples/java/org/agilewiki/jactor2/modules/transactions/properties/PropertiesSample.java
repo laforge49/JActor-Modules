@@ -5,8 +5,8 @@ import org.agilewiki.jactor2.core.reactors.CommonReactor;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 import org.agilewiki.jactor2.modules.MPlant;
 import org.agilewiki.jactor2.modules.properties.*;
-import org.agilewiki.jactor2.modules.pubSub.RequestBus;
-import org.agilewiki.jactor2.modules.pubSub.SubscribeAReq;
+import org.agilewiki.jactor2.core.blades.pubSub.RequestBus;
+import org.agilewiki.jactor2.core.blades.pubSub.SubscribeAReq;
 
 import java.util.Iterator;
 import java.util.SortedMap;
@@ -15,7 +15,7 @@ public class PropertiesSample {
     public static void main(final String[] _args) throws Exception {
         new MPlant();
         try {
-            PropertiesReference propertiesReference = new PropertiesReference(Plant.getInternalReactor());
+            PropertiesReference propertiesReference = new PropertiesReference(Plant.getInternalFacility());
             final CommonReactor reactor = new NonBlockingReactor();
             RequestBus<ImmutablePropertyChanges> validationBus = propertiesReference.validationBus;
 

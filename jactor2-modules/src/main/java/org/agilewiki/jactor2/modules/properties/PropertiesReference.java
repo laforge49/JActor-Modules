@@ -5,7 +5,7 @@ import org.agilewiki.jactor2.core.blades.transactions.ImmutableReference;
 import org.agilewiki.jactor2.core.impl.Plant;
 import org.agilewiki.jactor2.core.reactors.IsolationReactor;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
-import org.agilewiki.jactor2.modules.pubSub.RequestBus;
+import org.agilewiki.jactor2.core.blades.pubSub.RequestBus;
 
 import java.util.Map;
 

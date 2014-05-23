@@ -6,8 +6,8 @@ import org.agilewiki.jactor2.core.impl.Plant;
 import org.agilewiki.jactor2.core.reactors.CommonReactor;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 import org.agilewiki.jactor2.modules.MPlant;
-import org.agilewiki.jactor2.modules.pubSub.RequestBus;
-import org.agilewiki.jactor2.modules.pubSub.SubscribeAReq;
+import org.agilewiki.jactor2.core.blades.pubSub.RequestBus;
+import org.agilewiki.jactor2.core.blades.pubSub.SubscribeAReq;
 
 import java.io.IOException;
 import java.util.Iterator;

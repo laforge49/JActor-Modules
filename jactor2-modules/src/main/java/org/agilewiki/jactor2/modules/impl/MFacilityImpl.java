@@ -18,8 +18,8 @@ import org.agilewiki.jactor2.modules.properties.ImmutablePropertyChanges;
 import org.agilewiki.jactor2.modules.properties.PropertiesReference;
 import org.agilewiki.jactor2.modules.properties.PropertyChange;
 import org.agilewiki.jactor2.modules.properties.UpdatePropertyTransaction;
-import org.agilewiki.jactor2.modules.pubSub.SubscribeAReq;
-import org.agilewiki.jactor2.modules.pubSub.Subscription;
+import org.agilewiki.jactor2.core.blades.pubSub.SubscribeAReq;
+import org.agilewiki.jactor2.core.blades.pubSub.Subscription;
 
 import java.lang.reflect.Constructor;
 import java.util.Iterator;

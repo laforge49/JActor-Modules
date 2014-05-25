@@ -1,6 +1,10 @@
 package org.agilewiki.jactor2.modules.impl;
 
 import org.agilewiki.jactor2.core.blades.NamedBlade;
+import org.agilewiki.jactor2.core.blades.filters.PrefixFilter;
+import org.agilewiki.jactor2.core.blades.ismTransactions.*;
+import org.agilewiki.jactor2.core.blades.pubSub.RequestBus;
+import org.agilewiki.jactor2.core.blades.pubSub.SubscribeAReq;
 import org.agilewiki.jactor2.core.blades.transactions.ISMap;
 import org.agilewiki.jactor2.core.impl.mtPlant.PlantConfiguration;
 import org.agilewiki.jactor2.core.impl.mtPlant.PlantMtImpl;
@@ -11,12 +15,10 @@ import org.agilewiki.jactor2.core.requests.AsyncRequest;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.ExceptionHandler;
 import org.agilewiki.jactor2.modules.MFacility;
-import org.agilewiki.jactor2.core.blades.filters.PrefixFilter;
-import org.agilewiki.jactor2.modules.properties.*;
-import org.agilewiki.jactor2.core.blades.pubSub.RequestBus;
-import org.agilewiki.jactor2.core.blades.pubSub.SubscribeAReq;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.SortedMap;
 
 public class MPlantImpl extends PlantMtImpl {
 
@@ -71,7 +73,7 @@ public class MPlantImpl extends PlantMtImpl {
         return (MPlantImpl) PlantImpl.getSingleton();
     }
 
-    private final PropertiesReference propertiesReference;
+    private final ISMReference<String> propertiesReference;
 
     public MPlantImpl() throws Exception {
         this(new PlantConfiguration());
@@ -83,7 +85,7 @@ public class MPlantImpl extends PlantMtImpl {
 
     public MPlantImpl(final PlantConfiguration _plantConfiguration) throws Exception {
         super(_plantConfiguration);
-        propertiesReference = getInternalFacility().getPropertiesReference();
+        propertiesReference = getInternalFacility().getISMReference();
         validate();
         changes();
         int reactorPollMillis = _plantConfiguration.getRecovery().getReactorPollMillis();
@@ -96,6 +98,7 @@ public class MPlantImpl extends PlantMtImpl {
                                                         final boolean _stop,
                                                         final String _reasonForFailure) {
         System.out.println(">>>>>>>>>>>>>>>>> "+_facilityName);
+        final String stop = _stop ? "true" : null;
         final MFacility internalMFacility = getInternalFacility();
         return new AsyncRequest<Void>(internalMFacility) {
             AsyncRequest<Void> dis = this;
@@ -126,24 +129,24 @@ public class MPlantImpl extends PlantMtImpl {
                     internalMFacility.unregisterBlade(_facilityName, internalMFacility);
                 } else if (internalMFacility.isRegisteredBlade(_facilityName))
                     throw new IllegalStateException("Facility already registered: " + _facilityName);
-                final PropertiesReference propertiesReference = internalMFacility.getPropertiesReference();
-                UpdatePropertyTransaction t0 = new UpdatePropertyTransaction(stoppedKey(_facilityName), _stop);
-                UpdatePropertyTransaction t1 = new UpdatePropertyTransaction(failedKey(_facilityName), _reasonForFailure, t0);
+                final ISMReference<String> propertiesReference = internalMFacility.getISMReference();
+                ISMUpdateTransaction<String> t0 = new ISMUpdateTransaction<String>(stoppedKey(_facilityName), stop);
+                ISMUpdateTransaction<String> t1 = new ISMUpdateTransaction<String>(failedKey(_facilityName), _reasonForFailure, t0);
                 send(t1.applyAReq(propertiesReference), transactionResponseProcessor, null);
             }
         };
     }
 
     private void validate() throws Exception {
-        RequestBus<ImmutablePropertyChanges> validationBus = propertiesReference.validationBus;
-        new SubscribeAReq<ImmutablePropertyChanges>(
+        RequestBus<ImmutableChanges<String>> validationBus = propertiesReference.validationBus;
+        new SubscribeAReq<ImmutableChanges<String>>(
                 validationBus,
                 getInternalFacility()) {
-            protected void processContent(final ImmutablePropertyChanges _content)
+            protected void processContent(final ImmutableChanges<String> _content)
                     throws Exception {
-                SortedMap<String, PropertyChange> readOnlyChanges = _content.readOnlyChanges;
-                PropertyChange pc;
-                final Iterator<PropertyChange> it = readOnlyChanges.values().iterator();
+                SortedMap<String, ImmutableChange<String>> readOnlyChanges = _content.readOnlyChanges;
+                ImmutableChange<String> pc;
+                final Iterator<ImmutableChange<String>> it = readOnlyChanges.values().iterator();
                 while (it.hasNext()) {
                     pc = it.next();
                     String key = pc.name;
@@ -208,16 +211,16 @@ public class MPlantImpl extends PlantMtImpl {
     }
 
     public void changes() throws Exception {
-        RequestBus<ImmutablePropertyChanges> changeBus = propertiesReference.changeBus;
-        new SubscribeAReq<ImmutablePropertyChanges>(
+        RequestBus<ImmutableChanges<String>> changeBus = propertiesReference.changeBus;
+        new SubscribeAReq<ImmutableChanges<String>>(
                 changeBus,
                 getInternalFacility()) {
-            protected void processContent(final ImmutablePropertyChanges _content)
+            protected void processContent(final ImmutableChanges<String> _content)
                     throws Exception {
-                SortedMap<String, PropertyChange> readOnlyChanges = _content.readOnlyChanges;
-                final Iterator<PropertyChange> it = readOnlyChanges.values().iterator();
+                SortedMap<String, ImmutableChange<String>> readOnlyChanges = _content.readOnlyChanges;
+                final Iterator<ImmutableChange<String>> it = readOnlyChanges.values().iterator();
                 while (it.hasNext()) {
-                    PropertyChange pc = it.next();
+                    ImmutableChange<String> pc = it.next();
                     String key = pc.name;
                     Object newValue = pc.newValue;
                     if (key.startsWith(FACILITY_PREFIX)) {
@@ -317,7 +320,7 @@ public class MPlantImpl extends PlantMtImpl {
     public void stopFacility(final String _facilityName) throws Exception {
         MFacilityImpl facility = getMFacilityImpl(_facilityName);
         if (facility == null) {
-            getInternalFacility().putPropertyAReq(stoppedKey(_facilityName), true).signal();
+            getInternalFacility().putPropertyAReq(stoppedKey(_facilityName), "true").signal();
             return;
         }
         facility.stop();
@@ -358,7 +361,7 @@ public class MPlantImpl extends PlantMtImpl {
                 if (hasDependency(_dependencyName, _dependentName))
                     throw new IllegalArgumentException(
                             "this would create a cyclic dependency");
-                send(getInternalFacility().putPropertyAReq(dependencyPropertyName, true), dis, null);
+                send(getInternalFacility().putPropertyAReq(dependencyPropertyName, "true"), dis, null);
             }
         };
     }
@@ -414,7 +417,8 @@ public class MPlantImpl extends PlantMtImpl {
     }
 
     public AsyncRequest<ISMap<String>> autoStartAReq(final String _facilityName, final boolean _newValue) {
-        return getInternalFacility().putPropertyAReq(autoStartKey(_facilityName), _newValue);
+        final String newValue = _newValue ? "true" : null;
+        return getInternalFacility().putPropertyAReq(autoStartKey(_facilityName), newValue);
     }
 
     public boolean isAutoStart(String name) {
@@ -430,7 +434,8 @@ public class MPlantImpl extends PlantMtImpl {
     }
 
     public AsyncRequest<ISMap<String>> stoppedAReq(final String _facilityName, final boolean _newValue) {
-        return getInternalFacility().putPropertyAReq(stoppedKey(_facilityName), _newValue);
+        final String newValue = _newValue ? "true" : null;
+        return getInternalFacility().putPropertyAReq(stoppedKey(_facilityName), newValue);
     }
 
     public boolean isStopped(String name) {
@@ -440,6 +445,6 @@ public class MPlantImpl extends PlantMtImpl {
     public AsyncRequest<ISMap<String>> purgeFacilitySReq(final String _facilityName) {
         String prefix = FACILITY_PREFIX + _facilityName + ".";
         PrefixFilter filter = new PrefixFilter(prefix);
-        return new RemovePropertiesTransaction(filter).applyAReq(propertiesReference);
+        return new ISMRemoveTransaction<String>(filter).applyAReq(propertiesReference);
     }
 }

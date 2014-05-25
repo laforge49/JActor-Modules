@@ -1,5 +1,6 @@
 package org.agilewiki.jactor2.modules;
 
+import org.agilewiki.jactor2.core.blades.ismTransactions.ISMReference;
 import org.agilewiki.jactor2.core.blades.transactions.ISMap;
 import org.agilewiki.jactor2.core.reactors.Facility;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
@@ -7,7 +8,6 @@ import org.agilewiki.jactor2.core.reactors.Reactor;
 import org.agilewiki.jactor2.core.requests.AsyncRequest;
 import org.agilewiki.jactor2.modules.impl.MFacilityImpl;
 import org.agilewiki.jactor2.modules.impl.MPlantImpl;
-import org.agilewiki.jactor2.modules.properties.PropertiesReference;
 
 public class MFacility extends Facility {
     public static AsyncRequest<MFacility> createMFacilityAReq(final String _name) throws Exception {
@@ -62,18 +62,12 @@ public class MFacility extends Facility {
         return asFacilityImpl().getName();
     }
 
-    public PropertiesReference getPropertiesReference() {
-        return asFacilityImpl().getPropertiesReference();
+    public ISMReference<String> getISMReference() {
+        return asFacilityImpl().getISMReference();
     }
 
     public Object getProperty(final String propertyName) {
         return asFacilityImpl().getProperty(propertyName);
-    }
-
-    public AsyncRequest<ISMap<String>> putPropertyAReq(final String _propertyName,
-                                              final Boolean _expectedValue,
-                                              final Boolean _propertyValue) {
-        return asFacilityImpl().putPropertyAReq(_propertyName, _propertyValue, _expectedValue);
     }
 
     public AsyncRequest<ISMap<String>> putPropertyAReq(final String _propertyName,
@@ -84,11 +78,6 @@ public class MFacility extends Facility {
 
     public AsyncRequest<ISMap<String>> putPropertyAReq(final String _propertyName,
                                               final String _propertyValue) {
-        return asFacilityImpl().putPropertyAReq(_propertyName, _propertyValue);
-    }
-
-    public AsyncRequest<ISMap<String>> putPropertyAReq(final String _propertyName,
-                                              final Boolean _propertyValue) {
         return asFacilityImpl().putPropertyAReq(_propertyName, _propertyValue);
     }
 }

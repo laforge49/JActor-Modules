@@ -1,9 +1,9 @@
 package org.agilewiki.jactor2.modules.facilities;
 
 import junit.framework.TestCase;
+import org.agilewiki.jactor2.core.blades.ismTransactions.ISMReference;
 import org.agilewiki.jactor2.core.impl.Plant;
 import org.agilewiki.jactor2.modules.MPlant;
-import org.agilewiki.jactor2.modules.properties.PropertiesReference;
 
 public class StoppedTest extends TestCase {
     public void test() throws Exception {
@@ -12,7 +12,7 @@ public class StoppedTest extends TestCase {
             MPlant.activatorPropertyAReq("A", "org.agilewiki.jactor2.modules.facilities.SampleActivator").call();
             MPlant.stopFacility("A");
             MPlant.autoStartAReq("A", true).call();
-            PropertiesReference propertiesReference = MPlant.getInternalFacility().getPropertiesReference();
+            ISMReference<String> propertiesReference = MPlant.getInternalFacility().getISMReference();
             propertiesReference.getReactor().nullSReq().call(); //synchronize for the properties update
             System.out.println("before"+propertiesReference.getImmutable());
             MPlant.clearStoppedAReq("A").call();

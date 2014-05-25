@@ -1,5 +1,11 @@
 package org.agilewiki.jactor2.modules.impl;
 
+import org.agilewiki.jactor2.core.blades.ismTransactions.ISMReference;
+import org.agilewiki.jactor2.core.blades.ismTransactions.ISMUpdateTransaction;
+import org.agilewiki.jactor2.core.blades.ismTransactions.ImmutableChange;
+import org.agilewiki.jactor2.core.blades.ismTransactions.ImmutableChanges;
+import org.agilewiki.jactor2.core.blades.pubSub.SubscribeAReq;
+import org.agilewiki.jactor2.core.blades.pubSub.Subscription;
 import org.agilewiki.jactor2.core.blades.transactions.ISMap;
 import org.agilewiki.jactor2.core.closeable.Closeable;
 import org.agilewiki.jactor2.core.impl.mtReactors.NonBlockingReactorMtImpl;
@@ -14,19 +20,13 @@ import org.agilewiki.jactor2.modules.Activator;
 import org.agilewiki.jactor2.modules.DependencyNotPresentException;
 import org.agilewiki.jactor2.modules.MFacility;
 import org.agilewiki.jactor2.modules.MPlant;
-import org.agilewiki.jactor2.modules.properties.ImmutablePropertyChanges;
-import org.agilewiki.jactor2.modules.properties.PropertiesReference;
-import org.agilewiki.jactor2.modules.properties.PropertyChange;
-import org.agilewiki.jactor2.modules.properties.UpdatePropertyTransaction;
-import org.agilewiki.jactor2.core.blades.pubSub.SubscribeAReq;
-import org.agilewiki.jactor2.core.blades.pubSub.Subscription;
 
 import java.lang.reflect.Constructor;
 import java.util.Iterator;
 import java.util.SortedMap;
 
 public class MFacilityImpl extends NonBlockingReactorMtImpl {
-    protected PropertiesReference propertiesReference;
+    protected ISMReference<String> ismReference;
 
     private MPlantImpl plantImpl;
 
@@ -42,7 +42,7 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
 
     public void initialize(final Reactor _reactor) throws Exception{
         super.initialize(_reactor);
-        propertiesReference = new PropertiesReference(this.getFacility());
+        ismReference = new ISMReference<String>(this.getFacility());
     }
 
     public void nameSet(final String _name) throws Exception {
@@ -50,7 +50,7 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
         plantMFacilityImpl = plantImpl.getInternalFacility().asFacilityImpl();
         tracePropertyChangesAReq().signal();
         String dependencyPrefix = MPlantImpl.dependencyPrefix(name);
-        PropertiesReference plantProperties = plantMFacilityImpl.getPropertiesReference();
+        ISMReference<String> plantProperties = plantMFacilityImpl.getISMReference();
         ISMap<String> dependencies =
                 plantProperties.getImmutable().subMap(dependencyPrefix);
         Iterator<String> dit = dependencies.keySet().iterator();
@@ -111,8 +111,8 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
         return name;
     }
 
-    public PropertiesReference getPropertiesReference() {
-        return propertiesReference;
+    public ISMReference<String> getISMReference() {
+        return ismReference;
     }
 
     @Override
@@ -134,7 +134,7 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
         if (startedClosing()) {
             plantImpl.getInternalFacility().putPropertyAReq(MPlantImpl.failedKey(name), null, _reasonForFailure).
                     signal();
-            plantImpl.getInternalFacility().putPropertyAReq(MPlantImpl.stoppedKey(name), null, true).
+            plantImpl.getInternalFacility().putPropertyAReq(MPlantImpl.stoppedKey(name), null, "true").
                     signal();
             return;
         }
@@ -159,33 +159,20 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
      * @return The property value, or null.
      */
     public Object getProperty(final String propertyName) {
-        return propertiesReference.getImmutable().get(propertyName);
-    }
-
-    public AsyncRequest<ISMap<String>> putPropertyAReq(final String _propertyName,
-                                              final Boolean _propertyValue) {
-        return new UpdatePropertyTransaction(_propertyName, _propertyValue).
-                applyAReq(propertiesReference);
+        return ismReference.getImmutable().get(propertyName);
     }
 
     public AsyncRequest<ISMap<String>> putPropertyAReq(final String _propertyName,
                                               final String _propertyValue) {
-        return new UpdatePropertyTransaction(_propertyName, _propertyValue).
-                applyAReq(propertiesReference);
-    }
-
-    public AsyncRequest<ISMap<String>> putPropertyAReq(final String _propertyName,
-                                              final Boolean _expectedValue,
-                                              final Boolean _propertyValue) {
-        return new UpdatePropertyTransaction(_propertyName, _propertyValue, _expectedValue).
-                applyAReq(propertiesReference);
+        return new ISMUpdateTransaction<String>(_propertyName, _propertyValue).
+                applyAReq(ismReference);
     }
 
     public AsyncRequest<ISMap<String>> putPropertyAReq(final String _propertyName,
                                               final String _expectedValue,
                                               final String _propertyValue) {
-        return new UpdatePropertyTransaction(_propertyName, _propertyValue, _expectedValue).
-                applyAReq(propertiesReference);
+        return new ISMUpdateTransaction<String>(_propertyName, _propertyValue, _expectedValue).
+                applyAReq(ismReference);
     }
 
     protected ClassLoader getClassLoader() throws Exception {
@@ -221,15 +208,15 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
         };
     }
 
-    public AsyncRequest<Subscription<ImmutablePropertyChanges>> tracePropertyChangesAReq() {
-        return new SubscribeAReq<ImmutablePropertyChanges>(propertiesReference.changeBus, asReactor()) {
+    public AsyncRequest<Subscription<ImmutableChanges<String>>> tracePropertyChangesAReq() {
+        return new SubscribeAReq<ImmutableChanges<String>>(ismReference.changeBus, asReactor()) {
             @Override
-            protected void processContent(final ImmutablePropertyChanges _content)
+            protected void processContent(final ImmutableChanges<String> _content)
                     throws Exception {
-                SortedMap<String, PropertyChange> readOnlyChanges = _content.readOnlyChanges;
-                final Iterator<PropertyChange> it = readOnlyChanges.values().iterator();
+                SortedMap<String, ImmutableChange<String>> readOnlyChanges = _content.readOnlyChanges;
+                final Iterator<ImmutableChange<String>> it = readOnlyChanges.values().iterator();
                 while (it.hasNext()) {
-                    final PropertyChange propertyChange = it.next();
+                    final ImmutableChange<String> propertyChange = it.next();
                     String[] args = {
                             name,
                             propertyChange.name,

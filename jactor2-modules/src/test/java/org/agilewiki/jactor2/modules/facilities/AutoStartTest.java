@@ -1,10 +1,10 @@
 package org.agilewiki.jactor2.modules.facilities;
 
 import junit.framework.TestCase;
+import org.agilewiki.jactor2.core.blades.ismTransactions.ISMReference;
 import org.agilewiki.jactor2.core.blades.transactions.ISMap;
 import org.agilewiki.jactor2.core.impl.Plant;
 import org.agilewiki.jactor2.modules.MPlant;
-import org.agilewiki.jactor2.modules.properties.PropertiesReference;
 
 public class AutoStartTest extends TestCase {
     public void test() throws Exception {
@@ -14,7 +14,7 @@ public class AutoStartTest extends TestCase {
             MPlant.dependencyPropertyAReq("B", "A").call();
             MPlant.autoStartAReq("B", true).call();
             MPlant.autoStartAReq("A", true).call();
-            PropertiesReference propertiesReference = MPlant.getInternalFacility().getPropertiesReference();
+            ISMReference<String> propertiesReference = MPlant.getInternalFacility().getISMReference();
             propertiesReference.getReactor().nullSReq().call(); //synchronize for the properties update
             ISMap<String> properties = propertiesReference.getImmutable();
             System.out.println(properties);

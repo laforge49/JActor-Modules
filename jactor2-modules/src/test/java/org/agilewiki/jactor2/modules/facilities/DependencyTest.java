@@ -19,11 +19,11 @@ public class DependencyTest extends TestCase {
                     .call();
             final MFacility c = MPlant.createFacilityAOp("C")
                     .call();
-            ISMReference<String> propertiesReference = MPlant.getInternalFacility().getISMReference();
+            ISMReference<String> propertiesReference = MPlant.getInternalFacility().configuration;
             ISMap<String> properties = propertiesReference.getImmutable();
             System.out.println("before: "+properties);
             MPlant.purgeFacilityAOp("A").call();
-            MPlant.getInternalFacility().getISMReference().getReactor().nullSOp().call(); //synchronize for the properties update
+            MPlant.getInternalFacility().configuration.getReactor().nullSOp().call(); //synchronize for the properties update
             properties = propertiesReference.getImmutable();
             System.out.println("after: "+properties);
         } finally {

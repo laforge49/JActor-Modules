@@ -27,11 +27,11 @@ import java.util.Iterator;
 import java.util.SortedMap;
 
 public class MFacilityImpl extends NonBlockingReactorMtImpl {
-    protected ISMReference<String> ismReference;
-
     private MPlantImpl plantImpl;
 
-    private MFacilityImpl plantMFacilityImpl;
+    MFacility plantFacility;
+
+    ISMReference<String> plantConfiguration;
 
     private String name;
 
@@ -43,17 +43,16 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
 
     public void initialize(final Reactor _reactor) throws Exception {
         super.initialize(_reactor);
-        ismReference = new ISMReference<String>(this.getFacility());
     }
 
     public void nameSet(final String _name) throws Exception {
+        plantFacility = plantImpl.getInternalFacility();
+        plantConfiguration = plantFacility.configuration;
         name = _name;
-        plantMFacilityImpl = plantImpl.getInternalFacility().asFacilityImpl();
         tracePropertyChangesAOp().signal();
         String dependencyPrefix = MPlantImpl.dependencyPrefix(name);
-        ISMReference<String> plantProperties = plantMFacilityImpl.getISMReference();
         ISMap<String> dependencies =
-                plantProperties.getImmutable().subMap(dependencyPrefix);
+                plantConfiguration.getImmutable().subMap(dependencyPrefix);
         Iterator<String> dit = dependencies.keySet().iterator();
         while (dit.hasNext()) {
             String d = dit.next();
@@ -112,10 +111,6 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
         return name;
     }
 
-    public ISMReference<String> getISMReference() {
-        return ismReference;
-    }
-
     @Override
     public void close() throws Exception {
         close(false, null);
@@ -133,9 +128,9 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
         if (_reasonForFailure != null && _stop)
             throw new IllegalArgumentException("can not both stop and fail");
         if (startedClosing()) {
-            plantImpl.getInternalFacility().putPropertyAOp(MPlantImpl.failedKey(name), null, _reasonForFailure).
+            plantFacility.putPropertyAOp(MPlantImpl.failedKey(name), null, _reasonForFailure).
                     signal();
-            plantImpl.getInternalFacility().putPropertyAOp(MPlantImpl.stoppedKey(name), null, "true").
+            plantFacility.putPropertyAOp(MPlantImpl.stoppedKey(name), null, "true").
                     signal();
             return;
         }
@@ -151,29 +146,6 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
     private AOp<Void> registerFacilityAOp() {
         final MPlantImpl plantImpl = MPlantImpl.getSingleton();
         return plantImpl.updateFacilityStatusAOp(MFacilityImpl.this.asMFacility(), name, false, null);
-    }
-
-    /**
-     * Returns the value of a property.
-     *
-     * @param propertyName The property name.
-     * @return The property value, or null.
-     */
-    public Object getProperty(final String propertyName) {
-        return ismReference.getImmutable().get(propertyName);
-    }
-
-    public AOp<ISMap<String>> putPropertyAOp(final String _propertyName,
-                                             final String _propertyValue) {
-        return new ISMUpdateTransaction<String>(_propertyName, _propertyValue).
-                applyAOp(ismReference);
-    }
-
-    public AOp<ISMap<String>> putPropertyAOp(final String _propertyName,
-                                             final String _expectedValue,
-                                             final String _propertyValue) {
-        return new ISMUpdateTransaction<String>(_propertyName, _propertyValue, _expectedValue).
-                applyAOp(ismReference);
     }
 
     protected ClassLoader getClassLoader() throws Exception {
@@ -214,7 +186,7 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
     }
 
     public AOp<Subscription<ImmutableChanges<String>>> tracePropertyChangesAOp() {
-        return new SubscribeAOp<ImmutableChanges<String>>(ismReference.changeBus, asReactor()) {
+        return new SubscribeAOp<ImmutableChanges<String>>(plantConfiguration.changeBus, asReactor()) {
             @Override
             protected void processContent(final ImmutableChanges<String> _content)
                     throws Exception {

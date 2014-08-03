@@ -12,7 +12,7 @@ public class StoppedTest extends TestCase {
             MPlant.activatorPropertyAOp("A", "org.agilewiki.jactor2.modules.facilities.SampleActivator").call();
             MPlant.stopFacility("A");
             MPlant.autoStartAOp("A", true).call();
-            ISMReference<String> propertiesReference = MPlant.getInternalFacility().getISMReference();
+            ISMReference<String> propertiesReference = MPlant.getInternalFacility().configuration;
             propertiesReference.getReactor().nullSOp().call(); //synchronize for the properties update
             System.out.println("before"+propertiesReference.getImmutable());
             MPlant.clearStoppedAOp("A").call();

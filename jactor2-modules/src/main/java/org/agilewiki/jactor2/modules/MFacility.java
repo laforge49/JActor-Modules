@@ -64,23 +64,4 @@ public class MFacility extends Facility {
     public String getName() {
         return asFacilityImpl().getName();
     }
-
-    public ISMReference<String> getISMReference() {
-        return asFacilityImpl().getISMReference();
-    }
-
-    public Object getProperty(final String propertyName) {
-        return asFacilityImpl().getProperty(propertyName);
-    }
-
-    public AOp<ISMap<String>> putPropertyAOp(final String _propertyName,
-                                             final String _expectedValue,
-                                             final String _propertyValue) {
-        return asFacilityImpl().putPropertyAOp(_propertyName, _propertyValue, _expectedValue);
-    }
-
-    public AOp<ISMap<String>> putPropertyAOp(final String _propertyName,
-                                             final String _propertyValue) {
-        return asFacilityImpl().putPropertyAOp(_propertyName, _propertyValue);
-    }
 }

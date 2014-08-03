@@ -14,7 +14,7 @@ public class AutoStartTest extends TestCase {
             MPlant.dependencyPropertyAOp("B", "A").call();
             MPlant.autoStartAOp("B", true).call();
             MPlant.autoStartAOp("A", true).call();
-            ISMReference<String> propertiesReference = MPlant.getInternalFacility().getISMReference();
+            ISMReference<String> propertiesReference = MPlant.getInternalFacility().configuration;
             propertiesReference.getReactor().nullSOp().call(); //synchronize for the properties update
             ISMap<String> properties = propertiesReference.getImmutable();
             System.out.println(properties);

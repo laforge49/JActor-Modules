@@ -86,7 +86,7 @@ public class MPlantImpl extends PlantMtImpl {
 
     public MPlantImpl(final PlantConfiguration _plantConfiguration) throws Exception {
         super(_plantConfiguration);
-        propertiesReference = getInternalFacility().getISMReference();
+        propertiesReference = getInternalFacility().configuration;
         validate();
         changes();
         int reactorPollMillis = _plantConfiguration.getRecovery().getReactorPollMillis();
@@ -130,7 +130,7 @@ public class MPlantImpl extends PlantMtImpl {
                     _asyncRequestImpl.syncDirect(internalMFacility.unregisterBladeSOp(_facilityName));
                 } else if (internalMFacility.isRegisteredBlade(_facilityName))
                     throw new IllegalStateException("Facility already registered: " + _facilityName);
-                final ISMReference<String> propertiesReference = internalMFacility.getISMReference();
+                final ISMReference<String> propertiesReference = internalMFacility.configuration;
                 ISMUpdateTransaction<String> t0 = new ISMUpdateTransaction<String>(stoppedKey(_facilityName), stop);
                 ISMUpdateTransaction<String> t1 = new ISMUpdateTransaction<String>(failedKey(_facilityName), _reasonForFailure, t0);
                 _asyncRequestImpl.send(t1.applyAOp(propertiesReference), transactionResponseProcessor, null);

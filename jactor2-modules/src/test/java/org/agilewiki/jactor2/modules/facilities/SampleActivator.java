@@ -1,8 +1,9 @@
 package org.agilewiki.jactor2.modules.facilities;
 
-
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
-import org.agilewiki.jactor2.core.requests.AsyncRequest;
+import org.agilewiki.jactor2.core.requests.AOp;
+import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
+import org.agilewiki.jactor2.core.requests.impl.AsyncRequestImpl;
 import org.agilewiki.jactor2.modules.Activator;
 import org.agilewiki.jactor2.modules.MFacility;
 
@@ -13,12 +14,14 @@ public class SampleActivator extends Activator {
     }
 
     @Override
-    public AsyncRequest<Void> startAReq() {
-        return new AsyncBladeRequest<Void>() {
+    public AOp<Void> startAOp() {
+        return new AOp<Void>("start", getReactor()) {
             @Override
-            public void processAsyncRequest() {
+            public void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
+                                            final AsyncResponseProcessor<Void> _asyncResponseProcessor)
+                    throws Exception {
                 System.out.println("activated: "+((MFacility)getReactor()).getName());
-                this.processAsyncResponse(null);
+                _asyncResponseProcessor.processAsyncResponse(null);
             }
         };
     }

@@ -4,16 +4,17 @@ import org.agilewiki.jactor2.core.blades.NamedBlade;
 import org.agilewiki.jactor2.core.blades.filters.PrefixFilter;
 import org.agilewiki.jactor2.core.blades.ismTransactions.*;
 import org.agilewiki.jactor2.core.blades.pubSub.RequestBus;
-import org.agilewiki.jactor2.core.blades.pubSub.SubscribeAReq;
-import org.agilewiki.jactor2.core.blades.transactions.ISMap;
+import org.agilewiki.jactor2.core.blades.pubSub.SubscribeAOp;
+import org.agilewiki.jactor2.core.blades.ismTransactions.ISMap;
 import org.agilewiki.jactor2.core.impl.mtPlant.PlantConfiguration;
 import org.agilewiki.jactor2.core.impl.mtPlant.PlantMtImpl;
-import org.agilewiki.jactor2.core.plant.PlantImpl;
+import org.agilewiki.jactor2.core.plant.impl.PlantImpl;
 import org.agilewiki.jactor2.core.reactors.Facility;
 import org.agilewiki.jactor2.core.reactors.ReactorClosedException;
-import org.agilewiki.jactor2.core.requests.AsyncRequest;
+import org.agilewiki.jactor2.core.requests.AOp;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.ExceptionHandler;
+import org.agilewiki.jactor2.core.requests.impl.AsyncRequestImpl;
 import org.agilewiki.jactor2.modules.MFacility;
 
 import java.util.Collection;
@@ -26,47 +27,47 @@ public class MPlantImpl extends PlantMtImpl {
 
     public static final String FACILITY_PREFIX = "facility_";
 
-    public static final String FACILITY_DEPENDENCY_INFIX = CORE_PREFIX+"dependency_";
+    public static final String FACILITY_DEPENDENCY_INFIX = CORE_PREFIX + "dependency_";
 
     public static String dependencyPrefix(final String _facilityName) {
-        return FACILITY_PREFIX+_facilityName+"~"+FACILITY_DEPENDENCY_INFIX;
+        return FACILITY_PREFIX + _facilityName + "~" + FACILITY_DEPENDENCY_INFIX;
     }
 
     public static final String FACILITY_INITIAL_LOCAL_MESSAGE_QUEUE_SIZE_POSTFIX =
-            CORE_PREFIX+"initialLocalMessageQueueSize";
+            CORE_PREFIX + "initialLocalMessageQueueSize";
 
     public static String initialLocalMessageQueueSizeKey(final String _facilityName) {
-        return FACILITY_PREFIX+_facilityName+"~"+FACILITY_INITIAL_LOCAL_MESSAGE_QUEUE_SIZE_POSTFIX;
+        return FACILITY_PREFIX + _facilityName + "~" + FACILITY_INITIAL_LOCAL_MESSAGE_QUEUE_SIZE_POSTFIX;
     }
 
-    public static final String FACILITY_INITIAL_BUFFER_SIZE_POSTFIX = CORE_PREFIX+"initialBufferSize";
+    public static final String FACILITY_INITIAL_BUFFER_SIZE_POSTFIX = CORE_PREFIX + "initialBufferSize";
 
     public static String initialBufferSizeKey(final String _facilityName) {
-        return FACILITY_PREFIX+_facilityName+"~"+FACILITY_INITIAL_BUFFER_SIZE_POSTFIX;
+        return FACILITY_PREFIX + _facilityName + "~" + FACILITY_INITIAL_BUFFER_SIZE_POSTFIX;
     }
 
-    public static final String FACILITY_ACTIVATOR_POSTFIX = CORE_PREFIX+"activator";
+    public static final String FACILITY_ACTIVATOR_POSTFIX = CORE_PREFIX + "activator";
 
     public static String activatorKey(final String _facilityName) {
-        return FACILITY_PREFIX+_facilityName+"~"+FACILITY_ACTIVATOR_POSTFIX;
+        return FACILITY_PREFIX + _facilityName + "~" + FACILITY_ACTIVATOR_POSTFIX;
     }
 
-    public static String FACILITY_AUTO_START_POSTFIX = CORE_PREFIX+"autoStart";
+    public static String FACILITY_AUTO_START_POSTFIX = CORE_PREFIX + "autoStart";
 
     public static String autoStartKey(final String _facilityName) {
-        return FACILITY_PREFIX+_facilityName+"~"+FACILITY_AUTO_START_POSTFIX;
+        return FACILITY_PREFIX + _facilityName + "~" + FACILITY_AUTO_START_POSTFIX;
     }
 
-    public static String FACILITY_FAILED_POSTFIX = CORE_PREFIX+"failed";
+    public static String FACILITY_FAILED_POSTFIX = CORE_PREFIX + "failed";
 
     public static String failedKey(final String _facilityName) {
-        return FACILITY_PREFIX+_facilityName+"~"+FACILITY_FAILED_POSTFIX;
+        return FACILITY_PREFIX + _facilityName + "~" + FACILITY_FAILED_POSTFIX;
     }
 
-    public static String FACILITY_STOPPED_POSTFIX = CORE_PREFIX+"stopped";
+    public static String FACILITY_STOPPED_POSTFIX = CORE_PREFIX + "stopped";
 
     public static String stoppedKey(final String _facilityName) {
-        return FACILITY_PREFIX+_facilityName+"~"+FACILITY_STOPPED_POSTFIX;
+        return FACILITY_PREFIX + _facilityName + "~" + FACILITY_STOPPED_POSTFIX;
     }
 
     public static MPlantImpl getSingleton() {
@@ -93,53 +94,53 @@ public class MPlantImpl extends PlantMtImpl {
                 reactorPollMillis);
     }
 
-    public AsyncRequest<Void> updateFacilityStatusAReq(final MFacility _Mfacility,
-                                                        final String _facilityName,
-                                                        final boolean _stop,
-                                                        final String _reasonForFailure) {
-        System.out.println(">>>>>>>>>>>>>>>>> "+_facilityName);
+    public AOp<Void> updateFacilityStatusAOp(final MFacility _Mfacility,
+                                             final String _facilityName,
+                                             final boolean _stop,
+                                             final String _reasonForFailure) {
+        System.out.println(">>>>>>>>>>>>>>>>> " + _facilityName);
         final String stop = _stop ? "true" : null;
         final MFacility internalMFacility = getInternalFacility();
-        return new AsyncRequest<Void>(internalMFacility) {
-            AsyncRequest<Void> dis = this;
-
-            AsyncResponseProcessor<Void> transactionResponseProcessor = new AsyncResponseProcessor<Void>() {
-                @Override
-                public void processAsyncResponse(Void _response) {
-                    if (_Mfacility != null)
-                        internalMFacility.registerBlade(_Mfacility, internalMFacility);
-                    ISMap<String> facilityProperties =
-                            propertiesReference.getImmutable().subMap(FACILITY_PREFIX);
-                    Iterator<String> kit = facilityProperties.keySet().iterator();
-                    String postfix = "~"+FACILITY_DEPENDENCY_INFIX + _facilityName;
-                    while (kit.hasNext()) {
-                        String pk = kit.next();
-                        if (!pk.endsWith(postfix))
-                            continue;
-                        String dependentName = pk.substring(FACILITY_PREFIX.length(), pk.length()-postfix.length());
-                        autoStartAReq(dependentName).signal();
-                    }
-                    dis.processAsyncResponse(null);
-                }
-            };
-
+        return new AOp<Void>("updateFacilityStatus", internalMFacility) {
             @Override
-            public void processAsyncRequest() {
+            public void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
+                                              final AsyncResponseProcessor<Void> _asyncResponseProcessor)
+                    throws Exception {
+                AsyncResponseProcessor<Void> transactionResponseProcessor = new AsyncResponseProcessor<Void>() {
+                    @Override
+                    public void processAsyncResponse(Void _response) throws Exception {
+                        if (_Mfacility != null)
+                            _asyncRequestImpl.syncDirect(internalMFacility.registerBladeSOp(_Mfacility));
+                        ISMap<String> facilityProperties =
+                                propertiesReference.getImmutable().subMap(FACILITY_PREFIX);
+                        Iterator<String> kit = facilityProperties.keySet().iterator();
+                        String postfix = "~" + FACILITY_DEPENDENCY_INFIX + _facilityName;
+                        while (kit.hasNext()) {
+                            String pk = kit.next();
+                            if (!pk.endsWith(postfix))
+                                continue;
+                            String dependentName = pk.substring(FACILITY_PREFIX.length(), pk.length() - postfix.length());
+                            autoStartAOp(dependentName).signal();
+                        }
+                        _asyncResponseProcessor.processAsyncResponse(null);
+                    }
+                };
+
                 if (_Mfacility == null) {
-                    internalMFacility.unregisterBlade(_facilityName, internalMFacility);
+                    _asyncRequestImpl.syncDirect(internalMFacility.unregisterBladeSOp(_facilityName));
                 } else if (internalMFacility.isRegisteredBlade(_facilityName))
                     throw new IllegalStateException("Facility already registered: " + _facilityName);
                 final ISMReference<String> propertiesReference = internalMFacility.getISMReference();
                 ISMUpdateTransaction<String> t0 = new ISMUpdateTransaction<String>(stoppedKey(_facilityName), stop);
                 ISMUpdateTransaction<String> t1 = new ISMUpdateTransaction<String>(failedKey(_facilityName), _reasonForFailure, t0);
-                send(t1.applyAReq(propertiesReference), transactionResponseProcessor, null);
+                _asyncRequestImpl.send(t1.applyAOp(propertiesReference), transactionResponseProcessor, null);
             }
         };
     }
 
     private void validate() throws Exception {
         RequestBus<ImmutableChanges<String>> validationBus = propertiesReference.validationBus;
-        new SubscribeAReq<ImmutableChanges<String>>(
+        new SubscribeAOp<ImmutableChanges<String>>(
                 validationBus,
                 getInternalFacility()) {
             protected void processContent(final ImmutableChanges<String> _content)
@@ -212,7 +213,7 @@ public class MPlantImpl extends PlantMtImpl {
 
     public void changes() throws Exception {
         RequestBus<ImmutableChanges<String>> changeBus = propertiesReference.changeBus;
-        new SubscribeAReq<ImmutableChanges<String>>(
+        new SubscribeAOp<ImmutableChanges<String>>(
                 changeBus,
                 getInternalFacility()) {
             protected void processContent(final ImmutableChanges<String> _content)
@@ -232,13 +233,13 @@ public class MPlantImpl extends PlantMtImpl {
                         name1 = name1.substring(0, i);
                         if (name2.startsWith(FACILITY_AUTO_START_POSTFIX)) {
                             if (newValue != null)
-                                autoStartAReq(name1).signal();
+                                autoStartAOp(name1).signal();
                         } else if (name2.startsWith(FACILITY_FAILED_POSTFIX)) {
                             if (newValue == null)
-                                autoStartAReq(name1).signal();
+                                autoStartAOp(name1).signal();
                         } else if (name2.startsWith(FACILITY_STOPPED_POSTFIX)) {
                             if (newValue == null)
-                                autoStartAReq(name1).signal();
+                                autoStartAOp(name1).signal();
                         }
                     }
                 }
@@ -273,24 +274,26 @@ public class MPlantImpl extends PlantMtImpl {
         };
     }
 
-    private AsyncRequest<String> autoStartAReq(final String _facilityName) {
-        return new AsyncRequest<String>(getInternalFacility()) {
+    private AOp<String> autoStartAOp(final String _facilityName) {
+        return new AOp<String>("autoStart", getInternalFacility()) {
             @Override
-            public void processAsyncRequest() throws Exception {
+            public void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
+                                              final AsyncResponseProcessor<String> _asyncResponseProcessor)
+                    throws Exception {
                 if (getMFacilityImpl(_facilityName) != null) {
-                    processAsyncResponse(null);
+                    _asyncResponseProcessor.processAsyncResponse(null);
                     return;
                 }
                 if (!isAutoStart(_facilityName)) {
-                    processAsyncResponse(null);
+                    _asyncResponseProcessor.processAsyncResponse(null);
                     return;
                 }
                 if (getFailed(_facilityName) != null) {
-                    processAsyncResponse(null);
+                    _asyncResponseProcessor.processAsyncResponse(null);
                     return;
                 }
                 if (isStopped(_facilityName)) {
-                    processAsyncResponse(null);
+                    _asyncResponseProcessor.processAsyncResponse(null);
                     return;
                 }
                 String dependencyPrefix = dependencyPrefix(_facilityName);
@@ -301,9 +304,9 @@ public class MPlantImpl extends PlantMtImpl {
                     String d = dit.next();
                     String dependencyName = d.substring(dependencyPrefix.length());
                     if (getMFacilityImpl(dependencyName) == null)
-                        processAsyncResponse(null);
+                        _asyncResponseProcessor.processAsyncResponse(null);
                 }
-                setExceptionHandler(new ExceptionHandler<String>() {
+                _asyncRequestImpl.setExceptionHandler(new ExceptionHandler<String>() {
                     @Override
                     public String processException(Exception e) throws Exception {
                         if (e instanceof ReactorClosedException)
@@ -312,7 +315,7 @@ public class MPlantImpl extends PlantMtImpl {
                             return "create facility exception: " + e;
                     }
                 });
-                send(MFacility.createMFacilityAReq(_facilityName), this, null);
+                _asyncRequestImpl.send(MFacility.createMFacilityAOp(_facilityName), _asyncResponseProcessor, null);
             }
         };
     }
@@ -320,7 +323,7 @@ public class MPlantImpl extends PlantMtImpl {
     public void stopFacility(final String _facilityName) throws Exception {
         MFacilityImpl facility = getMFacilityImpl(_facilityName);
         if (facility == null) {
-            getInternalFacility().putPropertyAReq(stoppedKey(_facilityName), "true").signal();
+            getInternalFacility().putPropertyAOp(stoppedKey(_facilityName), "true").signal();
             return;
         }
         facility.stop();
@@ -329,31 +332,28 @@ public class MPlantImpl extends PlantMtImpl {
     public void failFacility(final String _facilityName, final String reason) throws Exception {
         MFacilityImpl facility = getMFacilityImpl(_facilityName);
         if (facility == null) {
-            getInternalFacility().putPropertyAReq(failedKey(_facilityName), reason).signal();
+            getInternalFacility().putPropertyAOp(failedKey(_facilityName), reason).signal();
             return;
         }
         facility.fail(reason);
     }
 
-    public AsyncRequest<Void> dependencyPropertyAReq(final String _dependentName, final String _dependencyName) {
-        return new AsyncRequest<Void>(getInternalFacility()) {
-
-            AsyncResponseProcessor<Void> dis = this;
-
-            String dependencyPropertyName;
-
+    public AOp<Void> dependencyPropertyAOp(final String _dependentName, final String _dependencyName) {
+        return new AOp<Void>("dependencyProperty", getInternalFacility()) {
             @Override
-            public void processAsyncRequest() throws Exception {
+            public void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
+                                              final AsyncResponseProcessor<Void> _asyncResponseProcessor)
+                    throws Exception {
                 final String name = _dependencyName;
                 if (_dependencyName == null) {
                     throw new IllegalArgumentException(
                             "the dependency name may not be null");
                 }
                 if (PLANT_INTERNAL_FACILITY_NAME.equals(_dependencyName))
-                    dis.processAsyncResponse(null);
+                    _asyncResponseProcessor.processAsyncResponse(null);
                 if (PLANT_INTERNAL_FACILITY_NAME.equals(_dependentName))
                     throw new IllegalArgumentException("Plant may not have a dependency");
-                dependencyPropertyName = dependencyPrefix(_dependentName) + name;
+                String dependencyPropertyName = dependencyPrefix(_dependentName) + name;
                 if (getProperty(dependencyPropertyName) != null) {
                     throw new IllegalStateException(
                             "the dependency was already present");
@@ -361,7 +361,8 @@ public class MPlantImpl extends PlantMtImpl {
                 if (hasDependency(_dependencyName, _dependentName))
                     throw new IllegalArgumentException(
                             "this would create a cyclic dependency");
-                send(getInternalFacility().putPropertyAReq(dependencyPropertyName, "true"), dis, null);
+                _asyncRequestImpl.send(getInternalFacility().putPropertyAOp(dependencyPropertyName, "true"),
+                        _asyncResponseProcessor, null);
             }
         };
     }
@@ -385,21 +386,21 @@ public class MPlantImpl extends PlantMtImpl {
         return false;
     }
 
-    public AsyncRequest<ISMap<String>> initialLocalMessageQueueSizePropertyAReq(final String _facilityName,
-                                                                                      final Integer _value) {
-        return getInternalFacility().putPropertyAReq(initialLocalMessageQueueSizeKey(_facilityName),
+    public AOp<ISMap<String>> initialLocalMessageQueueSizePropertyAOp(final String _facilityName,
+                                                                      final Integer _value) {
+        return getInternalFacility().putPropertyAOp(initialLocalMessageQueueSizeKey(_facilityName),
                 new Integer(_value).toString());
     }
 
-    public AsyncRequest<ISMap<String>> initialBufferSizePropertyAReq(final String _facilityName,
-                                                                           final Integer _value) {
-        return getInternalFacility().putPropertyAReq(initialBufferSizeKey(_facilityName),
+    public AOp<ISMap<String>> initialBufferSizePropertyAOp(final String _facilityName,
+                                                           final Integer _value) {
+        return getInternalFacility().putPropertyAOp(initialBufferSizeKey(_facilityName),
                 new Integer(_value).toString());
     }
 
-    public AsyncRequest<ISMap<String>> activatorPropertyAReq(final String _facilityName,
-                                                                   final String _className) {
-        return getInternalFacility().putPropertyAReq(activatorKey(_facilityName), _className);
+    public AOp<ISMap<String>> activatorPropertyAOp(final String _facilityName,
+                                                   final String _className) {
+        return getInternalFacility().putPropertyAOp(activatorKey(_facilityName), _className);
     }
 
     public String getActivatorClassName(final String _facilityName) {
@@ -416,35 +417,35 @@ public class MPlantImpl extends PlantMtImpl {
         return MFacility.asFacilityImpl();
     }
 
-    public AsyncRequest<ISMap<String>> autoStartAReq(final String _facilityName, final boolean _newValue) {
+    public AOp<ISMap<String>> autoStartAOp(final String _facilityName, final boolean _newValue) {
         final String newValue = _newValue ? "true" : null;
-        return getInternalFacility().putPropertyAReq(autoStartKey(_facilityName), newValue);
+        return getInternalFacility().putPropertyAOp(autoStartKey(_facilityName), newValue);
     }
 
     public boolean isAutoStart(String name) {
         return getProperty(autoStartKey(name)) != null;
     }
 
-    public AsyncRequest<ISMap<String>> failedAReq(final String _facilityName, final String _newValue) {
-        return getInternalFacility().putPropertyAReq(failedKey(_facilityName), _newValue);
+    public AOp<ISMap<String>> failedAOp(final String _facilityName, final String _newValue) {
+        return getInternalFacility().putPropertyAOp(failedKey(_facilityName), _newValue);
     }
 
     public Object getFailed(String name) {
         return getProperty(failedKey(name));
     }
 
-    public AsyncRequest<ISMap<String>> stoppedAReq(final String _facilityName, final boolean _newValue) {
+    public AOp<ISMap<String>> stoppedAOp(final String _facilityName, final boolean _newValue) {
         final String newValue = _newValue ? "true" : null;
-        return getInternalFacility().putPropertyAReq(stoppedKey(_facilityName), newValue);
+        return getInternalFacility().putPropertyAOp(stoppedKey(_facilityName), newValue);
     }
 
     public boolean isStopped(String name) {
         return getProperty(stoppedKey(name)) != null;
     }
 
-    public AsyncRequest<ISMap<String>> purgeFacilitySReq(final String _facilityName) {
+    public AOp<ISMap<String>> purgeFacilityAOp(final String _facilityName) {
         String prefix = FACILITY_PREFIX + _facilityName + ".";
         PrefixFilter filter = new PrefixFilter(prefix);
-        return new ISMRemoveTransaction<String>(filter).applyAReq(propertiesReference);
+        return new ISMRemoveTransaction<String>(filter).applyAOp(propertiesReference);
     }
 }

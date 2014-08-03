@@ -1,16 +1,18 @@
 package org.agilewiki.jactor2.modules;
 
 import org.agilewiki.jactor2.core.blades.ismTransactions.ISMReference;
-import org.agilewiki.jactor2.core.blades.transactions.ISMap;
+import org.agilewiki.jactor2.core.blades.ismTransactions.ISMap;
 import org.agilewiki.jactor2.core.reactors.Facility;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 import org.agilewiki.jactor2.core.reactors.Reactor;
-import org.agilewiki.jactor2.core.requests.AsyncRequest;
+import org.agilewiki.jactor2.core.requests.AOp;
+import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
+import org.agilewiki.jactor2.core.requests.impl.AsyncRequestImpl;
 import org.agilewiki.jactor2.modules.impl.MFacilityImpl;
 import org.agilewiki.jactor2.modules.impl.MPlantImpl;
 
 public class MFacility extends Facility {
-    public static AsyncRequest<MFacility> createMFacilityAReq(final String _name) throws Exception {
+    public static AOp<MFacility> createMFacilityAOp(final String _name) throws Exception {
         MPlantImpl plantImpl = MPlantImpl.getSingleton();
         final int initialBufferSize;
         Integer v = (Integer) plantImpl.getProperty(MPlantImpl.initialBufferSizeKey(_name));
@@ -25,10 +27,11 @@ public class MFacility extends Facility {
         else
             initialLocalQueueSize = plantImpl.getInternalFacility().asFacilityImpl().getInitialLocalQueueSize();
         final MFacility mFacility = new MFacility(_name, initialBufferSize, initialLocalQueueSize);
-        return new AsyncRequest<MFacility>(mFacility) {
+        return new AOp<MFacility>("startFacility", mFacility) {
             @Override
-            public void processAsyncRequest() throws Exception {
-                send(mFacility.asFacilityImpl().startFacilityAReq(), this, mFacility);
+            public void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
+                                              final AsyncResponseProcessor<MFacility> _asyncResponseProcessor) throws Exception {
+                _asyncRequestImpl.send(mFacility.asFacilityImpl().startFacilityAOp(), _asyncResponseProcessor, mFacility);
             }
         };
     }
@@ -70,14 +73,14 @@ public class MFacility extends Facility {
         return asFacilityImpl().getProperty(propertyName);
     }
 
-    public AsyncRequest<ISMap<String>> putPropertyAReq(final String _propertyName,
-                                              final String _expectedValue,
-                                              final String _propertyValue) {
-        return asFacilityImpl().putPropertyAReq(_propertyName, _propertyValue, _expectedValue);
+    public AOp<ISMap<String>> putPropertyAOp(final String _propertyName,
+                                             final String _expectedValue,
+                                             final String _propertyValue) {
+        return asFacilityImpl().putPropertyAOp(_propertyName, _propertyValue, _expectedValue);
     }
 
-    public AsyncRequest<ISMap<String>> putPropertyAReq(final String _propertyName,
-                                              final String _propertyValue) {
-        return asFacilityImpl().putPropertyAReq(_propertyName, _propertyValue);
+    public AOp<ISMap<String>> putPropertyAOp(final String _propertyName,
+                                             final String _propertyValue) {
+        return asFacilityImpl().putPropertyAOp(_propertyName, _propertyValue);
     }
 }

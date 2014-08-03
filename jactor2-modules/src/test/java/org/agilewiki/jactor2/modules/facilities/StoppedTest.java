@@ -9,14 +9,14 @@ public class StoppedTest extends TestCase {
     public void test() throws Exception {
         new MPlant();
         try {
-            MPlant.activatorPropertyAReq("A", "org.agilewiki.jactor2.modules.facilities.SampleActivator").call();
+            MPlant.activatorPropertyAOp("A", "org.agilewiki.jactor2.modules.facilities.SampleActivator").call();
             MPlant.stopFacility("A");
-            MPlant.autoStartAReq("A", true).call();
+            MPlant.autoStartAOp("A", true).call();
             ISMReference<String> propertiesReference = MPlant.getInternalFacility().getISMReference();
-            propertiesReference.getReactor().nullSReq().call(); //synchronize for the properties update
+            propertiesReference.getReactor().nullSOp().call(); //synchronize for the properties update
             System.out.println("before"+propertiesReference.getImmutable());
-            MPlant.clearStoppedAReq("A").call();
-            propertiesReference.getReactor().nullSReq().call(); //synchronize for the properties update
+            MPlant.clearStoppedAOp("A").call();
+            propertiesReference.getReactor().nullSOp().call(); //synchronize for the properties update
             System.out.println("after"+propertiesReference.getImmutable());
             Thread.sleep(100); //give the activator a chance to run
         } finally {

@@ -4,18 +4,19 @@ import org.agilewiki.jactor2.core.blades.ismTransactions.ISMReference;
 import org.agilewiki.jactor2.core.blades.ismTransactions.ISMUpdateTransaction;
 import org.agilewiki.jactor2.core.blades.ismTransactions.ImmutableChange;
 import org.agilewiki.jactor2.core.blades.ismTransactions.ImmutableChanges;
-import org.agilewiki.jactor2.core.blades.pubSub.SubscribeAReq;
+import org.agilewiki.jactor2.core.blades.pubSub.SubscribeAOp;
 import org.agilewiki.jactor2.core.blades.pubSub.Subscription;
-import org.agilewiki.jactor2.core.blades.transactions.ISMap;
+import org.agilewiki.jactor2.core.blades.ismTransactions.ISMap;
 import org.agilewiki.jactor2.core.closeable.Closeable;
 import org.agilewiki.jactor2.core.impl.mtReactors.NonBlockingReactorMtImpl;
 import org.agilewiki.jactor2.core.impl.mtReactors.ReactorMtImpl;
-import org.agilewiki.jactor2.core.plant.PlantImpl;
+import org.agilewiki.jactor2.core.plant.impl.PlantImpl;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 import org.agilewiki.jactor2.core.reactors.Reactor;
-import org.agilewiki.jactor2.core.requests.AsyncRequest;
+import org.agilewiki.jactor2.core.requests.AOp;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.ExceptionHandler;
+import org.agilewiki.jactor2.core.requests.impl.AsyncRequestImpl;
 import org.agilewiki.jactor2.modules.Activator;
 import org.agilewiki.jactor2.modules.DependencyNotPresentException;
 import org.agilewiki.jactor2.modules.MFacility;
@@ -40,7 +41,7 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
         plantImpl = MPlantImpl.getSingleton();
     }
 
-    public void initialize(final Reactor _reactor) throws Exception{
+    public void initialize(final Reactor _reactor) throws Exception {
         super.initialize(_reactor);
         ismReference = new ISMReference<String>(this.getFacility());
     }
@@ -48,7 +49,7 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
     public void nameSet(final String _name) throws Exception {
         name = _name;
         plantMFacilityImpl = plantImpl.getInternalFacility().asFacilityImpl();
-        tracePropertyChangesAReq().signal();
+        tracePropertyChangesAOp().signal();
         String dependencyPrefix = MPlantImpl.dependencyPrefix(name);
         ISMReference<String> plantProperties = plantMFacilityImpl.getISMReference();
         ISMap<String> dependencies =
@@ -64,37 +65,37 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
         }
     }
 
-    public AsyncRequest<Void> startFacilityAReq() {
-        return new AsyncRequest<Void>(this.asReactor()) {
-            AsyncRequest<Void> dis = this;
-
-            AsyncResponseProcessor<Void> registerResponseProcessor =
-                    new AsyncResponseProcessor<Void>() {
-                        @Override
-                        public void processAsyncResponse(Void _response) {
-                            parentReactor.addCloseable(MFacilityImpl.this);
-                            String activatorClassName = MPlant.getActivatorClassName(name);
-                            if (activatorClassName == null)
-                                dis.processAsyncResponse(null);
-                            else {
-                                send(activateAReq(activatorClassName), new AsyncResponseProcessor<String>() {
-                                    @Override
-                                    public void processAsyncResponse(final String _failure) throws Exception {
-                                        if (_failure == null) {
-                                            System.out.println("registered " + name);
-                                            dis.processAsyncResponse(null);
-                                            return;
-                                        }
-                                        close(false, _failure);
-                                    }
-                                });
-                            }
-                        }
-                    };
-
+    public AOp<Void> startFacilityAOp() {
+        return new AOp<Void>("startFacility", asReactor()) {
             @Override
-            public void processAsyncRequest() throws Exception {
-                send(registerFacilityAReq(), registerResponseProcessor);
+            public void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
+                                              final AsyncResponseProcessor<Void> _asyncResponseProcessor)
+                    throws Exception {
+                AsyncResponseProcessor<Void> registerResponseProcessor =
+                        new AsyncResponseProcessor<Void>() {
+                            @Override
+                            public void processAsyncResponse(Void _response) throws Exception {
+                                parentReactor.addCloseable(MFacilityImpl.this);
+                                String activatorClassName = MPlant.getActivatorClassName(name);
+                                if (activatorClassName == null)
+                                    _asyncResponseProcessor.processAsyncResponse(null);
+                                else {
+                                    _asyncRequestImpl.send(activateAOp(activatorClassName), new AsyncResponseProcessor<String>() {
+                                        @Override
+                                        public void processAsyncResponse(final String _failure) throws Exception {
+                                            if (_failure == null) {
+                                                System.out.println("registered " + name);
+                                                _asyncResponseProcessor.processAsyncResponse(null);
+                                                return;
+                                            }
+                                            close(false, _failure);
+                                        }
+                                    });
+                                }
+                            }
+                        };
+
+                _asyncRequestImpl.send(registerFacilityAOp(), registerResponseProcessor);
             }
         };
     }
@@ -132,9 +133,9 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
         if (_reasonForFailure != null && _stop)
             throw new IllegalArgumentException("can not both stop and fail");
         if (startedClosing()) {
-            plantImpl.getInternalFacility().putPropertyAReq(MPlantImpl.failedKey(name), null, _reasonForFailure).
+            plantImpl.getInternalFacility().putPropertyAOp(MPlantImpl.failedKey(name), null, _reasonForFailure).
                     signal();
-            plantImpl.getInternalFacility().putPropertyAReq(MPlantImpl.stoppedKey(name), null, "true").
+            plantImpl.getInternalFacility().putPropertyAOp(MPlantImpl.stoppedKey(name), null, "true").
                     signal();
             return;
         }
@@ -142,14 +143,14 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
         if ((plantImpl != null) &&
                 plantImpl.getInternalFacility().asFacilityImpl() != this &&
                 !plantImpl.getInternalFacility().asFacilityImpl().startedClosing()) {
-            plantImpl.updateFacilityStatusAReq(null, name, _stop, _reasonForFailure).signal();
+            plantImpl.updateFacilityStatusAOp(null, name, _stop, _reasonForFailure).signal();
         }
         super.fail(_reasonForFailure);
     }
 
-    private AsyncRequest<Void> registerFacilityAReq() {
+    private AOp<Void> registerFacilityAOp() {
         final MPlantImpl plantImpl = MPlantImpl.getSingleton();
-        return plantImpl.updateFacilityStatusAReq(MFacilityImpl.this.asMFacility(), name, false, null);
+        return plantImpl.updateFacilityStatusAOp(MFacilityImpl.this.asMFacility(), name, false, null);
     }
 
     /**
@@ -162,36 +163,40 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
         return ismReference.getImmutable().get(propertyName);
     }
 
-    public AsyncRequest<ISMap<String>> putPropertyAReq(final String _propertyName,
-                                              final String _propertyValue) {
+    public AOp<ISMap<String>> putPropertyAOp(final String _propertyName,
+                                             final String _propertyValue) {
         return new ISMUpdateTransaction<String>(_propertyName, _propertyValue).
-                applyAReq(ismReference);
+                applyAOp(ismReference);
     }
 
-    public AsyncRequest<ISMap<String>> putPropertyAReq(final String _propertyName,
-                                              final String _expectedValue,
-                                              final String _propertyValue) {
+    public AOp<ISMap<String>> putPropertyAOp(final String _propertyName,
+                                             final String _expectedValue,
+                                             final String _propertyValue) {
         return new ISMUpdateTransaction<String>(_propertyName, _propertyValue, _expectedValue).
-                applyAReq(ismReference);
+                applyAOp(ismReference);
     }
 
     protected ClassLoader getClassLoader() throws Exception {
         return getClass().getClassLoader();
     }
 
-    public AsyncRequest<ClassLoader> getClassLoaderAReq() {
-        return new AsyncBladeRequest<ClassLoader>() {
+    public AOp<ClassLoader> getClassLoaderAOp() {
+        return new AOp<ClassLoader>("getClassLoader", getReactor()) {
             @Override
-            public void processAsyncRequest() throws Exception {
-                processAsyncResponse(getClassLoader());
+            public void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
+                                              final AsyncResponseProcessor<ClassLoader> _asyncResponseProcessor)
+                    throws Exception {
+                _asyncResponseProcessor.processAsyncResponse(getClassLoader());
             }
         };
     }
 
-    public AsyncRequest<String> activateAReq(final String _activatorClassName) {
-        return new AsyncBladeRequest<String>() {
+    public AOp<String> activateAOp(final String _activatorClassName) {
+        return new AOp<String>("activate", getReactor()) {
             @Override
-            public void processAsyncRequest() throws Exception {
+            public void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
+                                            final AsyncResponseProcessor<String> _asyncResponseProcessor)
+                    throws Exception {
                 setExceptionHandler(new ExceptionHandler<String>() {
                     @Override
                     public String processException(Exception e) throws Exception {
@@ -203,13 +208,13 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
                         _activatorClassName);
                 final Constructor<?> constructor = initiatorClass.getConstructor(NonBlockingReactor.class);
                 final Activator activator = (Activator) constructor.newInstance(asReactor());
-                send(activator.startAReq(), this, null);
+                _asyncRequestImpl.send(activator.startAOp(), _asyncResponseProcessor, null);
             }
         };
     }
 
-    public AsyncRequest<Subscription<ImmutableChanges<String>>> tracePropertyChangesAReq() {
-        return new SubscribeAReq<ImmutableChanges<String>>(ismReference.changeBus, asReactor()) {
+    public AOp<Subscription<ImmutableChanges<String>>> tracePropertyChangesAOp() {
+        return new SubscribeAOp<ImmutableChanges<String>>(ismReference.changeBus, asReactor()) {
             @Override
             protected void processContent(final ImmutableChanges<String> _content)
                     throws Exception {

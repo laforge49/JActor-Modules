@@ -44,12 +44,12 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>jactor2-core</artifactId>
-            <version>0.10.0</version>
+            <version>0.11.0</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>jactor2-coreMt</artifactId>
-            <version>0.10.0</version>
+            <version>0.11.0</version>
         </dependency>
         <dependency>
             <groupId>org.pcollections</groupId>

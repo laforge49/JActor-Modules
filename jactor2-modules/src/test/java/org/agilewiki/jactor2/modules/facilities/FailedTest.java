@@ -9,14 +9,14 @@ public class FailedTest extends TestCase {
     public void test() throws Exception {
         new MPlant();
         try {
-            MPlant.activatorPropertyAReq("A", "org.agilewiki.jactor2.modules.facilities.SampleActivator").call();
+            MPlant.activatorPropertyAOp("A", "org.agilewiki.jactor2.modules.facilities.SampleActivator").call();
             MPlant.failFacility("A", "inhibit");
-            MPlant.autoStartAReq("A", true).call();
+            MPlant.autoStartAOp("A", true).call();
             ISMReference<String> propertiesReference = MPlant.getInternalFacility().getISMReference();
-            propertiesReference.getReactor().nullSReq().call(); //synchronize for the properties update
+            propertiesReference.getReactor().nullSOp().call(); //synchronize for the properties update
             System.out.println("before"+propertiesReference.getImmutable());
-            MPlant.clearFailedAReq("A").call();
-            propertiesReference.getReactor().nullSReq().call(); //synchronize for the properties update
+            MPlant.clearFailedAOp("A").call();
+            propertiesReference.getReactor().nullSOp().call(); //synchronize for the properties update
             System.out.println("after"+propertiesReference.getImmutable());
             Thread.sleep(100); //give the activator a chance to run
         } finally {

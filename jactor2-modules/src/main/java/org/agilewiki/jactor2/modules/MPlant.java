@@ -1,8 +1,9 @@
 package org.agilewiki.jactor2.modules;
 
-import org.agilewiki.jactor2.core.blades.transactions.ISMap;
+import org.agilewiki.jactor2.core.blades.ismTransactions.ISMap;
 import org.agilewiki.jactor2.core.impl.mtPlant.PlantConfiguration;
-import org.agilewiki.jactor2.core.requests.AsyncRequest;
+import org.agilewiki.jactor2.core.requests.AOp;
+import org.agilewiki.jactor2.core.requests.SOp;
 import org.agilewiki.jactor2.modules.impl.MFacilityImpl;
 import org.agilewiki.jactor2.modules.impl.MPlantImpl;
 
@@ -19,33 +20,33 @@ public class MPlant {
         return MFacilityImpl.asMFacility();
     }
 
-    public static AsyncRequest<MFacility> createFacilityAReq(final String _name)
+    public static AOp<MFacility> createFacilityAOp(final String _name)
             throws Exception {
-        return MFacility.createMFacilityAReq(_name);
+        return MFacility.createMFacilityAOp(_name);
     }
 
     public static String getActivatorClassName(final String _facilityName) {
         return MPlantImpl.getSingleton().getActivatorClassName(_facilityName);
     }
 
-    public static AsyncRequest<ISMap<String>> activatorPropertyAReq(final String _facilityName, final String _className) {
-        return MPlantImpl.getSingleton().activatorPropertyAReq(_facilityName, _className);
+    public static AOp<ISMap<String>> activatorPropertyAOp(final String _facilityName, final String _className) {
+        return MPlantImpl.getSingleton().activatorPropertyAOp(_facilityName, _className);
     }
 
     public static boolean isAutoStart(String name) {
         return MPlantImpl.getSingleton().isAutoStart(name);
     }
 
-    public static AsyncRequest<ISMap<String>> autoStartAReq(final String _facilityName, final boolean _newValue) {
-        return MPlantImpl.getSingleton().autoStartAReq(_facilityName, _newValue);
+    public static AOp<ISMap<String>> autoStartAOp(final String _facilityName, final boolean _newValue) {
+        return MPlantImpl.getSingleton().autoStartAOp(_facilityName, _newValue);
     }
 
-    public static AsyncRequest<Void> dependencyPropertyAReq(final String _dependentName, final String _dependencyName) {
-        return MPlantImpl.getSingleton().dependencyPropertyAReq(_dependentName, _dependencyName);
+    public static AOp<Void> dependencyPropertyAOp(final String _dependentName, final String _dependencyName) {
+        return MPlantImpl.getSingleton().dependencyPropertyAOp(_dependentName, _dependencyName);
     }
 
-    public static AsyncRequest<ISMap<String>> purgeFacilitySReq(final String _facilityName) {
-        return MPlantImpl.getSingleton().purgeFacilitySReq(_facilityName);
+    public static AOp<ISMap<String>> purgeFacilityAOp(final String _facilityName) {
+        return MPlantImpl.getSingleton().purgeFacilityAOp(_facilityName);
     }
 
     public static Object getFailed(String name) {
@@ -56,8 +57,8 @@ public class MPlant {
         MPlantImpl.getSingleton().failFacility(_facilityName, reason);
     }
 
-    public static AsyncRequest<ISMap<String>> clearFailedAReq(final String _facilityName) {
-        return MPlantImpl.getSingleton().failedAReq(_facilityName, null);
+    public static AOp<ISMap<String>> clearFailedAOp(final String _facilityName) {
+        return MPlantImpl.getSingleton().failedAOp(_facilityName, null);
     }
 
     public static boolean isStopped(String name) {
@@ -68,16 +69,16 @@ public class MPlant {
         MPlantImpl.getSingleton().stopFacility(_facilityName);
     }
 
-    public static AsyncRequest<ISMap<String>> clearStoppedAReq(final String _facilityName) {
-        return MPlantImpl.getSingleton().stoppedAReq(_facilityName, false);
+    public static AOp<ISMap<String>> clearStoppedAOp(final String _facilityName) {
+        return MPlantImpl.getSingleton().stoppedAOp(_facilityName, false);
     }
 
-    public static AsyncRequest<ISMap<String>> initialLocalMerssageQueueSizePropertyAReq(final String _facilityName, final Integer _value) {
-        return MPlantImpl.getSingleton().initialLocalMessageQueueSizePropertyAReq(_facilityName, _value);
+    public static AOp<ISMap<String>> initialLocalMerssageQueueSizePropertyAOp(final String _facilityName, final Integer _value) {
+        return MPlantImpl.getSingleton().initialLocalMessageQueueSizePropertyAOp(_facilityName, _value);
     }
 
-    public static AsyncRequest<ISMap<String>> initialBufferSizePropertyAReq(final String _facilityName, final Integer _value) {
-        return MPlantImpl.getSingleton().initialBufferSizePropertyAReq(_facilityName, _value);
+    public static AOp<ISMap<String>> initialBufferSizePropertyAOp(final String _facilityName, final Integer _value) {
+        return MPlantImpl.getSingleton().initialBufferSizePropertyAOp(_facilityName, _value);
     }
 
     public MPlant() throws Exception {

@@ -6,8 +6,8 @@ public class ActivatorSample {
     public static void main(String[] args) throws Exception {
         new MPlant();
         try {
-            MPlant.activatorPropertyAReq("a", "org.agilewiki.jactor2.modules.SampleActivator").call();
-            MPlant.createFacilityAReq("a").call();
+            MPlant.activatorPropertyAOp("a", "org.agilewiki.jactor2.modules.SampleActivator").call();
+            MPlant.createFacilityAOp("a").call();
         } finally {
             Plant.close();
         }

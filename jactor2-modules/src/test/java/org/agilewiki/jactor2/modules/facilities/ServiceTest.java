@@ -5,19 +5,19 @@ import org.agilewiki.jactor2.core.blades.NonBlockingBladeBase;
 import org.agilewiki.jactor2.core.impl.Plant;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 import org.agilewiki.jactor2.core.reactors.ReactorClosedException;
-import org.agilewiki.jactor2.core.requests.AsyncRequest;
+import org.agilewiki.jactor2.core.requests.AOp;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.ExceptionHandler;
-import org.agilewiki.jactor2.core.requests.Request;
+import org.agilewiki.jactor2.core.requests.impl.AsyncRequestImpl;
 import org.agilewiki.jactor2.modules.MFacility;
 import org.agilewiki.jactor2.modules.MPlant;
 
 public class ServiceTest extends TestCase {
     public void test() throws Exception {
         new MPlant();
-        final MFacility clientMFacility = MPlant.createFacilityAReq("Client")
+        final MFacility clientMFacility = MPlant.createFacilityAOp("Client")
                 .call();
-        final MFacility serverMFacility = MPlant.createFacilityAReq("Server")
+        final MFacility serverMFacility = MPlant.createFacilityAOp("Server")
                 .call();
         try {
             NonBlockingReactor serverReactor = new NonBlockingReactor(serverMFacility);
@@ -25,12 +25,12 @@ public class ServiceTest extends TestCase {
             NonBlockingReactor clientReactor = new NonBlockingReactor(clientMFacility);
             final Client client = new Client(clientReactor, server);
             NonBlockingReactor testReactor = new NonBlockingReactor();
-            new AsyncRequest<Void>(testReactor) {
-                AsyncRequest<Void> dis = this;
-
+            new AOp<Void>("bingo", testReactor) {
                 @Override
-                public void processAsyncRequest() throws Exception {
-                    send(client.crossAReq(),
+                public void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
+                                                  final AsyncResponseProcessor<Void> _asyncResponseProcessor)
+                        throws Exception {
+                    _asyncRequestImpl.send(client.crossAOp(),
                             new AsyncResponseProcessor<Boolean>() {
                                 @Override
                                 public void processAsyncResponse(
@@ -39,7 +39,7 @@ public class ServiceTest extends TestCase {
                                     System.out.println("Bingo!");
                                     Thread.sleep(10);
                                     assertFalse(response);
-                                    dis.processAsyncResponse(null);
+                                    _asyncResponseProcessor.processAsyncResponse(null);
                                 }
                             });
                 }
@@ -63,13 +63,13 @@ class Client extends NonBlockingBladeBase {
         server = _server;
     }
 
-    AsyncRequest<Boolean> crossAReq() {
-        return new AsyncBladeRequest<Boolean>() {
-            AsyncRequest<Boolean> dis = this;
-
+    AOp<Boolean> crossAOp() {
+        return new AOp<Boolean>("cross", getReactor()) {
             @Override
-            public void processAsyncRequest() throws Exception {
-                setExceptionHandler(new ExceptionHandler<Boolean>() {
+            public void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
+                                              final AsyncResponseProcessor<Boolean> _asyncResponseProcessor)
+                    throws Exception {
+                _asyncRequestImpl.setExceptionHandler(new ExceptionHandler<Boolean>() {
                     @Override
                     public Boolean processException(final Exception exception)
                             throws Exception {
@@ -81,10 +81,10 @@ class Client extends NonBlockingBladeBase {
                     }
                 });
                 Thread.sleep(10);
-                Request rb = server.hangAReq();
+                AOp rb = server.hangAOp();
                 System.out.println("client send hang "+rb);
                 Thread.sleep(10);
-                send(rb, dis, true);
+                _asyncRequestImpl.send(rb, _asyncResponseProcessor, true);
             }
         };
     }
@@ -95,10 +95,12 @@ class Server extends NonBlockingBladeBase {
         super(reactor);
     }
 
-    AsyncRequest<Void> hangAReq() {
-        return new AsyncBladeRequest<Void>() {
+    AOp<Void> hangAOp() {
+        return new AOp<Void>("hang", getReactor()) {
             @Override
-            public void processAsyncRequest() throws Exception {
+            public void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
+                                              final AsyncResponseProcessor<Void> _asyncResponseProcessor)
+                    throws Exception {
             }
         };
     }

@@ -7,9 +7,9 @@ public class ActivatorFailure {
     static public void main(final String[] _args) throws Exception {
         new MPlant();
         try {
-            MPlant.activatorPropertyAReq("a", "NoSuchActivator").call();
+            MPlant.activatorPropertyAOp("a", "NoSuchActivator").call();
             try {
-                MFacility.createMFacilityAReq("a").call();
+                MFacility.createMFacilityAOp("a").call();
             } catch (ReactorClosedException e) {
                 MFacility MFacility = MPlant.getInternalFacility();
                 MFacility.nullSReq().call(); //synchronize for the properties update

@@ -2,12 +2,13 @@ package org.agilewiki.jactor2.modules;
 
 import org.agilewiki.jactor2.core.blades.ismTransactions.ISMap;
 import org.agilewiki.jactor2.core.impl.mtPlant.PlantConfiguration;
+import org.agilewiki.jactor2.core.plant.PlantBase;
 import org.agilewiki.jactor2.core.requests.AOp;
 import org.agilewiki.jactor2.core.requests.SOp;
 import org.agilewiki.jactor2.modules.impl.MFacilityImpl;
 import org.agilewiki.jactor2.modules.impl.MPlantImpl;
 
-public class MPlant {
+public class MPlant extends PlantBase {
 
     public static MFacility getInternalFacility() {
         return MPlantImpl.getSingleton().getInternalFacility();
@@ -73,7 +74,7 @@ public class MPlant {
         return MPlantImpl.getSingleton().stoppedAOp(_facilityName, false);
     }
 
-    public static AOp<ISMap<String>> initialLocalMerssageQueueSizePropertyAOp(final String _facilityName, final Integer _value) {
+    public static AOp<ISMap<String>> initialLocalMessageQueueSizePropertyAOp(final String _facilityName, final Integer _value) {
         return MPlantImpl.getSingleton().initialLocalMessageQueueSizePropertyAOp(_facilityName, _value);
     }
 

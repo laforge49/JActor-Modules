@@ -2,7 +2,7 @@ package org.agilewiki.jactor2.modules.transactions.properties;
 
 import org.agilewiki.jactor2.core.blades.ismTransactions.*;
 import org.agilewiki.jactor2.core.blades.pubSub.RequestBus;
-import org.agilewiki.jactor2.core.blades.pubSub.SubscribeAReq;
+import org.agilewiki.jactor2.core.blades.pubSub.SubscribeAOp;
 import org.agilewiki.jactor2.core.impl.Plant;
 import org.agilewiki.jactor2.core.reactors.CommonReactor;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
@@ -19,7 +19,7 @@ public class PropertiesSample {
             final CommonReactor reactor = new NonBlockingReactor();
             RequestBus<ImmutableChanges<String>> validationBus = propertiesReference.validationBus;
 
-            new SubscribeAReq<ImmutableChanges<String>>(
+            new SubscribeAOp<ImmutableChanges<String>>(
                     validationBus,
                     reactor,
                     new ChangesFilter<String>("immutable.")){
@@ -39,13 +39,13 @@ public class PropertiesSample {
             }.call();
 
             try {
-                new ISMUpdateTransaction<String>("pie", "apple").applyAReq(propertiesReference).call();
-                new ISMUpdateTransaction<String>("pie", "peach").applyAReq(propertiesReference).call();
-                new ISMUpdateTransaction<String>("pie", (String) null).applyAReq(propertiesReference).call();
-                new ISMUpdateTransaction<String>("fruit", "pear").applyAReq(propertiesReference).call();
-                new ISMUpdateTransaction<String>("fruit", "orange").applyAReq(propertiesReference).call();
-                new ISMUpdateTransaction<String>("immutable.fudge", "fun").applyAReq(propertiesReference).call();
-                new ISMUpdateTransaction<String>("immutable.fudge", (String) null).applyAReq(propertiesReference).call(); //raises exception
+                new ISMUpdateTransaction<String>("pie", "apple").applyAOp(propertiesReference).call();
+                new ISMUpdateTransaction<String>("pie", "peach").applyAOp(propertiesReference).call();
+                new ISMUpdateTransaction<String>("pie", (String) null).applyAOp(propertiesReference).call();
+                new ISMUpdateTransaction<String>("fruit", "pear").applyAOp(propertiesReference).call();
+                new ISMUpdateTransaction<String>("fruit", "orange").applyAOp(propertiesReference).call();
+                new ISMUpdateTransaction<String>("immutable.fudge", "fun").applyAOp(propertiesReference).call();
+                new ISMUpdateTransaction<String>("immutable.fudge", (String) null).applyAOp(propertiesReference).call(); //raises exception
             } catch (final Exception e) {
                 System.out.println(e.getMessage());
             }

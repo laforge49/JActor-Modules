@@ -12,7 +12,7 @@ public class ActivatorFailure {
                 MFacility.createMFacilityAOp("a").call();
             } catch (ReactorClosedException e) {
                 MFacility MFacility = MPlant.getInternalFacility();
-                MFacility.nullSReq().call(); //synchronize for the properties update
+                MFacility.nullSOp().call(); //synchronize for the properties update
                 System.out.println(MFacility.configuration.getImmutable());
             }
         } finally {

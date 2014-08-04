@@ -12,7 +12,7 @@ public class PrinterSample {
         try {
 
             //Print something.
-            Printer.printlnAReq("Hello World!").call();
+            Printer.printlnAOp("Hello World!").call();
 
         } finally {
             //shutdown the plant

@@ -7,7 +7,7 @@ public class ActivatorSample {
         new MPlant();
         try {
             MPlant.activatorPropertyAOp("a", "org.agilewiki.jactor2.modules.SampleActivator").call();
-            MPlant.createFacilityAOp("a").call();
+            MPlant.createMFacilityAOp("a").call();
         } finally {
             Plant.close();
         }

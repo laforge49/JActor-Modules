@@ -13,11 +13,11 @@ public class DependencyTest extends TestCase {
         try {
             MPlant.dependencyPropertyAOp("B", "A").call();
             MPlant.dependencyPropertyAOp("C", "B").call();
-            final MFacility a = MPlant.createFacilityAOp("A")
+            final MFacility a = MPlant.createMFacilityAOp("A")
                     .call();
-            final MFacility b = MPlant.createFacilityAOp("B")
+            final MFacility b = MPlant.createMFacilityAOp("B")
                     .call();
-            final MFacility c = MPlant.createFacilityAOp("C")
+            final MFacility c = MPlant.createMFacilityAOp("C")
                     .call();
             ISMReference<String> propertiesReference = MPlant.getInternalFacility().configuration;
             ISMap<String> properties = propertiesReference.getImmutable();

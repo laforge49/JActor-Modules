@@ -14,14 +14,14 @@ public class MPlant extends PlantBase {
         return MPlantImpl.getSingleton().getInternalFacility();
     }
 
-    public static MFacility getFacility(String name) {
+    public static MFacility getMFacility(String name) {
         MFacilityImpl MFacilityImpl = MPlantImpl.getSingleton().getMFacilityImpl(name);
         if (MFacilityImpl == null)
             return null;
         return MFacilityImpl.asMFacility();
     }
 
-    public static AOp<MFacility> createFacilityAOp(final String _name)
+    public static AOp<MFacility> createMFacilityAOp(final String _name)
             throws Exception {
         return MFacility.createMFacilityAOp(_name);
     }

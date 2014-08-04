@@ -15,9 +15,9 @@ import org.agilewiki.jactor2.modules.MPlant;
 public class ServiceTest extends TestCase {
     public void test() throws Exception {
         new MPlant();
-        final MFacility clientMFacility = MPlant.createFacilityAOp("Client")
+        final MFacility clientMFacility = MPlant.createMFacilityAOp("Client")
                 .call();
-        final MFacility serverMFacility = MPlant.createFacilityAOp("Server")
+        final MFacility serverMFacility = MPlant.createMFacilityAOp("Server")
                 .call();
         try {
             NonBlockingReactor serverReactor = new NonBlockingReactor(serverMFacility);

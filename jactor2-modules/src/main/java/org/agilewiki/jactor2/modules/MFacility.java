@@ -1,6 +1,7 @@
 package org.agilewiki.jactor2.modules;
 
 import org.agilewiki.jactor2.core.blades.ismTransactions.ISMReference;
+import org.agilewiki.jactor2.core.blades.ismTransactions.ISMUpdateTransaction;
 import org.agilewiki.jactor2.core.blades.ismTransactions.ISMap;
 import org.agilewiki.jactor2.core.reactors.Facility;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
@@ -42,13 +43,17 @@ public class MFacility extends Facility {
         return getMFacility(_reactor.getParentReactor());
     }
 
+    public final ISMReference<String> configuration;
+
     private MFacility(final String _name, final int _initialOutboxSize, final int _initialLocalQueueSize) throws Exception {
         super(_name, _initialOutboxSize, _initialLocalQueueSize);
         asFacilityImpl().nameSet(name);
+        configuration = new ISMReference<>();
     }
 
     public MFacility(final String _name, Void _parentReactor, final int _initialOutboxSize, final int _initialLocalQueueSize) throws Exception {
         super(_name, null, _initialOutboxSize, _initialLocalQueueSize);
+        configuration = new ISMReference<>(this);
     }
 
     @Override
@@ -63,5 +68,28 @@ public class MFacility extends Facility {
 
     public String getName() {
         return asFacilityImpl().getName();
+    }
+
+    /**
+     * Returns the value of a property.
+     *
+     * @param propertyName The property name.
+     * @return The property value, or null.
+     */
+    public Object getProperty(final String propertyName) {
+        return configuration.getImmutable().get(propertyName);
+    }
+
+    public AOp<ISMap<String>> putPropertyAOp(final String _propertyName,
+                                             final String _propertyValue) {
+        return new ISMUpdateTransaction<String>(_propertyName, _propertyValue).
+                applyAOp(configuration);
+    }
+
+    public AOp<ISMap<String>> putPropertyAOp(final String _propertyName,
+                                             final String _expectedValue,
+                                             final String _propertyValue) {
+        return new ISMUpdateTransaction<String>(_propertyName, _propertyValue, _expectedValue).
+                applyAOp(configuration);
     }
 }

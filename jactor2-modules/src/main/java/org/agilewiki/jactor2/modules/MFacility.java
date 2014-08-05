@@ -48,7 +48,7 @@ public class MFacility extends Facility {
     private MFacility(final String _name, final int _initialOutboxSize, final int _initialLocalQueueSize) throws Exception {
         super(_name, _initialOutboxSize, _initialLocalQueueSize);
         asFacilityImpl().nameSet(name);
-        configuration = new ISMReference<>();
+        configuration = new ISMReference<>(this);
     }
 
     public MFacility(final String _name, Void _parentReactor, final int _initialOutboxSize, final int _initialLocalQueueSize) throws Exception {

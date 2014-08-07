@@ -106,7 +106,7 @@ public class Printer extends BlockingBladeBase {
     public SOp<Void> printlnSOp(final String _string) {
         return new SOp<Void>("printlnS", getReactor()) {
             @Override
-            public Void processSyncOperation(final RequestImpl _requestImpl) throws Exception {
+            protected Void processSyncOperation(final RequestImpl _requestImpl) throws Exception {
                 System.out.println(_string);
                 return null;
             }
@@ -124,7 +124,7 @@ public class Printer extends BlockingBladeBase {
             final Object... _args) {
         return new SOp<Void>("printfS", getReactor()) {
             @Override
-            public Void processSyncOperation(final RequestImpl _requestImpl) throws Exception {
+            protected Void processSyncOperation(final RequestImpl _requestImpl) throws Exception {
                 System.out.print(String.format(_format, _args));
                 return null;
             }

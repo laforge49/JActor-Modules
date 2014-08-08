@@ -103,7 +103,7 @@ public class MPlantImpl extends PlantMtImpl {
         final MFacility internalMFacility = getInternalFacility();
         return new AOp<Void>("updateFacilityStatus", internalMFacility) {
             @Override
-            public void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
+            protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
                                               final AsyncResponseProcessor<Void> _asyncResponseProcessor)
                     throws Exception {
                 AsyncResponseProcessor<Void> transactionResponseProcessor = new AsyncResponseProcessor<Void>() {
@@ -277,7 +277,7 @@ public class MPlantImpl extends PlantMtImpl {
     private AOp<String> autoStartAOp(final String _facilityName) {
         return new AOp<String>("autoStart", getInternalFacility()) {
             @Override
-            public void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
+            protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
                                               final AsyncResponseProcessor<String> _asyncResponseProcessor)
                     throws Exception {
                 if (getMFacilityImpl(_facilityName) != null) {
@@ -341,7 +341,7 @@ public class MPlantImpl extends PlantMtImpl {
     public AOp<Void> dependencyPropertyAOp(final String _dependentName, final String _dependencyName) {
         return new AOp<Void>("dependencyProperty", getInternalFacility()) {
             @Override
-            public void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
+            protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
                                               final AsyncResponseProcessor<Void> _asyncResponseProcessor)
                     throws Exception {
                 final String name = _dependencyName;

@@ -27,7 +27,7 @@ public class ServiceTest extends TestCase {
             NonBlockingReactor testReactor = new NonBlockingReactor();
             new AOp<Void>("bingo", testReactor) {
                 @Override
-                public void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
+                protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
                                                   final AsyncResponseProcessor<Void> _asyncResponseProcessor)
                         throws Exception {
                     _asyncRequestImpl.send(client.crossAOp(),
@@ -66,7 +66,7 @@ class Client extends NonBlockingBladeBase {
     AOp<Boolean> crossAOp() {
         return new AOp<Boolean>("cross", getReactor()) {
             @Override
-            public void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
+            protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
                                               final AsyncResponseProcessor<Boolean> _asyncResponseProcessor)
                     throws Exception {
                 _asyncRequestImpl.setExceptionHandler(new ExceptionHandler<Boolean>() {
@@ -98,7 +98,7 @@ class Server extends NonBlockingBladeBase {
     AOp<Void> hangAOp() {
         return new AOp<Void>("hang", getReactor()) {
             @Override
-            public void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
+            protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
                                               final AsyncResponseProcessor<Void> _asyncResponseProcessor)
                     throws Exception {
             }

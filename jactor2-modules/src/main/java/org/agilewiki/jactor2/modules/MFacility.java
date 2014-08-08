@@ -30,7 +30,7 @@ public class MFacility extends Facility {
         final MFacility mFacility = new MFacility(_name, initialBufferSize, initialLocalQueueSize);
         return new AOp<MFacility>("startFacility", mFacility) {
             @Override
-            public void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
+            protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
                                               final AsyncResponseProcessor<MFacility> _asyncResponseProcessor) throws Exception {
                 _asyncRequestImpl.send(mFacility.asFacilityImpl().startFacilityAOp(), _asyncResponseProcessor, mFacility);
             }

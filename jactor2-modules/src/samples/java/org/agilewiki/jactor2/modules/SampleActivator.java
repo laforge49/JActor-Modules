@@ -17,7 +17,7 @@ public class SampleActivator extends Activator {
     public AOp<Void> startAOp() {
         return new AOp<Void>("start", getReactor()) {
             @Override
-            public void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
+            protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
                                               final AsyncResponseProcessor<Void> _asyncResponseProcessor)
                     throws Exception {
                 System.out.println("activated!");

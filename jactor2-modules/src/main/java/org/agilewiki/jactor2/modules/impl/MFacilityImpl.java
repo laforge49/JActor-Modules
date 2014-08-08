@@ -67,7 +67,7 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
     public AOp<Void> startFacilityAOp() {
         return new AOp<Void>("startFacility", asReactor()) {
             @Override
-            public void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
+            protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
                                               final AsyncResponseProcessor<Void> _asyncResponseProcessor)
                     throws Exception {
                 AsyncResponseProcessor<Void> registerResponseProcessor =
@@ -155,7 +155,7 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
     public AOp<ClassLoader> getClassLoaderAOp() {
         return new AOp<ClassLoader>("getClassLoader", getReactor()) {
             @Override
-            public void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
+            protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
                                               final AsyncResponseProcessor<ClassLoader> _asyncResponseProcessor)
                     throws Exception {
                 _asyncResponseProcessor.processAsyncResponse(getClassLoader());
@@ -166,7 +166,7 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
     public AOp<String> activateAOp(final String _activatorClassName) {
         return new AOp<String>("activate", getReactor()) {
             @Override
-            public void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
+            protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
                                             final AsyncResponseProcessor<String> _asyncResponseProcessor)
                     throws Exception {
                 setExceptionHandler(new ExceptionHandler<String>() {

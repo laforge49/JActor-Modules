@@ -44,7 +44,7 @@ public class Printer extends BlockingBladeBase {
     public static AOp<Void> printlnAOp(final String _string) {
         return new AOp<Void>("printlnA", Plant.getInternalFacility()) {
             @Override
-            public void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
+            protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
                                               final AsyncResponseProcessor<Void> _asyncResponseProcessor) {
                 _asyncRequestImpl.send(stdoutAOp(),
                         new AsyncResponseProcessor<Printer>() {
@@ -61,7 +61,7 @@ public class Printer extends BlockingBladeBase {
     public static AOp<Void> printfAOp(final String _format, final Object... _args) {
         return new AOp<Void>("printfA", Plant.getInternalFacility()) {
             @Override
-            public void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
+            protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
                                             final AsyncResponseProcessor<Void> _asyncResponseProcessor) {
                 _asyncRequestImpl.send(stdoutAOp(),
                         new AsyncResponseProcessor<Printer>() {
@@ -78,7 +78,7 @@ public class Printer extends BlockingBladeBase {
     static public AOp<Printer> stdoutAOp() {
         return new AOp<Printer>("stdout", Plant.getInternalFacility()) {
             @Override
-            public void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
+            protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
                                               final AsyncResponseProcessor<Printer> _asyncResponseProcessor) throws Exception {
                 if (printer != null) {
                     _asyncResponseProcessor.processAsyncResponse(printer);

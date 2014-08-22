@@ -4,7 +4,6 @@ import org.agilewiki.jactor2.core.blades.ismTransactions.ISMap;
 import org.agilewiki.jactor2.core.impl.mtPlant.PlantConfiguration;
 import org.agilewiki.jactor2.core.plant.PlantBase;
 import org.agilewiki.jactor2.core.requests.AOp;
-import org.agilewiki.jactor2.core.requests.SOp;
 import org.agilewiki.jactor2.modules.impl.MFacilityImpl;
 import org.agilewiki.jactor2.modules.impl.MPlantImpl;
 

@@ -8,7 +8,7 @@ public class PrinterServiceTest extends TestCase {
         new CPlant();
         try {
             PrinterService.register();
-            PrinterService x = PrinterService.getPrinter();
+            PrinterService x = PrinterService.getPrinterService();
             x.printlnSOp("Ho!").call();
             x.unregisterSOp().call();
         } finally {

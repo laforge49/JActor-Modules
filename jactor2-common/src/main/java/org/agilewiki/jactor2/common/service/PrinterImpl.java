@@ -5,6 +5,11 @@ import org.agilewiki.jactor2.core.requests.SOp;
 import org.agilewiki.jactor2.core.requests.impl.RequestImpl;
 
 public class PrinterImpl extends Printer {
+
+    public static void register() throws Exception {
+        new PrinterImpl().registerSOp().call();
+    }
+
     public PrinterImpl() throws Exception {
         this(new BlockingReactor());
     }

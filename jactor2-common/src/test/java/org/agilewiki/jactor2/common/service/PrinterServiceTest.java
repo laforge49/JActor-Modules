@@ -7,7 +7,7 @@ public class PrinterServiceTest extends TestCase {
     public void test1() throws Exception {
         new CPlant();
         try {
-            BasePrinterService.register();
+            PrinterService.register();
             PrinterService x = PrinterService.getPrinter();
             x.printlnSOp("Ho!").call();
             x.unregisterSOp().call();

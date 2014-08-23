@@ -4,17 +4,17 @@ import org.agilewiki.jactor2.core.reactors.BlockingReactor;
 import org.agilewiki.jactor2.core.requests.SOp;
 import org.agilewiki.jactor2.core.requests.impl.RequestImpl;
 
-public class PrinterServiceImpl extends PrinterService {
+public class BasePrinterService extends PrinterService {
 
     public static void register() throws Exception {
-        new PrinterServiceImpl().registerSOp().call();
+        new BasePrinterService().registerSOp().call();
     }
 
-    public PrinterServiceImpl() throws Exception {
+    public BasePrinterService() throws Exception {
         this(new BlockingReactor());
     }
 
-    public PrinterServiceImpl(BlockingReactor _reactor) {
+    public BasePrinterService(BlockingReactor _reactor) {
         super(_reactor);
     }
 

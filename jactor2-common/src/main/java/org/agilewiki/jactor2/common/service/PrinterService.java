@@ -7,17 +7,17 @@ import org.agilewiki.jactor2.core.reactors.Facility;
 import org.agilewiki.jactor2.core.reactors.Reactor;
 import org.agilewiki.jactor2.core.requests.SOp;
 
-public abstract class Printer extends Service {
-    public static Printer getPrinter() throws Exception {
+public abstract class PrinterService extends Service {
+    public static PrinterService getPrinter() throws Exception {
         return getPrinter(CPlantImpl.getSingleton().getInternalFacility());
     }
 
-    public static Printer getPrinter(final Reactor _reactor) throws Exception {
+    public static PrinterService getPrinter(final Reactor _reactor) throws Exception {
         Facility facility = CPlant.getFacility(_reactor);
-        return (Printer) facility.getBlade("printer");
+        return (PrinterService) facility.getBlade("printer");
     }
 
-    protected Printer(final Reactor _reactor) {
+    protected PrinterService(final Reactor _reactor) {
         super(_reactor, "printer");
     }
 

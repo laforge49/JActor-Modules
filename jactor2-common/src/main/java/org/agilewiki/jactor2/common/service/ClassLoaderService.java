@@ -31,6 +31,10 @@ public class ClassLoaderService extends Service {
 
     public ClassLoaderService(BlockingReactor _reactor) {
         super(_reactor, CLASS_LOADER_SERVICE_NAME);
-        classLoader = getClass().getClassLoader();
+        classLoader = createClassLoader();
+    }
+
+    protected ClassLoader createClassLoader() {
+        return getClass().getClassLoader();
     }
 }

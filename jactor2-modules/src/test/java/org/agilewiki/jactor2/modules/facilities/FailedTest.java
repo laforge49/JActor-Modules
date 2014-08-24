@@ -1,6 +1,7 @@
 package org.agilewiki.jactor2.modules.facilities;
 
 import junit.framework.TestCase;
+import org.agilewiki.jactor2.common.service.ClassLoaderService;
 import org.agilewiki.jactor2.core.blades.ismTransactions.ISMReference;
 import org.agilewiki.jactor2.core.impl.Plant;
 import org.agilewiki.jactor2.modules.MPlant;
@@ -9,6 +10,7 @@ public class FailedTest extends TestCase {
     public void test() throws Exception {
         new MPlant();
         try {
+            ClassLoaderService.register();
             MPlant.activatorPropertyAOp("A", "org.agilewiki.jactor2.modules.facilities.SampleActivator").call();
             MPlant.failFacility("A", "inhibit");
             MPlant.autoStartAOp("A", true).call();

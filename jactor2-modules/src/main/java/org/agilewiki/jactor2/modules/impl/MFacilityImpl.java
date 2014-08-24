@@ -1,5 +1,6 @@
 package org.agilewiki.jactor2.modules.impl;
 
+import org.agilewiki.jactor2.common.service.ClassLoaderService;
 import org.agilewiki.jactor2.core.blades.ismTransactions.ISMReference;
 import org.agilewiki.jactor2.core.blades.ismTransactions.ISMUpdateTransaction;
 import org.agilewiki.jactor2.core.blades.ismTransactions.ImmutableChange;
@@ -148,19 +149,8 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
         return plantImpl.updateFacilityStatusAOp(MFacilityImpl.this.asMFacility(), name, false, null);
     }
 
-    protected ClassLoader getClassLoader() throws Exception {
-        return getClass().getClassLoader();
-    }
-
-    public AOp<ClassLoader> getClassLoaderAOp() {
-        return new AOp<ClassLoader>("getClassLoader", getReactor()) {
-            @Override
-            protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
-                                              final AsyncResponseProcessor<ClassLoader> _asyncResponseProcessor)
-                    throws Exception {
-                _asyncResponseProcessor.processAsyncResponse(getClassLoader());
-            }
-        };
+    public ClassLoader getClassLoader() throws Exception {
+        return ClassLoaderService.getClassLoaderService().classLoader;
     }
 
     public AOp<String> activateAOp(final String _activatorClassName) {

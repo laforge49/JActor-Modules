@@ -1,6 +1,7 @@
 package org.agilewiki.jactor2.modules.facilities;
 
 import junit.framework.TestCase;
+import org.agilewiki.jactor2.common.service.ClassLoaderService;
 import org.agilewiki.jactor2.core.blades.ismTransactions.ISMReference;
 import org.agilewiki.jactor2.core.blades.ismTransactions.ISMap;
 import org.agilewiki.jactor2.core.impl.Plant;
@@ -10,6 +11,7 @@ public class AutoStartTest extends TestCase {
     public void test() throws Exception {
         new MPlant();
         try {
+            ClassLoaderService.register();
             MPlant.activatorPropertyAOp("B", "org.agilewiki.jactor2.modules.facilities.SampleActivator").call();
             MPlant.dependencyPropertyAOp("B", "A").call();
             MPlant.autoStartAOp("B", true).call();

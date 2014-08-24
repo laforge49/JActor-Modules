@@ -1,6 +1,7 @@
 package org.agilewiki.jactor2.modules.facilities;
 
 import junit.framework.TestCase;
+import org.agilewiki.jactor2.common.service.ClassLoaderService;
 import org.agilewiki.jactor2.core.blades.ismTransactions.ISMReference;
 import org.agilewiki.jactor2.core.blades.ismTransactions.ISMap;
 import org.agilewiki.jactor2.core.impl.Plant;
@@ -11,6 +12,7 @@ public class DependencyTest extends TestCase {
     public void test() throws Exception {
         new MPlant();
         try {
+            ClassLoaderService.register();
             MPlant.dependencyPropertyAOp("B", "A").call();
             MPlant.dependencyPropertyAOp("C", "B").call();
             final MFacility a = MPlant.createMFacilityAOp("A")

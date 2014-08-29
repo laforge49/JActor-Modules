@@ -10,12 +10,14 @@ public class ActivatorFailure {
         try {
             ClassLoaderService.register();
             MPlant.activatorPropertyAOp("a", "NoSuchActivator").call();
+            MFacility mFacility = MPlant.getInternalFacility();
+            mFacility.nullSOp().call(); //synchronize for the properties update
+            System.out.println(mFacility.configuration.getImmutable());
             try {
                 MFacility.createMFacilityAOp("a").call();
             } catch (ReactorClosedException e) {
-                MFacility MFacility = MPlant.getInternalFacility();
-                MFacility.nullSOp().call(); //synchronize for the properties update
-                System.out.println(MFacility.configuration.getImmutable());
+                mFacility.nullSOp().call(); //synchronize for the properties update
+                System.out.println(mFacility.configuration.getImmutable());
             }
         } finally {
             Plant.close();

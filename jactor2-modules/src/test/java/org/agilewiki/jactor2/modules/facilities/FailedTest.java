@@ -20,7 +20,7 @@ public class FailedTest extends TestCase {
             MPlant.clearFailedAOp("A").call();
             propertiesReference.getReactor().nullSOp().call(); //synchronize for the properties update
             System.out.println("after"+propertiesReference.getImmutable());
-            Thread.sleep(100); //give the activator a chance to run
+            Thread.sleep(500); //give the activator a chance to run
         } finally {
             Plant.close();
         }

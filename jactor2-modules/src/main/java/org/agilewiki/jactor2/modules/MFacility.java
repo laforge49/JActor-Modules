@@ -92,4 +92,8 @@ public class MFacility extends Facility {
         return new ISMUpdateTransaction<String>(_propertyName, _propertyValue, _expectedValue).
                 applyAOp(configuration);
     }
+
+    public String toString() {
+        return getName();
+    }
 }

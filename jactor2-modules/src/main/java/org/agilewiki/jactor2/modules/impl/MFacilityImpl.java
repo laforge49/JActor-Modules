@@ -69,7 +69,7 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
         return new AOp<Void>("startFacility", asReactor()) {
             @Override
             protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
-                                              final AsyncResponseProcessor<Void> _asyncResponseProcessor)
+                                                 final AsyncResponseProcessor<Void> _asyncResponseProcessor)
                     throws Exception {
                 AsyncResponseProcessor<Void> registerResponseProcessor =
                         new AsyncResponseProcessor<Void>() {
@@ -80,14 +80,10 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
                                 if (activatorClassName == null)
                                     _asyncResponseProcessor.processAsyncResponse(null);
                                 else {
-                                    _asyncRequestImpl.send(activateAOp(activatorClassName), new AsyncResponseProcessor<String>() {
+                                    _asyncRequestImpl.send(activateAOp(activatorClassName),
+                                            new AsyncResponseProcessor<String>() {
                                         @Override
                                         public void processAsyncResponse(final String _failure) throws Exception {
-                                            if (_failure == null) {
-                                                System.out.println("registered " + name);
-                                                _asyncResponseProcessor.processAsyncResponse(null);
-                                                return;
-                                            }
                                             close(false, _failure);
                                         }
                                     });
@@ -157,7 +153,7 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
         return new AOp<String>("activate", getReactor()) {
             @Override
             protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
-                                            final AsyncResponseProcessor<String> _asyncResponseProcessor)
+                                                 final AsyncResponseProcessor<String> _asyncResponseProcessor)
                     throws Exception {
                 setExceptionHandler(new ExceptionHandler<String>() {
                     @Override
@@ -206,5 +202,9 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
             reactor.reactorPoll();
         }
         reactorPoll();
+    }
+
+    public String toString() {
+        return getName();
     }
 }

@@ -98,7 +98,6 @@ public class MPlantImpl extends PlantMtImpl {
                                              final String _facilityName,
                                              final boolean _stop,
                                              final String _reasonForFailure) {
-        System.out.println(">>>>>>>>>>>>>>>>> " + _facilityName);
         final String stop = _stop ? "true" : null;
         final MFacility internalMFacility = getInternalFacility();
         return new AOp<Void>("updateFacilityStatus", internalMFacility) {

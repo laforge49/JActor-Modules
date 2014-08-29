@@ -84,7 +84,11 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
                                             new AsyncResponseProcessor<String>() {
                                         @Override
                                         public void processAsyncResponse(final String _failure) throws Exception {
-                                            close(false, _failure);
+                                            if (_failure != null) {
+                                                close(false, _failure);
+                                                return;
+                                            }
+                                            _asyncResponseProcessor.processAsyncResponse(null);
                                         }
                                     });
                                 }

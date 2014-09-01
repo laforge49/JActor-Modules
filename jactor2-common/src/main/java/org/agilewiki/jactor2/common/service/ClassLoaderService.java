@@ -2,7 +2,6 @@ package org.agilewiki.jactor2.common.service;
 
 import org.agilewiki.jactor2.common.CPlant;
 import org.agilewiki.jactor2.common.CPlantImpl;
-import org.agilewiki.jactor2.common.Service;
 import org.agilewiki.jactor2.core.reactors.BlockingReactor;
 import org.agilewiki.jactor2.core.reactors.Facility;
 import org.agilewiki.jactor2.core.reactors.Reactor;

@@ -150,7 +150,7 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
     }
 
     public ClassLoader getClassLoader() throws Exception {
-        return ClassLoaderService.getClassLoaderService().classLoader;
+        return ClassLoaderService.getClassLoaderService().jcl;
     }
 
     public AOp<String> activateAOp(final String _activatorClassName) {

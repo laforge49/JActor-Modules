@@ -5,6 +5,7 @@ import org.agilewiki.jactor2.common.CPlantImpl;
 import org.agilewiki.jactor2.core.reactors.BlockingReactor;
 import org.agilewiki.jactor2.core.reactors.Facility;
 import org.agilewiki.jactor2.core.reactors.Reactor;
+import org.xeustechnologies.jcl.JarClassLoader;
 
 public class ClassLoaderService extends Service {
     public static final String CLASS_LOADER_SERVICE_NAME = "classLoader";
@@ -22,7 +23,7 @@ public class ClassLoaderService extends Service {
         new ClassLoaderService().registerSOp().call();
     }
 
-    public final ClassLoader classLoader;
+    public final JarClassLoader jcl;
 
     public ClassLoaderService() throws Exception {
         this(new BlockingReactor());
@@ -30,10 +31,6 @@ public class ClassLoaderService extends Service {
 
     public ClassLoaderService(BlockingReactor _reactor) {
         super(_reactor, CLASS_LOADER_SERVICE_NAME);
-        classLoader = createClassLoader();
-    }
-
-    protected ClassLoader createClassLoader() {
-        return getClass().getClassLoader();
+        jcl = new JarClassLoader();
     }
 }

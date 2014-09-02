@@ -48,6 +48,7 @@
 
     <modules>
         <module>jactor2-common</module>
+        <module>jactor2-a</module>
         <module>jactor2-modules</module>
     </modules>
 </project>

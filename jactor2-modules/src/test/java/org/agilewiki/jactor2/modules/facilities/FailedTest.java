@@ -10,7 +10,7 @@ public class FailedTest extends TestCase {
     public void test() throws Exception {
         new MPlant();
         try {
-            MPlant.activatorPropertyAOp("A", "org.agilewiki.jactor2.modules.facilities.SampleActivator").call();
+            MPlant.activatorPropertyAOp("A", "org.agilewiki.jactor2.a.SampleActivator").call();
             MPlant.failFacility("A", "inhibit");
             MPlant.autoStartAOp("A", true).call();
             ISMReference<String> propertiesReference = MPlant.getInternalFacility().configuration;

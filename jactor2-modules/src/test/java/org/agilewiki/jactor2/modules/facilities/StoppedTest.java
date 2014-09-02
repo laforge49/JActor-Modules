@@ -10,7 +10,7 @@ public class StoppedTest extends TestCase {
     public void test() throws Exception {
         new MPlant();
         try {
-            MPlant.activatorPropertyAOp("A", "org.agilewiki.jactor2.modules.facilities.SampleActivator").call();
+            MPlant.activatorPropertyAOp("A", "org.agilewiki.jactor2.a.SampleActivator").call();
             MPlant.stopFacility("A");
             MPlant.autoStartAOp("A", true).call();
             ISMReference<String> propertiesReference = MPlant.getInternalFacility().configuration;

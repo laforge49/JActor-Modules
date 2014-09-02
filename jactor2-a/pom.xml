@@ -9,8 +9,8 @@
         <version>0.0.1</version>
     </parent>
 
-    <artifactId>jactor2-modules</artifactId>
-    <name>JActor2-modules</name>
+    <artifactId>jactor2-a</artifactId>
+    <name>JActor2-a</name>
     <packaging>jar</packaging>
 
     <build>
@@ -44,11 +44,6 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>jactor2-common</artifactId>
-            <version>0.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>jactor2-a</artifactId>
             <version>0.0.1</version>
         </dependency>
         <dependency>

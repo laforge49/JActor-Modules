@@ -16,7 +16,7 @@ public class AutoStartTest extends TestCase {
             String fn = "jactor2-a/target/jactor2-a-0.0.1.jar";
             if (!(new File(fn).exists()))
                 fn = "../" + fn;
-            MPlant.resourcePropertyAOp("B", fn).call();
+            MPlant.resourcePropertyAOp("A", fn).call();
             MPlant.activatorPropertyAOp("B", "org.agilewiki.jactor2.a.SampleActivator").call();
             MPlant.dependencyPropertyAOp("B", "A").call();
             MPlant.autoStartAOp("B", true).call();

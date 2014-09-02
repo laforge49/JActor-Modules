@@ -12,6 +12,7 @@ import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.impl.AsyncRequestImpl;
 import org.agilewiki.jactor2.modules.impl.MFacilityImpl;
 import org.agilewiki.jactor2.modules.impl.MPlantImpl;
+import org.xeustechnologies.jcl.CompositeProxyClassLoader;
 import org.xeustechnologies.jcl.JarClassLoader;
 
 public class MFacility extends Facility {
@@ -102,5 +103,9 @@ public class MFacility extends Facility {
 
     public JarClassLoader getJCL() throws Exception {
         return ClassLoaderService.getClassLoaderService(this).jcl;
+    }
+
+    public CompositeProxyClassLoader getCCL() throws Exception {
+        return ClassLoaderService.getClassLoaderService(this).ccl;
     }
 }

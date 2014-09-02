@@ -5,7 +5,6 @@ import org.agilewiki.jactor2.common.CPlantImpl;
 import org.agilewiki.jactor2.core.reactors.BlockingReactor;
 import org.agilewiki.jactor2.core.reactors.Facility;
 import org.agilewiki.jactor2.core.reactors.Reactor;
-import org.agilewiki.jactor2.core.requests.SOp;
 import org.xeustechnologies.jcl.CompositeProxyClassLoader;
 import org.xeustechnologies.jcl.JarClassLoader;
 

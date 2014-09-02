@@ -21,6 +21,7 @@ import org.agilewiki.jactor2.core.requests.impl.AsyncRequestImpl;
 import org.agilewiki.jactor2.modules.DependencyNotPresentException;
 import org.agilewiki.jactor2.modules.MFacility;
 import org.agilewiki.jactor2.modules.MPlant;
+import org.xeustechnologies.jcl.CompositeProxyClassLoader;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -78,11 +79,23 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
                                 parentReactor.addCloseable(MFacilityImpl.this);
                                 _asyncRequestImpl.syncDirect(
                                         new ClassLoaderService(getReactor()).registerSOp());
-                                String resourcePrefix = MPlantImpl.resourcePrefix(name);
                                 final ISMReference<String> propertiesReference = MPlant.getInternalFacility().configuration;
+                                String dependencyPrefix = MPlantImpl.dependencyPrefix(name);
+                                String resourcePrefix = MPlantImpl.resourcePrefix(name);
+                                final ISMap<String> dependencies =
+                                        propertiesReference.getImmutable().subMap(dependencyPrefix);
                                 final ISMap<String> resources =
                                         propertiesReference.getImmutable().subMap(resourcePrefix);
+                                Iterator<String> dit = dependencies.keySet().iterator();
                                 Iterator<String> rit = resources.keySet().iterator();
+                                CompositeProxyClassLoader ccl = asMFacility().getCCL();
+                                while (dit.hasNext()) {
+                                    String d = dit.next();
+                                    String dependencyName = d.substring(dependencyPrefix.length());
+                                    MFacility dFacility = MPlant.getMFacility(dependencyName);
+                                    ccl.add(dFacility.getJCL().getLocalLoader());
+                                    ccl.add(dFacility.getCCL());
+                                }
                                 while (rit.hasNext()) {
                                     String r = rit.next();
                                     String resourceName = r.substring(resourcePrefix.length());

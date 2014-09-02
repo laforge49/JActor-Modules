@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.agilewiki.jactor2</groupId>
         <artifactId>jactor-modules</artifactId>
-        <version>0.0.1</version>
+        <version>0.1.0</version>
     </parent>
 
     <artifactId>jactor2-modules</artifactId>
@@ -44,7 +44,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>jactor2-common</artifactId>
-            <version>0.0.1</version>
+            <version>0.1.0</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>

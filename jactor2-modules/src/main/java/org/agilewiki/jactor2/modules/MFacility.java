@@ -1,5 +1,6 @@
 package org.agilewiki.jactor2.modules;
 
+import org.agilewiki.jactor2.common.service.ClassLoaderService;
 import org.agilewiki.jactor2.core.blades.ismTransactions.ISMReference;
 import org.agilewiki.jactor2.core.blades.ismTransactions.ISMUpdateTransaction;
 import org.agilewiki.jactor2.core.blades.ismTransactions.ISMap;
@@ -11,6 +12,7 @@ import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.impl.AsyncRequestImpl;
 import org.agilewiki.jactor2.modules.impl.MFacilityImpl;
 import org.agilewiki.jactor2.modules.impl.MPlantImpl;
+import org.xeustechnologies.jcl.JarClassLoader;
 
 public class MFacility extends Facility {
     public static AOp<MFacility> createMFacilityAOp(final String _name) throws Exception {
@@ -95,5 +97,9 @@ public class MFacility extends Facility {
 
     public String toString() {
         return getName();
+    }
+
+    public JarClassLoader getJCL() throws Exception {
+        return ClassLoaderService.getClassLoaderService(this).jcl;
     }
 }

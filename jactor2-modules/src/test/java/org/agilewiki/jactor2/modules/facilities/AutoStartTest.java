@@ -11,7 +11,6 @@ public class AutoStartTest extends TestCase {
     public void test() throws Exception {
         new MPlant();
         try {
-            ClassLoaderService.register();
             MPlant.activatorPropertyAOp("B", "org.agilewiki.jactor2.modules.facilities.SampleActivator").call();
             MPlant.dependencyPropertyAOp("B", "A").call();
             MPlant.autoStartAOp("B", true).call();

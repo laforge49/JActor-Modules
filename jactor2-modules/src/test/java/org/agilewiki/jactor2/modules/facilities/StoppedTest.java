@@ -10,7 +10,6 @@ public class StoppedTest extends TestCase {
     public void test() throws Exception {
         new MPlant();
         try {
-            ClassLoaderService.register();
             MPlant.activatorPropertyAOp("A", "org.agilewiki.jactor2.modules.facilities.SampleActivator").call();
             MPlant.stopFacility("A");
             MPlant.autoStartAOp("A", true).call();

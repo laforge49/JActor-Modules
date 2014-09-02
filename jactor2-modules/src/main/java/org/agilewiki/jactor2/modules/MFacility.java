@@ -33,7 +33,8 @@ public class MFacility extends Facility {
         return new AOp<MFacility>("startFacility", mFacility) {
             @Override
             protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
-                                              final AsyncResponseProcessor<MFacility> _asyncResponseProcessor) throws Exception {
+                                              final AsyncResponseProcessor<MFacility> _asyncResponseProcessor)
+                    throws Exception {
                 _asyncRequestImpl.send(mFacility.asFacilityImpl().startFacilityAOp(), _asyncResponseProcessor, mFacility);
             }
         };

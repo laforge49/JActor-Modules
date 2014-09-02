@@ -8,7 +8,6 @@ public class ActivatorSample {
     public static void main(String[] args) throws Exception {
         new MPlant();
         try {
-            ClassLoaderService.register();
             MPlant.activatorPropertyAOp("a", SampleActivator.class.getName()).call();
             MPlant.createMFacilityAOp("a").call();
         } finally {

@@ -22,6 +22,7 @@ import org.agilewiki.jactor2.modules.Activator;
 import org.agilewiki.jactor2.modules.DependencyNotPresentException;
 import org.agilewiki.jactor2.modules.MFacility;
 import org.agilewiki.jactor2.modules.MPlant;
+import org.xeustechnologies.jcl.JarClassLoader;
 
 import java.lang.reflect.Constructor;
 import java.util.Iterator;
@@ -76,6 +77,8 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
                             @Override
                             public void processAsyncResponse(Void _response) throws Exception {
                                 parentReactor.addCloseable(MFacilityImpl.this);
+                                _asyncRequestImpl.syncDirect(
+                                        new ClassLoaderService(getReactor()).registerSOp());
                                 String activatorClassName = MPlant.getActivatorClassName(name);
                                 if (activatorClassName == null)
                                     _asyncResponseProcessor.processAsyncResponse(null);
@@ -149,10 +152,6 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
         return plantImpl.updateFacilityStatusAOp(MFacilityImpl.this.asMFacility(), name, false, null);
     }
 
-    public ClassLoader getClassLoader() throws Exception {
-        return ClassLoaderService.getClassLoaderService().jcl;
-    }
-
     public AOp<String> activateAOp(final String _activatorClassName) {
         return new AOp<String>("activate", getReactor()) {
             @Override
@@ -166,7 +165,7 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
                         return "activation exception, " + e;
                     }
                 });
-                final Class<?> initiatorClass = getClassLoader().loadClass(
+                final Class<?> initiatorClass = asMFacility().getJCL().loadClass(
                         _activatorClassName);
                 final Constructor<?> constructor = initiatorClass.getConstructor(NonBlockingReactor.class);
                 final Activator activator = (Activator) constructor.newInstance(asReactor());

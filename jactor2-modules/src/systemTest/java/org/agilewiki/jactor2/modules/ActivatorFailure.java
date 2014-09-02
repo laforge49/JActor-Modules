@@ -8,7 +8,6 @@ public class ActivatorFailure {
     static public void main(final String[] _args) throws Exception {
         new MPlant();
         try {
-            ClassLoaderService.register();
             MPlant.activatorPropertyAOp("a", "NoSuchActivator").call();
             MFacility mFacility = MPlant.getInternalFacility();
             mFacility.nullSOp().call(); //synchronize for the properties update

@@ -8,7 +8,7 @@ public class ClassLoaderServiceTest extends TestCase {
     public void test1() throws Exception {
         new CPlant();
         try {
-            ClassLoaderService.register();
+            new ClassLoaderService().registerSOp().call();
             ClassLoaderService cls = ClassLoaderService.getClassLoaderService();
             JarClassLoader cl = cls.jcl;
             String smileName = Smile.class.getName();

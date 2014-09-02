@@ -10,7 +10,6 @@ public class FailedTest extends TestCase {
     public void test() throws Exception {
         new MPlant();
         try {
-            ClassLoaderService.register();
             MPlant.activatorPropertyAOp("A", "org.agilewiki.jactor2.modules.facilities.SampleActivator").call();
             MPlant.failFacility("A", "inhibit");
             MPlant.autoStartAOp("A", true).call();

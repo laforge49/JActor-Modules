@@ -12,7 +12,6 @@ public class DependencyTest extends TestCase {
     public void test() throws Exception {
         new MPlant();
         try {
-            ClassLoaderService.register();
             MPlant.dependencyPropertyAOp("B", "A").call();
             MPlant.dependencyPropertyAOp("C", "B").call();
             final MFacility a = MPlant.createMFacilityAOp("A")

@@ -78,7 +78,10 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
                                 parentReactor.addCloseable(MFacilityImpl.this);
                                 _asyncRequestImpl.syncDirect(
                                         new ClassLoaderService(getReactor()).registerSOp());
-                                asMFacility().getJCL().add("../jactor2-a/target/jactor2-a-0.0.1.jar");
+                                String fn = "jactor2-a/target/jactor2-a-0.0.1.jar";
+                                if (!(new File(fn).exists()))
+                                    fn = "../" + fn;
+                                asMFacility().getJCL().add(fn);
                                 String activatorClassName = MPlant.getActivatorClassName(name);
                                 if (activatorClassName == null)
                                     _asyncResponseProcessor.processAsyncResponse(null);

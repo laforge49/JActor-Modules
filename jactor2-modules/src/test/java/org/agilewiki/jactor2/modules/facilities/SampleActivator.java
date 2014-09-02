@@ -4,7 +4,7 @@ import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 import org.agilewiki.jactor2.core.requests.AOp;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.impl.AsyncRequestImpl;
-import org.agilewiki.jactor2.modules.Activator;
+import org.agilewiki.jactor2.common.Activator;
 import org.agilewiki.jactor2.modules.MFacility;
 
 public class SampleActivator extends Activator {

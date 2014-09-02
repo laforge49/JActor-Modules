@@ -1,13 +1,13 @@
 package org.agilewiki.jactor2.modules.impl;
 
+import org.agilewiki.jactor2.common.Activator;
 import org.agilewiki.jactor2.common.service.ClassLoaderService;
 import org.agilewiki.jactor2.core.blades.ismTransactions.ISMReference;
-import org.agilewiki.jactor2.core.blades.ismTransactions.ISMUpdateTransaction;
+import org.agilewiki.jactor2.core.blades.ismTransactions.ISMap;
 import org.agilewiki.jactor2.core.blades.ismTransactions.ImmutableChange;
 import org.agilewiki.jactor2.core.blades.ismTransactions.ImmutableChanges;
 import org.agilewiki.jactor2.core.blades.pubSub.SubscribeAOp;
 import org.agilewiki.jactor2.core.blades.pubSub.Subscription;
-import org.agilewiki.jactor2.core.blades.ismTransactions.ISMap;
 import org.agilewiki.jactor2.core.closeable.Closeable;
 import org.agilewiki.jactor2.core.impl.mtReactors.NonBlockingReactorMtImpl;
 import org.agilewiki.jactor2.core.impl.mtReactors.ReactorMtImpl;
@@ -18,11 +18,9 @@ import org.agilewiki.jactor2.core.requests.AOp;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.ExceptionHandler;
 import org.agilewiki.jactor2.core.requests.impl.AsyncRequestImpl;
-import org.agilewiki.jactor2.modules.Activator;
 import org.agilewiki.jactor2.modules.DependencyNotPresentException;
 import org.agilewiki.jactor2.modules.MFacility;
 import org.agilewiki.jactor2.modules.MPlant;
-import org.xeustechnologies.jcl.JarClassLoader;
 
 import java.lang.reflect.Constructor;
 import java.util.Iterator;
@@ -85,15 +83,15 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
                                 else {
                                     _asyncRequestImpl.send(activateAOp(activatorClassName),
                                             new AsyncResponseProcessor<String>() {
-                                        @Override
-                                        public void processAsyncResponse(final String _failure) throws Exception {
-                                            if (_failure != null) {
-                                                close(false, _failure);
-                                                return;
-                                            }
-                                            _asyncResponseProcessor.processAsyncResponse(null);
-                                        }
-                                    });
+                                                @Override
+                                                public void processAsyncResponse(final String _failure) throws Exception {
+                                                    if (_failure != null) {
+                                                        close(false, _failure);
+                                                        return;
+                                                    }
+                                                    _asyncResponseProcessor.processAsyncResponse(null);
+                                                }
+                                            });
                                 }
                             }
                         };

@@ -22,6 +22,7 @@ import org.agilewiki.jactor2.modules.DependencyNotPresentException;
 import org.agilewiki.jactor2.modules.MFacility;
 import org.agilewiki.jactor2.modules.MPlant;
 
+import java.io.File;
 import java.lang.reflect.Constructor;
 import java.util.Iterator;
 import java.util.SortedMap;
@@ -77,6 +78,7 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
                                 parentReactor.addCloseable(MFacilityImpl.this);
                                 _asyncRequestImpl.syncDirect(
                                         new ClassLoaderService(getReactor()).registerSOp());
+                                asMFacility().getJCL().add("../jactor2-a/target/jactor2-a-0.0.1.jar");
                                 String activatorClassName = MPlant.getActivatorClassName(name);
                                 if (activatorClassName == null)
                                     _asyncResponseProcessor.processAsyncResponse(null);

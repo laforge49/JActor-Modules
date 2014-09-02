@@ -45,6 +45,10 @@ public class MPlant extends PlantBase {
         return MPlantImpl.getSingleton().dependencyPropertyAOp(_dependentName, _dependencyName);
     }
 
+    public static AOp<Void> resourcePropertyAOp(final String _facilityName, final String _resource) {
+        return MPlantImpl.getSingleton().resourcePropertyAOp(_facilityName, _resource);
+    }
+
     public static AOp<ISMap<String>> purgeFacilityAOp(final String _facilityName) {
         return MPlantImpl.getSingleton().purgeFacilityAOp(_facilityName);
     }

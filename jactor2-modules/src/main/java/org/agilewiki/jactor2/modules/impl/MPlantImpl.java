@@ -5,7 +5,6 @@ import org.agilewiki.jactor2.core.blades.filters.PrefixFilter;
 import org.agilewiki.jactor2.core.blades.ismTransactions.*;
 import org.agilewiki.jactor2.core.blades.pubSub.RequestBus;
 import org.agilewiki.jactor2.core.blades.pubSub.SubscribeAOp;
-import org.agilewiki.jactor2.core.blades.ismTransactions.ISMap;
 import org.agilewiki.jactor2.core.impl.mtPlant.PlantConfiguration;
 import org.agilewiki.jactor2.core.impl.mtPlant.PlantMtImpl;
 import org.agilewiki.jactor2.core.plant.impl.PlantImpl;
@@ -29,8 +28,14 @@ public class MPlantImpl extends PlantMtImpl {
 
     public static final String FACILITY_DEPENDENCY_INFIX = CORE_PREFIX + "dependency_";
 
+    public static final String FACILITY_RESOURCE_INFIX = CORE_PREFIX + "resource_";
+
     public static String dependencyPrefix(final String _facilityName) {
         return FACILITY_PREFIX + _facilityName + "~" + FACILITY_DEPENDENCY_INFIX;
+    }
+
+    public static String resourcePrefix(final String _resource) {
+        return FACILITY_PREFIX + _resource + "~" + FACILITY_RESOURCE_INFIX;
     }
 
     public static final String FACILITY_INITIAL_LOCAL_MESSAGE_QUEUE_SIZE_POSTFIX =
@@ -103,7 +108,7 @@ public class MPlantImpl extends PlantMtImpl {
         return new AOp<Void>("updateFacilityStatus", internalMFacility) {
             @Override
             protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
-                                              final AsyncResponseProcessor<Void> _asyncResponseProcessor)
+                                                 final AsyncResponseProcessor<Void> _asyncResponseProcessor)
                     throws Exception {
                 AsyncResponseProcessor<Void> transactionResponseProcessor = new AsyncResponseProcessor<Void>() {
                     @Override
@@ -170,6 +175,11 @@ public class MPlantImpl extends PlantMtImpl {
                             if (hasDependency(name2, key))
                                 throw new IllegalArgumentException(
                                         "Would create a dependency cycle.");
+                        } else if (name2.startsWith(FACILITY_RESOURCE_INFIX)) {
+                            if (facility0 != null) {
+                                throw new IllegalStateException(
+                                        "the dependency properties can not change while a facility is running ");
+                            }
                         } else if (name2.equals(FACILITY_INITIAL_LOCAL_MESSAGE_QUEUE_SIZE_POSTFIX)) {
                             if (facility0 != null) {
                                 throw new IllegalStateException(
@@ -207,7 +217,11 @@ public class MPlantImpl extends PlantMtImpl {
                     }
                 }
             }
-        }.signal();
+        }
+
+                .
+
+                        signal();
     }
 
     public void changes() throws Exception {
@@ -277,7 +291,7 @@ public class MPlantImpl extends PlantMtImpl {
         return new AOp<String>("autoStart", getInternalFacility()) {
             @Override
             protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
-                                              final AsyncResponseProcessor<String> _asyncResponseProcessor)
+                                                 final AsyncResponseProcessor<String> _asyncResponseProcessor)
                     throws Exception {
                 if (getMFacilityImpl(_facilityName) != null) {
                     _asyncResponseProcessor.processAsyncResponse(null);
@@ -314,7 +328,13 @@ public class MPlantImpl extends PlantMtImpl {
                             return "create facility exception: " + e;
                     }
                 });
-                _asyncRequestImpl.send(MFacility.createMFacilityAOp(_facilityName), _asyncResponseProcessor, null);
+                AsyncResponseProcessor<MFacility> createResponseProcessor = new AsyncResponseProcessor<MFacility>() {
+                    @Override
+                    public void processAsyncResponse(MFacility _response) throws Exception {
+                        _asyncResponseProcessor.processAsyncResponse(null);
+                    }
+                };
+                _asyncRequestImpl.send(MFacility.createMFacilityAOp(_facilityName), createResponseProcessor);
             }
         };
     }
@@ -341,7 +361,7 @@ public class MPlantImpl extends PlantMtImpl {
         return new AOp<Void>("dependencyProperty", getInternalFacility()) {
             @Override
             protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
-                                              final AsyncResponseProcessor<Void> _asyncResponseProcessor)
+                                                 final AsyncResponseProcessor<Void> _asyncResponseProcessor)
                     throws Exception {
                 final String name = _dependencyName;
                 if (_dependencyName == null) {
@@ -361,6 +381,28 @@ public class MPlantImpl extends PlantMtImpl {
                     throw new IllegalArgumentException(
                             "this would create a cyclic dependency");
                 _asyncRequestImpl.send(getInternalFacility().putPropertyAOp(dependencyPropertyName, "true"),
+                        _asyncResponseProcessor, null);
+            }
+        };
+    }
+
+    public AOp<Void> resourcePropertyAOp(final String _facilityName, final String _resource) {
+        return new AOp<Void>("resourceProperty", getInternalFacility()) {
+            @Override
+            protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
+                                                 final AsyncResponseProcessor<Void> _asyncResponseProcessor)
+                    throws Exception {
+                final String name = _resource;
+                if (_resource == null) {
+                    throw new IllegalArgumentException(
+                            "the resource name may not be null");
+                }
+                String resourcePropertyName = resourcePrefix(_facilityName) + name;
+                if (getProperty(resourcePropertyName) != null) {
+                    throw new IllegalStateException(
+                            "the dependency was already present");
+                }
+                _asyncRequestImpl.send(getInternalFacility().putPropertyAOp(resourcePropertyName, "true"),
                         _asyncResponseProcessor, null);
             }
         };

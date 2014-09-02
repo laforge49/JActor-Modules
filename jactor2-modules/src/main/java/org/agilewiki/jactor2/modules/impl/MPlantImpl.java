@@ -15,6 +15,7 @@ import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.ExceptionHandler;
 import org.agilewiki.jactor2.core.requests.impl.AsyncRequestImpl;
 import org.agilewiki.jactor2.modules.MFacility;
+import org.xeustechnologies.jcl.JarClassLoader;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -310,7 +311,7 @@ public class MPlantImpl extends PlantMtImpl {
                     return;
                 }
                 String dependencyPrefix = dependencyPrefix(_facilityName);
-                ISMap<String> dependencies =
+                final ISMap<String> dependencies =
                         propertiesReference.getImmutable().subMap(dependencyPrefix);
                 Iterator<String> dit = dependencies.keySet().iterator();
                 while (dit.hasNext()) {
@@ -328,13 +329,7 @@ public class MPlantImpl extends PlantMtImpl {
                             return "create facility exception: " + e;
                     }
                 });
-                AsyncResponseProcessor<MFacility> createResponseProcessor = new AsyncResponseProcessor<MFacility>() {
-                    @Override
-                    public void processAsyncResponse(MFacility _response) throws Exception {
-                        _asyncResponseProcessor.processAsyncResponse(null);
-                    }
-                };
-                _asyncRequestImpl.send(MFacility.createMFacilityAOp(_facilityName), createResponseProcessor);
+                _asyncRequestImpl.send(MFacility.createMFacilityAOp(_facilityName), _asyncResponseProcessor, null);
             }
         };
     }

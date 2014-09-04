@@ -1,5 +1,6 @@
 package org.agilewiki.jactor2.modules;
 
+import org.agilewiki.jactor2.common.ISMAppendTransaction;
 import org.agilewiki.jactor2.common.service.ClassLoaderService;
 import org.agilewiki.jactor2.core.blades.ismTransactions.ISMReference;
 import org.agilewiki.jactor2.core.blades.ismTransactions.ISMUpdateTransaction;
@@ -87,6 +88,12 @@ public class MFacility extends Facility {
     public AOp<ISMap<String>> putPropertyAOp(final String _propertyName,
                                              final String _propertyValue) {
         return new ISMUpdateTransaction<String>(_propertyName, _propertyValue).
+                applyAOp(configuration);
+    }
+
+    public AOp<ISMap<String>> appendPropertyAOp(final String _prefix,
+                                             final String _propertyValue) {
+        return new ISMAppendTransaction<String>(_prefix, _propertyValue).
                 applyAOp(configuration);
     }
 

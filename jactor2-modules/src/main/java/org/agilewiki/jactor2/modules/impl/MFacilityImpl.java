@@ -98,7 +98,7 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
                                 }
                                 while (rit.hasNext()) {
                                     String r = rit.next();
-                                    String resourceName = r.substring(resourcePrefix.length());
+                                    String resourceName = resources.get(r);
                                     asMFacility().getJCL().add(resourceName);
                                 }
                                 String activatorClassName = MPlant.getActivatorClassName(name);

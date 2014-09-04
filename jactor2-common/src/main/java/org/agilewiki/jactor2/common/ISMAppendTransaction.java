@@ -45,9 +45,14 @@ public class ISMAppendTransaction<VALUE> extends ISMSyncTransaction<VALUE> {
     @Override
     protected void update(ImmutableSource<ISMap<VALUE>> source) throws Exception {
         ISMap<VALUE> values = source.getImmutable().subMap(prefix + sep);
-        String lastKey = values.sortedKeySet().last();
-        int i = lastKey.lastIndexOf(sep);
-        int ndx = new Integer(lastKey.substring(i + 1)).intValue() + 1;
+        int ndx;
+        if (values.size() == 0) {
+            ndx = 0;
+        } else {
+            String lastKey = values.sortedKeySet().last();
+            int i = lastKey.lastIndexOf(sep);
+            ndx = new Integer(lastKey.substring(i + 1)).intValue() + 1;
+        }
         String key = prefix + sep + ndx;
         immutable = source.getImmutable().plus(key, value);
         immutableChangeManager.put(key, value);

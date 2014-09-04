@@ -392,12 +392,7 @@ public class MPlantImpl extends PlantMtImpl {
                     throw new IllegalArgumentException(
                             "the resource name may not be null");
                 }
-                String resourcePropertyName = resourcePrefix(_facilityName) + name;
-                if (getProperty(resourcePropertyName) != null) {
-                    throw new IllegalStateException(
-                            "the dependency was already present");
-                }
-                _asyncRequestImpl.send(getInternalFacility().putPropertyAOp(resourcePropertyName, "true"),
+                _asyncRequestImpl.send(getInternalFacility().appendPropertyAOp(resourcePrefix(_facilityName), name),
                         _asyncResponseProcessor, null);
             }
         };

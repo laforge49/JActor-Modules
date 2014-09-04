@@ -352,13 +352,28 @@ public class MPlantImpl extends PlantMtImpl {
         facility.fail(reason);
     }
 
+    public AOp<Void> resourcePropertyAOp(final String _facilityName, final String _resource) {
+        return new AOp<Void>("resourceProperty", getInternalFacility()) {
+            @Override
+            protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
+                                                 final AsyncResponseProcessor<Void> _asyncResponseProcessor)
+                    throws Exception {
+                if (_resource == null) {
+                    throw new IllegalArgumentException(
+                            "the resource name may not be null");
+                }
+                _asyncRequestImpl.send(getInternalFacility().appendPropertyAOp(resourcePrefix(_facilityName), _resource),
+                        _asyncResponseProcessor, null);
+            }
+        };
+    }
+
     public AOp<Void> dependencyPropertyAOp(final String _dependentName, final String _dependencyName) {
         return new AOp<Void>("dependencyProperty", getInternalFacility()) {
             @Override
             protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
                                                  final AsyncResponseProcessor<Void> _asyncResponseProcessor)
                     throws Exception {
-                final String name = _dependencyName;
                 if (_dependencyName == null) {
                     throw new IllegalArgumentException(
                             "the dependency name may not be null");
@@ -367,32 +382,10 @@ public class MPlantImpl extends PlantMtImpl {
                     _asyncResponseProcessor.processAsyncResponse(null);
                 if (PLANT_INTERNAL_FACILITY_NAME.equals(_dependentName))
                     throw new IllegalArgumentException("Plant may not have a dependency");
-                String dependencyPropertyName = dependencyPrefix(_dependentName) + name;
-                if (getProperty(dependencyPropertyName) != null) {
-                    throw new IllegalStateException(
-                            "the dependency was already present");
-                }
                 if (hasDependency(_dependencyName, _dependentName))
                     throw new IllegalArgumentException(
                             "this would create a cyclic dependency");
-                _asyncRequestImpl.send(getInternalFacility().putPropertyAOp(dependencyPropertyName, "true"),
-                        _asyncResponseProcessor, null);
-            }
-        };
-    }
-
-    public AOp<Void> resourcePropertyAOp(final String _facilityName, final String _resource) {
-        return new AOp<Void>("resourceProperty", getInternalFacility()) {
-            @Override
-            protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
-                                                 final AsyncResponseProcessor<Void> _asyncResponseProcessor)
-                    throws Exception {
-                final String name = _resource;
-                if (_resource == null) {
-                    throw new IllegalArgumentException(
-                            "the resource name may not be null");
-                }
-                _asyncRequestImpl.send(getInternalFacility().appendPropertyAOp(resourcePrefix(_facilityName), name),
+                _asyncRequestImpl.send(getInternalFacility().appendPropertyAOp(dependencyPrefix(_dependentName), _dependencyName),
                         _asyncResponseProcessor, null);
             }
         };
@@ -400,8 +393,6 @@ public class MPlantImpl extends PlantMtImpl {
 
     public boolean hasDependency(final String _dependentName, final String _dependencyName) throws Exception {
         String prefix = FACILITY_PREFIX + _dependentName + "~" + FACILITY_DEPENDENCY_INFIX;
-        if (getProperty(prefix + _dependencyName) != null)
-            return true;
         final ISMap<String> immutableProperties = propertiesReference.getImmutable();
         final ISMap<String> subMap = immutableProperties.subMap(prefix);
         final Collection<String> keys = subMap.keySet();
@@ -410,7 +401,9 @@ public class MPlantImpl extends PlantMtImpl {
         final Iterator<String> it = keys.iterator();
         while (it.hasNext()) {
             final String key = it.next();
-            String nm = key.substring(prefix.length());
+            String nm = subMap.get(key);
+            if (_dependencyName.equals(nm))
+                return true;
             if (hasDependency(nm, _dependencyName))
                 return true;
         }

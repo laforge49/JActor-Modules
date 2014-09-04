@@ -58,7 +58,7 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
         Iterator<String> dit = dependencies.keySet().iterator();
         while (dit.hasNext()) {
             String d = dit.next();
-            String dependencyName = d.substring(dependencyPrefix.length());
+            String dependencyName = dependencies.get(d);
             MFacilityImpl dependency = plantImpl.getMFacilityImpl(dependencyName);
             if (dependency == null)
                 throw new DependencyNotPresentException(dependencyName);
@@ -91,7 +91,7 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
                                 CompositeProxyClassLoader ccl = asMFacility().getCCL();
                                 while (dit.hasNext()) {
                                     String d = dit.next();
-                                    String dependencyName = d.substring(dependencyPrefix.length());
+                                    String dependencyName = dependencies.get(d);
                                     MFacility dFacility = MPlant.getMFacility(dependencyName);
                                     ccl.add(dFacility.getJCL().getLocalLoader());
                                     ccl.add(dFacility.getCCL());

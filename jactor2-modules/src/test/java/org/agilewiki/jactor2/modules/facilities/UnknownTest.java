@@ -21,7 +21,7 @@ public class UnknownTest extends TestCase {
 
             MPlant.activatorPropertyAOp("B", "org.agilewiki.jactor2.modules.facilities.UnknownActivator").call();
             MPlant.autoStartAOp("B", true).call();
-            
+
             ISMReference<String> propertiesReference = MPlant.getInternalFacility().configuration;
             propertiesReference.getReactor().nullSOp().call(); //synchronize for the properties update
             ISMap<String> properties = propertiesReference.getImmutable();

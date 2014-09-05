@@ -1,6 +1,5 @@
 package org.agilewiki.jactor2.modules;
 
-import org.agilewiki.jactor2.common.service.ClassLoaderService;
 import org.agilewiki.jactor2.core.impl.Plant;
 import org.agilewiki.jactor2.core.reactors.ReactorClosedException;
 

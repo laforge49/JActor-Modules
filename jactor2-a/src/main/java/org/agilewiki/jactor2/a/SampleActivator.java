@@ -21,18 +21,18 @@ public class SampleActivator extends Activator {
             protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
                                             final AsyncResponseProcessor<Void> _asyncResponseProcessor)
                     throws Exception {
-                SimpleService simple = new SimpleService(getReactor());
-                _asyncRequestImpl.syncDirect(simple.registerSOp());
-                System.out.println("activated!");
+                SampleService sampleService = new SampleService(getReactor());
+                _asyncRequestImpl.syncDirect(sampleService.registerSOp());
+                System.out.println("Sample activated!");
                 _asyncResponseProcessor.processAsyncResponse(null);
             }
         };
     }
 }
 
-class SimpleService extends Service {
+class SampleService extends Service {
 
-    protected SimpleService(Reactor _reactor) {
-        super(_reactor, "simple");
+    protected SampleService(Reactor _reactor) {
+        super(_reactor, "sample");
     }
 }

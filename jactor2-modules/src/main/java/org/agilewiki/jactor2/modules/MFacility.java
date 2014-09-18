@@ -1,7 +1,7 @@
 package org.agilewiki.jactor2.modules;
 
 import org.agilewiki.jactor2.common.ISMAppendTransaction;
-import org.agilewiki.jactor2.common.service.ClassLoaderService;
+import org.agilewiki.jactor2.common.services.ClassLoaderService;
 import org.agilewiki.jactor2.core.blades.ismTransactions.ISMReference;
 import org.agilewiki.jactor2.core.blades.ismTransactions.ISMUpdateTransaction;
 import org.agilewiki.jactor2.core.blades.ismTransactions.ISMap;

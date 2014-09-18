@@ -1,7 +1,7 @@
 package org.agilewiki.jactor2.modules.impl;
 
 import org.agilewiki.jactor2.common.Activator;
-import org.agilewiki.jactor2.common.service.ClassLoaderService;
+import org.agilewiki.jactor2.common.services.ClassLoaderService;
 import org.agilewiki.jactor2.core.blades.ismTransactions.ISMReference;
 import org.agilewiki.jactor2.core.blades.ismTransactions.ISMap;
 import org.agilewiki.jactor2.core.blades.ismTransactions.ImmutableChange;
@@ -23,7 +23,6 @@ import org.agilewiki.jactor2.modules.MFacility;
 import org.agilewiki.jactor2.modules.MPlant;
 import org.xeustechnologies.jcl.CompositeProxyClassLoader;
 
-import java.io.File;
 import java.lang.reflect.Constructor;
 import java.util.Iterator;
 import java.util.SortedMap;

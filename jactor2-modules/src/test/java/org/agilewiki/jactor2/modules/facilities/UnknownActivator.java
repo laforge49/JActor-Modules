@@ -1,7 +1,7 @@
 package org.agilewiki.jactor2.modules.facilities;
 
 import org.agilewiki.jactor2.common.Activator;
-import org.agilewiki.jactor2.common.service.Service;
+import org.agilewiki.jactor2.common.services.Service;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 import org.agilewiki.jactor2.core.requests.AOp;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;

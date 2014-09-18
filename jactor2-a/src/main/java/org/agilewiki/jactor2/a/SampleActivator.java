@@ -1,6 +1,6 @@
 package org.agilewiki.jactor2.a;
 
-import org.agilewiki.jactor2.common.service.Service;
+import org.agilewiki.jactor2.common.services.Service;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 import org.agilewiki.jactor2.core.reactors.Reactor;
 import org.agilewiki.jactor2.core.requests.AOp;

@@ -14,7 +14,6 @@ import org.agilewiki.jactor2.core.requests.impl.AsyncRequestImpl;
 import org.agilewiki.jactor2.modules.impl.MFacilityImpl;
 import org.agilewiki.jactor2.modules.impl.MPlantImpl;
 import org.xeustechnologies.jcl.CompositeProxyClassLoader;
-import org.xeustechnologies.jcl.JarClassLoader;
 
 public class MFacility extends CFacility {
     public static AOp<MFacility> createMFacilityAOp(final String _name) throws Exception {
@@ -106,10 +105,6 @@ public class MFacility extends CFacility {
 
     public String toString() {
         return getName();
-    }
-
-    public JarClassLoader getJCL() throws Exception {
-        return ClassLoaderService.getClassLoaderService(this).jcl;
     }
 
     public CompositeProxyClassLoader getCCL() throws Exception {

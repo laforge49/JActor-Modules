@@ -1,6 +1,8 @@
 package org.agilewiki.jactor2.common;
 
+import org.agilewiki.jactor2.common.services.ClassLoaderService;
 import org.agilewiki.jactor2.core.reactors.Facility;
+import org.xeustechnologies.jcl.JarClassLoader;
 
 public class CFacility extends Facility {
     public CFacility(String _name) throws Exception {
@@ -17,5 +19,9 @@ public class CFacility extends Facility {
 
     public CFacility(String _name, Void _parentReactor, int _initialOutboxSize, int _initialLocalQueueSize) throws Exception {
         super(_name, _parentReactor, _initialOutboxSize, _initialLocalQueueSize);
+    }
+
+    public JarClassLoader getJCL() throws Exception {
+        return ClassLoaderService.getClassLoaderService(this).jcl;
     }
 }

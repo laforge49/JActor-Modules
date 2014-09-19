@@ -24,4 +24,11 @@ public class CFacility extends Facility {
     public JarClassLoader getJCL() throws Exception {
         return ClassLoaderService.getClassLoaderService(this).jcl;
     }
+
+    public ClassLoader getClassLoader() throws Exception {
+        JarClassLoader jcl = getJCL();
+        if (jcl != null)
+            return jcl;
+        return ClassLoader.getSystemClassLoader();
+    }
 }

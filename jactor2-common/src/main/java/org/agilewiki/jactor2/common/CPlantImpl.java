@@ -16,4 +16,10 @@ public class CPlantImpl extends PlantMtImpl {
     public CPlantImpl(final PlantConfiguration _plantConfiguration) throws Exception {
         super(_plantConfiguration);
     }
+
+    protected CFacility createInternalFacility() throws Exception {
+        return new CFacility(PLANT_INTERNAL_FACILITY_NAME, null,
+                getPlantConfiguration().getInitialBufferSize(),
+                getPlantConfiguration().getInitialLocalMessageQueueSize());
+    }
 }

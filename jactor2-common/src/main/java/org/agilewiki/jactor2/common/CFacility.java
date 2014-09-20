@@ -9,8 +9,6 @@ import org.agilewiki.jactor2.core.requests.SOp;
 import org.agilewiki.jactor2.core.requests.impl.RequestImpl;
 import org.xeustechnologies.jcl.JarClassLoader;
 
-import java.lang.reflect.Constructor;
-
 public class CFacility extends Facility {
     protected ISMap<WidgetFactory> widgetFactories = PlantBase.createISMap();
 

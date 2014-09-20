@@ -186,7 +186,7 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
                         return "activation exception, " + e;
                     }
                 });
-                final Class<?> initiatorClass = asMFacility().getJCL().loadClass(
+                final Class<?> initiatorClass = asMFacility().loadClass(
                         _activatorClassName);
                 final Constructor<?> constructor = initiatorClass.getConstructor(NonBlockingReactor.class);
                 final Activator activator = (Activator) constructor.newInstance(asReactor());

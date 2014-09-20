@@ -1,10 +1,12 @@
 package org.agilewiki.jactor2.common;
 
 import org.agilewiki.jactor2.common.services.ClassLoaderService;
+import org.agilewiki.jactor2.common.widgets.Widget;
 import org.agilewiki.jactor2.common.widgets.WidgetFactory;
 import org.agilewiki.jactor2.core.blades.ismTransactions.ISMap;
 import org.agilewiki.jactor2.core.plant.PlantBase;
 import org.agilewiki.jactor2.core.reactors.Facility;
+import org.agilewiki.jactor2.core.reactors.Reactor;
 import org.agilewiki.jactor2.core.requests.SOp;
 import org.agilewiki.jactor2.core.requests.impl.RequestImpl;
 import org.xeustechnologies.jcl.JarClassLoader;
@@ -49,6 +51,14 @@ public class CFacility extends Facility {
 
     public WidgetFactory getWidgetFactory(final String _name) {
         return widgetFactories.get(_name);
+    }
+
+    public Widget newWidget(final String _factoryName, Reactor _reactor) throws Exception {
+        return newWidget(_factoryName, _reactor, null);
+    }
+
+    public Widget newWidget(final String _factoryName, Reactor _reactor, Widget _parentWidget) throws Exception {
+        return getWidgetFactory(_factoryName).newWidget(_reactor, _parentWidget);
     }
 
     public boolean hasWidgetFactory(final String _name) {

@@ -1,11 +1,10 @@
 package org.agilewiki.jactor2.modules;
 
 import org.agilewiki.jactor2.common.CFacility;
-import org.agilewiki.jactor2.common.ISMAppendTransaction;
+import org.agilewiki.jactor2.common.TSSMAppendTransaction;
 import org.agilewiki.jactor2.common.services.ClassLoaderService;
-import org.agilewiki.jactor2.core.blades.ismTransactions.ISMReference;
-import org.agilewiki.jactor2.core.blades.ismTransactions.ISMUpdateTransaction;
-import org.agilewiki.jactor2.core.blades.ismTransactions.ISMap;
+import org.agilewiki.jactor2.core.blades.transmutable.tssmTransactions.TSSMReference;
+import org.agilewiki.jactor2.core.blades.transmutable.tssmTransactions.TSSMUpdateTransaction;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 import org.agilewiki.jactor2.core.reactors.Reactor;
 import org.agilewiki.jactor2.core.requests.AOp;
@@ -47,17 +46,17 @@ public class MFacility extends CFacility {
         return getMFacility(_reactor.getParentReactor());
     }
 
-    public final ISMReference<String> configuration;
+    public final TSSMReference<String> configuration;
 
     private MFacility(final String _name, final int _initialOutboxSize, final int _initialLocalQueueSize) throws Exception {
         super(_name, _initialOutboxSize, _initialLocalQueueSize);
         asFacilityImpl().nameSet(name);
-        configuration = new ISMReference<>(this);
+        configuration = new TSSMReference<>(this);
     }
 
     public MFacility(final String _name, Void _parentReactor, final int _initialOutboxSize, final int _initialLocalQueueSize) throws Exception {
         super(_name, null, _initialOutboxSize, _initialLocalQueueSize);
-        configuration = new ISMReference<>(this);
+        configuration = new TSSMReference<>(this);
     }
 
     @Override
@@ -80,26 +79,26 @@ public class MFacility extends CFacility {
      * @param propertyName The property name.
      * @return The property value, or null.
      */
-    public Object getProperty(final String propertyName) {
-        return configuration.getImmutable().get(propertyName);
+    public String getProperty(final String propertyName) {
+        return configuration.getUnmodifiable().get(propertyName);
     }
 
-    public AOp<ISMap<String>> putPropertyAOp(final String _propertyName,
+    public AOp<Void> putPropertyAOp(final String _propertyName,
                                              final String _propertyValue) {
-        return new ISMUpdateTransaction<String>(_propertyName, _propertyValue).
+        return new TSSMUpdateTransaction<String>(_propertyName, _propertyValue).
                 applyAOp(configuration);
     }
 
-    public AOp<ISMap<String>> appendPropertyAOp(final String _prefix,
+    public AOp<Void> appendPropertyAOp(final String _prefix,
                                              final String _propertyValue) {
-        return new ISMAppendTransaction<String>(_prefix, _propertyValue).
+        return new TSSMAppendTransaction<String>(_prefix, _propertyValue).
                 applyAOp(configuration);
     }
 
-    public AOp<ISMap<String>> putPropertyAOp(final String _propertyName,
+    public AOp<Void> putPropertyAOp(final String _propertyName,
                                              final String _expectedValue,
                                              final String _propertyValue) {
-        return new ISMUpdateTransaction<String>(_propertyName, _propertyValue, _expectedValue).
+        return new TSSMUpdateTransaction<String>(_propertyName, _propertyValue, _expectedValue).
                 applyAOp(configuration);
     }
 

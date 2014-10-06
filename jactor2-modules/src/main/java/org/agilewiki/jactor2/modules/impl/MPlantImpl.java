@@ -2,9 +2,9 @@ package org.agilewiki.jactor2.modules.impl;
 
 import org.agilewiki.jactor2.core.blades.NamedBlade;
 import org.agilewiki.jactor2.core.blades.filters.PrefixFilter;
-import org.agilewiki.jactor2.core.blades.ismTransactions.*;
 import org.agilewiki.jactor2.core.blades.pubSub.RequestBus;
 import org.agilewiki.jactor2.core.blades.pubSub.SubscribeAOp;
+import org.agilewiki.jactor2.core.blades.transmutable.tssmTransactions.*;
 import org.agilewiki.jactor2.core.impl.mtPlant.PlantConfiguration;
 import org.agilewiki.jactor2.core.impl.mtPlant.PlantMtImpl;
 import org.agilewiki.jactor2.core.plant.impl.PlantImpl;
@@ -15,7 +15,6 @@ import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.ExceptionHandler;
 import org.agilewiki.jactor2.core.requests.impl.AsyncRequestImpl;
 import org.agilewiki.jactor2.modules.MFacility;
-import org.xeustechnologies.jcl.JarClassLoader;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -80,7 +79,7 @@ public class MPlantImpl extends PlantMtImpl {
         return (MPlantImpl) PlantImpl.getSingleton();
     }
 
-    private final ISMReference<String> propertiesReference;
+    private final TSSMReference<String> propertiesReference;
 
     public MPlantImpl() throws Exception {
         this(new PlantConfiguration());
@@ -116,8 +115,8 @@ public class MPlantImpl extends PlantMtImpl {
                     public void processAsyncResponse(Void _response) throws Exception {
                         if (_Mfacility != null)
                             _asyncRequestImpl.syncDirect(internalMFacility.registerBladeSOp(_Mfacility));
-                        ISMap<String> facilityProperties =
-                                propertiesReference.getImmutable().subMap(FACILITY_PREFIX);
+                        SortedMap<String, String> facilityProperties =
+                                propertiesReference.getUnmodifiable().subMap(FACILITY_PREFIX, FACILITY_PREFIX + Character.MAX_VALUE);
                         Iterator<String> kit = facilityProperties.keySet().iterator();
                         String postfix = "~" + FACILITY_DEPENDENCY_INFIX + _facilityName;
                         while (kit.hasNext()) {
@@ -135,24 +134,24 @@ public class MPlantImpl extends PlantMtImpl {
                     _asyncRequestImpl.syncDirect(internalMFacility.unregisterBladeSOp(_facilityName));
                 } else if (internalMFacility.isRegisteredBlade(_facilityName))
                     throw new IllegalStateException("Facility already registered: " + _facilityName);
-                final ISMReference<String> propertiesReference = internalMFacility.configuration;
-                ISMUpdateTransaction<String> t0 = new ISMUpdateTransaction<String>(stoppedKey(_facilityName), stop);
-                ISMUpdateTransaction<String> t1 = new ISMUpdateTransaction<String>(failedKey(_facilityName), _reasonForFailure, t0);
+                final TSSMReference<String> propertiesReference = internalMFacility.configuration;
+                TSSMUpdateTransaction<String> t0 = new TSSMUpdateTransaction<String>(stoppedKey(_facilityName), stop);
+                TSSMUpdateTransaction<String> t1 = new TSSMUpdateTransaction<String>(failedKey(_facilityName), _reasonForFailure, t0);
                 _asyncRequestImpl.send(t1.applyAOp(propertiesReference), transactionResponseProcessor, null);
             }
         };
     }
 
     private void validate() throws Exception {
-        RequestBus<ImmutableChanges<String>> validationBus = propertiesReference.validationBus;
-        new SubscribeAOp<ImmutableChanges<String>>(
+        RequestBus<TSSMChanges<String>> validationBus = propertiesReference.validationBus;
+        new SubscribeAOp<TSSMChanges<String>>(
                 validationBus,
                 getInternalFacility()) {
-            protected void processContent(final ImmutableChanges<String> _content)
+            protected void processContent(final TSSMChanges<String> _content)
                     throws Exception {
-                SortedMap<String, ImmutableChange<String>> readOnlyChanges = _content.readOnlyChanges;
-                ImmutableChange<String> pc;
-                final Iterator<ImmutableChange<String>> it = readOnlyChanges.values().iterator();
+                SortedMap<String, TSSMChange<String>> readOnlyChanges = _content.unmodifiableChanges;
+                TSSMChange<String> pc;
+                final Iterator<TSSMChange<String>> it = readOnlyChanges.values().iterator();
                 while (it.hasNext()) {
                     pc = it.next();
                     String key = pc.name;
@@ -226,16 +225,16 @@ public class MPlantImpl extends PlantMtImpl {
     }
 
     public void changes() throws Exception {
-        RequestBus<ImmutableChanges<String>> changeBus = propertiesReference.changeBus;
-        new SubscribeAOp<ImmutableChanges<String>>(
+        RequestBus<TSSMChanges<String>> changeBus = propertiesReference.changeBus;
+        new SubscribeAOp<TSSMChanges<String>>(
                 changeBus,
                 getInternalFacility()) {
-            protected void processContent(final ImmutableChanges<String> _content)
+            protected void processContent(final TSSMChanges<String> _content)
                     throws Exception {
-                SortedMap<String, ImmutableChange<String>> readOnlyChanges = _content.readOnlyChanges;
-                final Iterator<ImmutableChange<String>> it = readOnlyChanges.values().iterator();
+                SortedMap<String, TSSMChange<String>> readOnlyChanges = _content.unmodifiableChanges;
+                final Iterator<TSSMChange<String>> it = readOnlyChanges.values().iterator();
                 while (it.hasNext()) {
-                    ImmutableChange<String> pc = it.next();
+                    TSSMChange<String> pc = it.next();
                     String key = pc.name;
                     Object newValue = pc.newValue;
                     if (key.startsWith(FACILITY_PREFIX)) {
@@ -311,8 +310,9 @@ public class MPlantImpl extends PlantMtImpl {
                     return;
                 }
                 String dependencyPrefix = dependencyPrefix(_facilityName);
-                final ISMap<String> dependencies =
-                        propertiesReference.getImmutable().subMap(dependencyPrefix);
+                final SortedMap<String, String> dependencies =
+                        propertiesReference.getUnmodifiable().
+                                subMap(dependencyPrefix, dependencyPrefix + Character.MAX_VALUE);
                 Iterator<String> dit = dependencies.keySet().iterator();
                 while (dit.hasNext()) {
                     String d = dit.next();
@@ -393,8 +393,8 @@ public class MPlantImpl extends PlantMtImpl {
 
     public boolean hasDependency(final String _dependentName, final String _dependencyName) throws Exception {
         String prefix = FACILITY_PREFIX + _dependentName + "~" + FACILITY_DEPENDENCY_INFIX;
-        final ISMap<String> immutableProperties = propertiesReference.getImmutable();
-        final ISMap<String> subMap = immutableProperties.subMap(prefix);
+        final SortedMap<String, String> immutableProperties = propertiesReference.getUnmodifiable();
+        final SortedMap<String, String> subMap = immutableProperties.subMap(prefix, prefix + Character.MAX_VALUE);
         final Collection<String> keys = subMap.keySet();
         if (keys.size() == 0)
             return false;
@@ -410,19 +410,19 @@ public class MPlantImpl extends PlantMtImpl {
         return false;
     }
 
-    public AOp<ISMap<String>> initialLocalMessageQueueSizePropertyAOp(final String _facilityName,
+    public AOp<Void> initialLocalMessageQueueSizePropertyAOp(final String _facilityName,
                                                                       final Integer _value) {
         return getInternalFacility().putPropertyAOp(initialLocalMessageQueueSizeKey(_facilityName),
                 new Integer(_value).toString());
     }
 
-    public AOp<ISMap<String>> initialBufferSizePropertyAOp(final String _facilityName,
+    public AOp<Void> initialBufferSizePropertyAOp(final String _facilityName,
                                                            final Integer _value) {
         return getInternalFacility().putPropertyAOp(initialBufferSizeKey(_facilityName),
                 new Integer(_value).toString());
     }
 
-    public AOp<ISMap<String>> activatorPropertyAOp(final String _facilityName,
+    public AOp<Void> activatorPropertyAOp(final String _facilityName,
                                                    final String _className) {
         return getInternalFacility().putPropertyAOp(activatorKey(_facilityName), _className);
     }
@@ -441,7 +441,7 @@ public class MPlantImpl extends PlantMtImpl {
         return MFacility.asFacilityImpl();
     }
 
-    public AOp<ISMap<String>> autoStartAOp(final String _facilityName, final boolean _newValue) {
+    public AOp<Void> autoStartAOp(final String _facilityName, final boolean _newValue) {
         final String newValue = _newValue ? "true" : null;
         return getInternalFacility().putPropertyAOp(autoStartKey(_facilityName), newValue);
     }
@@ -450,7 +450,7 @@ public class MPlantImpl extends PlantMtImpl {
         return getProperty(autoStartKey(name)) != null;
     }
 
-    public AOp<ISMap<String>> failedAOp(final String _facilityName, final String _newValue) {
+    public AOp<Void> failedAOp(final String _facilityName, final String _newValue) {
         return getInternalFacility().putPropertyAOp(failedKey(_facilityName), _newValue);
     }
 
@@ -458,7 +458,7 @@ public class MPlantImpl extends PlantMtImpl {
         return getProperty(failedKey(name));
     }
 
-    public AOp<ISMap<String>> stoppedAOp(final String _facilityName, final boolean _newValue) {
+    public AOp<Void> stoppedAOp(final String _facilityName, final boolean _newValue) {
         final String newValue = _newValue ? "true" : null;
         return getInternalFacility().putPropertyAOp(stoppedKey(_facilityName), newValue);
     }
@@ -467,9 +467,9 @@ public class MPlantImpl extends PlantMtImpl {
         return getProperty(stoppedKey(name)) != null;
     }
 
-    public AOp<ISMap<String>> purgeFacilityAOp(final String _facilityName) {
+    public AOp<Void> purgeFacilityAOp(final String _facilityName) {
         String prefix = FACILITY_PREFIX + _facilityName + ".";
         PrefixFilter filter = new PrefixFilter(prefix);
-        return new ISMRemoveTransaction<String>(filter).applyAOp(propertiesReference);
+        return new TSSMRemoveTransaction<String>(filter).applyAOp(propertiesReference);
     }
 }

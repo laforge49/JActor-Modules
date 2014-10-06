@@ -2,12 +2,11 @@ package org.agilewiki.jactor2.modules.impl;
 
 import org.agilewiki.jactor2.common.Activator;
 import org.agilewiki.jactor2.common.services.ClassLoaderService;
-import org.agilewiki.jactor2.core.blades.ismTransactions.ISMReference;
-import org.agilewiki.jactor2.core.blades.ismTransactions.ISMap;
-import org.agilewiki.jactor2.core.blades.ismTransactions.ImmutableChange;
-import org.agilewiki.jactor2.core.blades.ismTransactions.ImmutableChanges;
 import org.agilewiki.jactor2.core.blades.pubSub.SubscribeAOp;
 import org.agilewiki.jactor2.core.blades.pubSub.Subscription;
+import org.agilewiki.jactor2.core.blades.transmutable.tssmTransactions.TSSMChange;
+import org.agilewiki.jactor2.core.blades.transmutable.tssmTransactions.TSSMChanges;
+import org.agilewiki.jactor2.core.blades.transmutable.tssmTransactions.TSSMReference;
 import org.agilewiki.jactor2.core.closeable.Closeable;
 import org.agilewiki.jactor2.core.impl.mtReactors.NonBlockingReactorMtImpl;
 import org.agilewiki.jactor2.core.impl.mtReactors.ReactorMtImpl;
@@ -32,7 +31,7 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
 
     MFacility plantFacility;
 
-    ISMReference<String> plantConfiguration;
+    TSSMReference<String> plantConfiguration;
 
     private String name;
 
@@ -52,8 +51,8 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
         name = _name;
         tracePropertyChangesAOp().signal();
         String dependencyPrefix = MPlantImpl.dependencyPrefix(name);
-        ISMap<String> dependencies =
-                plantConfiguration.getImmutable().subMap(dependencyPrefix);
+        SortedMap<String, String> dependencies =
+                plantConfiguration.getUnmodifiable().subMap(dependencyPrefix, dependencyPrefix + Character.MAX_VALUE);
         Iterator<String> dit = dependencies.keySet().iterator();
         while (dit.hasNext()) {
             String d = dit.next();
@@ -78,13 +77,13 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
                                 parentReactor.addCloseable(MFacilityImpl.this);
                                 _asyncRequestImpl.syncDirect(
                                         new ClassLoaderService(getReactor()).registerSOp());
-                                final ISMReference<String> propertiesReference = MPlant.getInternalFacility().configuration;
+                                final TSSMReference<String> propertiesReference = MPlant.getInternalFacility().configuration;
                                 String dependencyPrefix = MPlantImpl.dependencyPrefix(name);
                                 String resourcePrefix = MPlantImpl.resourcePrefix(name);
-                                final ISMap<String> dependencies =
-                                        propertiesReference.getImmutable().subMap(dependencyPrefix);
-                                final ISMap<String> resources =
-                                        propertiesReference.getImmutable().subMap(resourcePrefix);
+                                final SortedMap<String, String> dependencies =
+                                        propertiesReference.getUnmodifiable().subMap(dependencyPrefix, dependencyPrefix + Character.MAX_VALUE);
+                                final SortedMap<String, String> resources =
+                                        propertiesReference.getUnmodifiable().subMap(resourcePrefix, resourcePrefix + Character.MAX_VALUE);
                                 Iterator<String> dit = dependencies.keySet().iterator();
                                 Iterator<String> rit = resources.keySet().iterator();
                                 CompositeProxyClassLoader ccl = asMFacility().getCCL();
@@ -195,15 +194,15 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
         };
     }
 
-    public AOp<Subscription<ImmutableChanges<String>>> tracePropertyChangesAOp() {
-        return new SubscribeAOp<ImmutableChanges<String>>(plantConfiguration.changeBus, asReactor()) {
+    public AOp<Subscription<TSSMChanges<String>>> tracePropertyChangesAOp() {
+        return new SubscribeAOp<TSSMChanges<String>>(plantConfiguration.changeBus, asReactor()) {
             @Override
-            protected void processContent(final ImmutableChanges<String> _content)
+            protected void processContent(final TSSMChanges<String> _content)
                     throws Exception {
-                SortedMap<String, ImmutableChange<String>> readOnlyChanges = _content.readOnlyChanges;
-                final Iterator<ImmutableChange<String>> it = readOnlyChanges.values().iterator();
+                SortedMap<String, TSSMChange<String>> readOnlyChanges = _content.unmodifiableChanges;
+                final Iterator<TSSMChange<String>> it = readOnlyChanges.values().iterator();
                 while (it.hasNext()) {
-                    final ImmutableChange<String> propertyChange = it.next();
+                    final TSSMChange<String> propertyChange = it.next();
                     String[] args = {
                             name,
                             propertyChange.name,

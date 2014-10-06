@@ -1,12 +1,12 @@
 package org.agilewiki.jactor2.modules.facilities;
 
 import junit.framework.TestCase;
-import org.agilewiki.jactor2.core.blades.ismTransactions.ISMReference;
-import org.agilewiki.jactor2.core.blades.ismTransactions.ISMap;
+import org.agilewiki.jactor2.core.blades.transmutable.tssmTransactions.TSSMReference;
 import org.agilewiki.jactor2.core.impl.Plant;
 import org.agilewiki.jactor2.modules.MPlant;
 
 import java.io.File;
+import java.util.SortedMap;
 
 public class AutoStartTest extends TestCase {
     public void test() throws Exception {
@@ -20,9 +20,9 @@ public class AutoStartTest extends TestCase {
             MPlant.dependencyPropertyAOp("B", "A").call();
             MPlant.autoStartAOp("B", true).call();
             MPlant.autoStartAOp("A", true).call();
-            ISMReference<String> propertiesReference = MPlant.getInternalFacility().configuration;
+            TSSMReference<String> propertiesReference = MPlant.getInternalFacility().configuration;
             propertiesReference.getReactor().nullSOp().call(); //synchronize for the properties update
-            ISMap<String> properties = propertiesReference.getImmutable();
+            SortedMap<String, String> properties = propertiesReference.getUnmodifiable();
             System.out.println(properties);
             Thread.sleep(100); //give the activator a chance to run
         } finally {

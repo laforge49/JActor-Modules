@@ -29,7 +29,7 @@ public class MPlant extends PlantBase {
         return MPlantImpl.getSingleton().getActivatorClassName(_facilityName);
     }
 
-    public static AOp<ISMap<String>> activatorPropertyAOp(final String _facilityName, final String _className) {
+    public static AOp<Void> activatorPropertyAOp(final String _facilityName, final String _className) {
         return MPlantImpl.getSingleton().activatorPropertyAOp(_facilityName, _className);
     }
 
@@ -37,7 +37,7 @@ public class MPlant extends PlantBase {
         return MPlantImpl.getSingleton().isAutoStart(name);
     }
 
-    public static AOp<ISMap<String>> autoStartAOp(final String _facilityName, final boolean _newValue) {
+    public static AOp<Void> autoStartAOp(final String _facilityName, final boolean _newValue) {
         return MPlantImpl.getSingleton().autoStartAOp(_facilityName, _newValue);
     }
 
@@ -49,7 +49,7 @@ public class MPlant extends PlantBase {
         return MPlantImpl.getSingleton().resourcePropertyAOp(_facilityName, _resource);
     }
 
-    public static AOp<ISMap<String>> purgeFacilityAOp(final String _facilityName) {
+    public static AOp<Void> purgeFacilityAOp(final String _facilityName) {
         return MPlantImpl.getSingleton().purgeFacilityAOp(_facilityName);
     }
 
@@ -61,7 +61,7 @@ public class MPlant extends PlantBase {
         MPlantImpl.getSingleton().failFacility(_facilityName, reason);
     }
 
-    public static AOp<ISMap<String>> clearFailedAOp(final String _facilityName) {
+    public static AOp<Void> clearFailedAOp(final String _facilityName) {
         return MPlantImpl.getSingleton().failedAOp(_facilityName, null);
     }
 
@@ -73,15 +73,15 @@ public class MPlant extends PlantBase {
         MPlantImpl.getSingleton().stopFacility(_facilityName);
     }
 
-    public static AOp<ISMap<String>> clearStoppedAOp(final String _facilityName) {
+    public static AOp<Void> clearStoppedAOp(final String _facilityName) {
         return MPlantImpl.getSingleton().stoppedAOp(_facilityName, false);
     }
 
-    public static AOp<ISMap<String>> initialLocalMessageQueueSizePropertyAOp(final String _facilityName, final Integer _value) {
+    public static AOp<Void> initialLocalMessageQueueSizePropertyAOp(final String _facilityName, final Integer _value) {
         return MPlantImpl.getSingleton().initialLocalMessageQueueSizePropertyAOp(_facilityName, _value);
     }
 
-    public static AOp<ISMap<String>> initialBufferSizePropertyAOp(final String _facilityName, final Integer _value) {
+    public static AOp<Void> initialBufferSizePropertyAOp(final String _facilityName, final Integer _value) {
         return MPlantImpl.getSingleton().initialBufferSizePropertyAOp(_facilityName, _value);
     }
 

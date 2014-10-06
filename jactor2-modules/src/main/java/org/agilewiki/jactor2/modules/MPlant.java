@@ -1,6 +1,5 @@
 package org.agilewiki.jactor2.modules;
 
-import org.agilewiki.jactor2.core.blades.ismTransactions.ISMap;
 import org.agilewiki.jactor2.core.impl.mtPlant.PlantConfiguration;
 import org.agilewiki.jactor2.core.plant.PlantBase;
 import org.agilewiki.jactor2.core.requests.AOp;

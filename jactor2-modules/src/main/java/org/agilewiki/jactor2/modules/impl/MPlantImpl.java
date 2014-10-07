@@ -172,7 +172,7 @@ public class MPlantImpl extends PlantMtImpl {
                             name2 = name2.substring(FACILITY_DEPENDENCY_INFIX.length());
                             if (PLANT_INTERNAL_FACILITY_NAME.equals(name1))
                                 throw new UnsupportedOperationException("a plant can not have a dependency");
-                            if (hasDependency(name2, key))
+                            if (hasDependency(_content.unmodifiableSortedMap, name2, key))
                                 throw new IllegalArgumentException(
                                         "Would create a dependency cycle.");
                         } else if (name2.startsWith(FACILITY_RESOURCE_INFIX)) {
@@ -382,7 +382,7 @@ public class MPlantImpl extends PlantMtImpl {
                     _asyncResponseProcessor.processAsyncResponse(null);
                 if (PLANT_INTERNAL_FACILITY_NAME.equals(_dependentName))
                     throw new IllegalArgumentException("Plant may not have a dependency");
-                if (hasDependency(_dependencyName, _dependentName))
+                if (hasDependency(propertiesReference.getUnmodifiable(), _dependencyName, _dependentName))
                     throw new IllegalArgumentException(
                             "this would create a cyclic dependency");
                 _asyncRequestImpl.send(getInternalFacility().appendPropertyAOp(dependencyPrefix(_dependentName), _dependencyName),
@@ -391,10 +391,11 @@ public class MPlantImpl extends PlantMtImpl {
         };
     }
 
-    public boolean hasDependency(final String _dependentName, final String _dependencyName) throws Exception {
+    static public boolean hasDependency(final SortedMap<String, String> _unmodifiable,
+                                        final String _dependentName,
+                                        final String _dependencyName) throws Exception {
         String prefix = FACILITY_PREFIX + _dependentName + "~" + FACILITY_DEPENDENCY_INFIX;
-        final SortedMap<String, String> immutableProperties = propertiesReference.getUnmodifiable();
-        final SortedMap<String, String> subMap = immutableProperties.subMap(prefix, prefix + Character.MAX_VALUE);
+        final SortedMap<String, String> subMap = _unmodifiable.subMap(prefix, prefix + Character.MAX_VALUE);
         final Collection<String> keys = subMap.keySet();
         if (keys.size() == 0)
             return false;
@@ -404,7 +405,7 @@ public class MPlantImpl extends PlantMtImpl {
             String nm = subMap.get(key);
             if (_dependencyName.equals(nm))
                 return true;
-            if (hasDependency(nm, _dependencyName))
+            if (hasDependency(_unmodifiable, nm, _dependencyName))
                 return true;
         }
         return false;

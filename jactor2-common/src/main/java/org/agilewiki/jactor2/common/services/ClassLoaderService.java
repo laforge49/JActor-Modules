@@ -17,7 +17,7 @@ public class ClassLoaderService extends Service {
 
     public static ClassLoaderService getClassLoaderService(final Reactor _reactor) throws Exception {
         Facility facility = CPlant.getFacility(_reactor);
-        return (ClassLoaderService) facility.namedBlades.get(CLASS_LOADER_SERVICE_NAME);
+        return (ClassLoaderService) facility.getNamedBlades().get(CLASS_LOADER_SERVICE_NAME);
     }
 
     public final JarClassLoader jcl;

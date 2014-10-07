@@ -15,7 +15,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 public class CFacility extends Facility {
-    public SortedMap<String, WidgetFactory> widgetFactories = new TreeMap();
+    private volatile SortedMap<String, WidgetFactory> widgetFactories = new TreeMap();
     protected TransmutableSortedMap<String, WidgetFactory> widgetFactoriesTransmutable = new TransmutableSortedMap();
 
     public CFacility(String _name) throws Exception {
@@ -47,6 +47,10 @@ public class CFacility extends Facility {
 
     public Class loadClass(String _className) throws Exception {
         return getClassLoader().loadClass(_className);
+    }
+
+    public SortedMap<String, WidgetFactory> getWidgetFactories() {
+        return widgetFactories;
     }
 
     public Widget newWidget(final String _factoryName, Reactor _reactor) throws Exception {

@@ -17,7 +17,7 @@ public class PrinterService extends Service {
 
     public static PrinterService getPrinterService(final Reactor _reactor) throws Exception {
         Facility facility = CPlant.getFacility(_reactor);
-        return (PrinterService) facility.namedBlades.get(PRINTER_SERVICE_NAME);
+        return (PrinterService) facility.getNamedBlades().get(PRINTER_SERVICE_NAME);
     }
 
     public static void register() throws Exception {

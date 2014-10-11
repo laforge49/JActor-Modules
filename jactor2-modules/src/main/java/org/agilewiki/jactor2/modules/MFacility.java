@@ -14,6 +14,8 @@ import org.agilewiki.jactor2.modules.impl.MFacilityImpl;
 import org.agilewiki.jactor2.modules.impl.MPlantImpl;
 import org.xeustechnologies.jcl.CompositeProxyClassLoader;
 
+import java.util.Collection;
+
 public class MFacility extends CFacility {
     public static AOp<MFacility> createMFacilityAOp(final String _name) throws Exception {
         MPlantImpl plantImpl = MPlantImpl.getSingleton();
@@ -108,5 +110,9 @@ public class MFacility extends CFacility {
 
     public CompositeProxyClassLoader getCCL() throws Exception {
         return ClassLoaderService.getClassLoaderService(this).ccl;
+    }
+
+    public Collection<String> dependencyNames() {
+        return MPlantImpl.getSingleton().dependencyNames(getName());
     }
 }

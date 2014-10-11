@@ -28,11 +28,31 @@ public class MPlantImpl extends PlantMtImpl {
 
     public static final String FACILITY_DEPENDENCY_INFIX = CORE_PREFIX + "dependency_";
 
-    public static final String FACILITY_RESOURCE_INFIX = CORE_PREFIX + "resource_";
-
     public static String dependencyPrefix(final String _facilityName) {
         return FACILITY_PREFIX + _facilityName + "~" + FACILITY_DEPENDENCY_INFIX;
     }
+
+    static public boolean hasDependency(final SortedMap<String, String> _unmodifiable,
+                                        final String _dependentName,
+                                        final String _dependencyName) throws Exception {
+        String prefix = FACILITY_PREFIX + _dependentName + "~" + FACILITY_DEPENDENCY_INFIX;
+        final SortedMap<String, String> subMap = _unmodifiable.subMap(prefix, prefix + Character.MAX_VALUE);
+        final Collection<String> keys = subMap.keySet();
+        if (keys.size() == 0)
+            return false;
+        final Iterator<String> it = keys.iterator();
+        while (it.hasNext()) {
+            final String key = it.next();
+            String nm = subMap.get(key);
+            if (_dependencyName.equals(nm))
+                return true;
+            if (hasDependency(_unmodifiable, nm, _dependencyName))
+                return true;
+        }
+        return false;
+    }
+
+    public static final String FACILITY_RESOURCE_INFIX = CORE_PREFIX + "resource_";
 
     public static String resourcePrefix(final String _resource) {
         return FACILITY_PREFIX + _resource + "~" + FACILITY_RESOURCE_INFIX;
@@ -391,24 +411,10 @@ public class MPlantImpl extends PlantMtImpl {
         };
     }
 
-    static public boolean hasDependency(final SortedMap<String, String> _unmodifiable,
-                                        final String _dependentName,
-                                        final String _dependencyName) throws Exception {
+    public Collection<String> dependencyNames(final String _dependentName) {
+        SortedMap<String, String> unmodifiable = propertiesReference.getUnmodifiable();
         String prefix = FACILITY_PREFIX + _dependentName + "~" + FACILITY_DEPENDENCY_INFIX;
-        final SortedMap<String, String> subMap = _unmodifiable.subMap(prefix, prefix + Character.MAX_VALUE);
-        final Collection<String> keys = subMap.keySet();
-        if (keys.size() == 0)
-            return false;
-        final Iterator<String> it = keys.iterator();
-        while (it.hasNext()) {
-            final String key = it.next();
-            String nm = subMap.get(key);
-            if (_dependencyName.equals(nm))
-                return true;
-            if (hasDependency(_unmodifiable, nm, _dependencyName))
-                return true;
-        }
-        return false;
+        return unmodifiable.subMap(prefix, prefix + Character.MAX_VALUE).values();
     }
 
     public AOp<Void> initialLocalMessageQueueSizePropertyAOp(final String _facilityName,

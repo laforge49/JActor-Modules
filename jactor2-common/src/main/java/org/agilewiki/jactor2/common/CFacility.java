@@ -11,6 +11,8 @@ import org.agilewiki.jactor2.core.requests.SOp;
 import org.agilewiki.jactor2.core.requests.impl.RequestImpl;
 import org.xeustechnologies.jcl.JarClassLoader;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -92,6 +94,39 @@ public class CFacility extends Facility {
                     throw new IllegalArgumentException("duplicate widget factory name");
                 }
                 widgetFactoriesTransmutable.put(_name, _widgetFactory);
+                widgetFactories = widgetFactoriesTransmutable.createUnmodifiable();
+                return null;
+            }
+        };
+    }
+
+    public SOp<Void> addWidgetFactoriesSOp(final Collection<WidgetFactory> _widgetFactories) {
+        return new SOp<Void>("addWidgetFactory", this) {
+            @Override
+            protected Void processSyncOperation(RequestImpl _requestImpl) throws Exception {
+                Iterator<WidgetFactory> it = _widgetFactories.iterator();
+                while(it.hasNext()) {
+                    WidgetFactory widgetFactory = it.next();
+                    final String _name = widgetFactory.getName();
+                    if (_name == null) {
+                        throw new IllegalArgumentException("name may not be null");
+                    }
+                    if (_name.length() == 0) {
+                        throw new IllegalArgumentException("name may not be empty");
+                    }
+                    if (_name.contains(" ")) {
+                        throw new IllegalArgumentException("name may not contain spaces: "
+                                + _name);
+                    }
+                    if (_name.contains(".")) {
+                        throw new IllegalArgumentException("name may not contain .: "
+                                + _name);
+                    }
+                    if (widgetFactories.containsKey(_name)) {
+                        throw new IllegalArgumentException("duplicate widget factory name");
+                    }
+                    widgetFactoriesTransmutable.put(_name, widgetFactory);
+                }
                 widgetFactories = widgetFactoriesTransmutable.createUnmodifiable();
                 return null;
             }

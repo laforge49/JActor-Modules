@@ -24,7 +24,7 @@ public class UnknownActivator extends Activator {
                 System.out.println("unknown activated!");
                 MFacility a = MPlant.getFacility("A");
                 System.out.println(a.getNamedBlades());
-                Object u = a.getNamedBlades().get("sample");
+                Object u = a.getNamedBlade("sample");
                 System.out.println(u);
                 Service s = (Service) u;
                 System.out.println(s.getClass());

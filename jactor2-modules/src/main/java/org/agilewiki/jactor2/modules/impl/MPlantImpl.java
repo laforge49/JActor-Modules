@@ -132,7 +132,7 @@ public class MPlantImpl extends PlantMtImpl {
 
                 if (_Mfacility == null) {
                     _asyncRequestImpl.syncDirect(internalMFacility.unregisterBladeSOp(_facilityName));
-                } else if (internalMFacility.getNamedBlades().containsKey(_facilityName))
+                } else if (internalMFacility.getNamedBlade(_facilityName) != null)
                     throw new IllegalStateException("Facility already registered: " + _facilityName);
                 final TSSMReference<String> propertiesReference = internalMFacility.configuration;
                 TSSMUpdateTransaction<String> t0 = new TSSMUpdateTransaction<String>(stoppedKey(_facilityName), stop);
@@ -433,7 +433,7 @@ public class MPlantImpl extends PlantMtImpl {
     }
 
     public MFacilityImpl getMFacilityImpl(String name) {
-        NamedBlade blade = getInternalFacility().getNamedBlades().get(name);
+        NamedBlade blade = getInternalFacility().getNamedBlade(name);
         if (blade == null)
             return null;
         if (!(blade instanceof Facility))

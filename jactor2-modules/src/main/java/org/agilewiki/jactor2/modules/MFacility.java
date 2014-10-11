@@ -3,6 +3,7 @@ package org.agilewiki.jactor2.modules;
 import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.TSSMAppendTransaction;
 import org.agilewiki.jactor2.common.services.ClassLoaderService;
+import org.agilewiki.jactor2.core.blades.NamedBlade;
 import org.agilewiki.jactor2.core.blades.transmutable.tssmTransactions.TSSMReference;
 import org.agilewiki.jactor2.core.blades.transmutable.tssmTransactions.TSSMUpdateTransaction;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
@@ -15,6 +16,7 @@ import org.agilewiki.jactor2.modules.impl.MPlantImpl;
 import org.xeustechnologies.jcl.CompositeProxyClassLoader;
 
 import java.util.Collection;
+import java.util.Iterator;
 
 public class MFacility extends CFacility {
     public static AOp<MFacility> createMFacilityAOp(final String _name) throws Exception {
@@ -114,5 +116,21 @@ public class MFacility extends CFacility {
 
     public Collection<String> dependencyNames() {
         return MPlantImpl.getSingleton().dependencyNames(getName());
+    }
+
+    @Override
+    public NamedBlade getNamedBlade(final String _bladeName) {
+        NamedBlade namedBlade = super.getNamedBlade(_bladeName);
+        if (namedBlade != null)
+            return namedBlade;
+        Iterator<String> it = dependencyNames().iterator();
+        while (it.hasNext()) {
+            String dependencyName = it.next();
+            MFacility facility = MPlant.getFacility(dependencyName);
+            namedBlade = facility.getNamedBlade(_bladeName);
+            if (namedBlade != null)
+                return namedBlade;
+        }
+        return null;
     }
 }

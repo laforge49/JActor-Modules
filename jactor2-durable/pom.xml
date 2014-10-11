@@ -9,8 +9,8 @@
         <version>0.2.0</version>
     </parent>
 
-    <artifactId>jactor2-a</artifactId>
-    <name>JActor2-a</name>
+    <artifactId>jactor2-durable</artifactId>
+    <name>JActor2-Durable</name>
     <packaging>jar</packaging>
 
     <build>

@@ -11,7 +11,7 @@ public class StoppedTest extends TestCase {
     public void test() throws Exception {
         new MPlant();
         try {
-            String fn = "jactor2-a/target/jactor2-a-0.0.1.jar";
+            String fn = "jactor2-a/target/jactor2-a-0.2.0.jar";
             if (!(new File(fn).exists()))
                 fn = "../" + fn;
             MPlant.resourcePropertyAOp("A", fn).call();

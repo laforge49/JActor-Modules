@@ -3,6 +3,7 @@ package org.agilewiki.jactor2.modules;
 import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.TSSMAppendTransaction;
 import org.agilewiki.jactor2.common.services.ClassLoaderService;
+import org.agilewiki.jactor2.common.widgets.WidgetFactory;
 import org.agilewiki.jactor2.core.blades.NamedBlade;
 import org.agilewiki.jactor2.core.blades.transmutable.tssmTransactions.TSSMReference;
 import org.agilewiki.jactor2.core.blades.transmutable.tssmTransactions.TSSMUpdateTransaction;
@@ -130,6 +131,22 @@ public class MFacility extends CFacility {
             namedBlade = facility.getNamedBlade(_bladeName);
             if (namedBlade != null)
                 return namedBlade;
+        }
+        return null;
+    }
+
+    @Override
+    public WidgetFactory getWidgetFactory(final String _factoryName) {
+        WidgetFactory widgetFactory = super.getWidgetFactory(_factoryName);
+        if (widgetFactory != null)
+            return widgetFactory;
+        Iterator<String> it = dependencyNames().iterator();
+        while (it.hasNext()) {
+            String dependencyName = it.next();
+            MFacility facility = MPlant.getFacility(dependencyName);
+            widgetFactory = facility.getWidgetFactory(_factoryName);
+            if (widgetFactory != null)
+                return widgetFactory;
         }
         return null;
     }

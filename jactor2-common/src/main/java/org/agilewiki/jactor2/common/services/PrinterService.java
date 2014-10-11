@@ -1,9 +1,9 @@
 package org.agilewiki.jactor2.common.services;
 
+import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.CPlant;
 import org.agilewiki.jactor2.common.CPlantImpl;
 import org.agilewiki.jactor2.core.reactors.BlockingReactor;
-import org.agilewiki.jactor2.core.reactors.Facility;
 import org.agilewiki.jactor2.core.reactors.Reactor;
 import org.agilewiki.jactor2.core.requests.SOp;
 import org.agilewiki.jactor2.core.requests.impl.RequestImpl;
@@ -16,7 +16,7 @@ public class PrinterService extends Service {
     }
 
     public static PrinterService getPrinterService(final Reactor _reactor) throws Exception {
-        Facility facility = CPlant.getFacility(_reactor);
+        CFacility facility = CPlant.getFacility(_reactor);
         return (PrinterService) facility.getNamedBlades().get(PRINTER_SERVICE_NAME);
     }
 

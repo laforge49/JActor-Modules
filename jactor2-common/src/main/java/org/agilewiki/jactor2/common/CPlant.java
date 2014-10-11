@@ -2,13 +2,12 @@ package org.agilewiki.jactor2.common;
 
 import org.agilewiki.jactor2.core.impl.mtPlant.PlantConfiguration;
 import org.agilewiki.jactor2.core.plant.PlantBase;
-import org.agilewiki.jactor2.core.reactors.Facility;
 import org.agilewiki.jactor2.core.reactors.Reactor;
 
 public class CPlant extends PlantBase {
-    public static Facility getFacility(Reactor _reactor) {
-        while (!(_reactor instanceof Facility)) _reactor = _reactor.getParentReactor();
-        return (Facility) _reactor;
+    public static CFacility getFacility(Reactor _reactor) {
+        while (!(_reactor instanceof CFacility)) _reactor = _reactor.getParentReactor();
+        return (CFacility) _reactor;
     }
 
     /**

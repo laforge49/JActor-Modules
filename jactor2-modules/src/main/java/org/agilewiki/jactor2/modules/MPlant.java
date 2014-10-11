@@ -12,7 +12,7 @@ public class MPlant extends PlantBase {
         return MPlantImpl.getSingleton().getInternalFacility();
     }
 
-    public static MFacility getMFacility(String name) {
+    public static MFacility getFacility(String name) {
         MFacilityImpl MFacilityImpl = MPlantImpl.getSingleton().getMFacilityImpl(name);
         if (MFacilityImpl == null)
             return null;

@@ -22,7 +22,7 @@ public class UnknownActivator extends Activator {
                                                  final AsyncResponseProcessor<Void> _asyncResponseProcessor)
                     throws Exception {
                 System.out.println("unknown activated!");
-                MFacility a = MPlant.getMFacility("A");
+                MFacility a = MPlant.getFacility("A");
                 System.out.println(a.getNamedBlades());
                 Object u = a.getNamedBlades().get("sample");
                 System.out.println(u);

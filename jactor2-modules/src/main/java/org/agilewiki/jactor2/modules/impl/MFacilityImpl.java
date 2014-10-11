@@ -90,7 +90,7 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
                                 while (dit.hasNext()) {
                                     String d = dit.next();
                                     String dependencyName = dependencies.get(d);
-                                    MFacility dFacility = MPlant.getMFacility(dependencyName);
+                                    MFacility dFacility = MPlant.getFacility(dependencyName);
                                     ccl.add(dFacility.getJCL().getLocalLoader());
                                     ccl.add(dFacility.getCCL());
                                 }

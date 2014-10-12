@@ -63,12 +63,12 @@ public class CFacility extends Facility {
         return widgetFactories.get(_factoryName);
     }
 
-    public Widget newWidget(final String _factoryName, Reactor _reactor) throws Exception {
-        return newWidget(_factoryName, _reactor, null);
+    public Widget newWidget(final String _factoryName) throws Exception {
+        return newWidget(_factoryName, null);
     }
 
-    public Widget newWidget(final String _factoryName, Reactor _reactor, Widget _parentWidget) throws Exception {
-        return getWidgetFactory(_factoryName).newWidget(_reactor, _parentWidget);
+    public Widget newWidget(final String _factoryName, Widget _parentWidget) throws Exception {
+        return getWidgetFactory(_factoryName).newWidget(_parentWidget);
     }
 
     public SOp<Void> addWidgetFactorySOp(final WidgetFactory _widgetFactory) {

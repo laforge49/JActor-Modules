@@ -5,16 +5,17 @@ import org.agilewiki.jactor2.core.blades.BladeBase;
 import org.agilewiki.jactor2.core.blades.NamedBlade;
 import org.agilewiki.jactor2.core.reactors.Reactor;
 
-public class WidgetFactoryBase extends BladeBase implements WidgetFactory, NamedBlade {
+public class WidgetFactoryBase implements WidgetFactory {
     public static String factoryKey(String facilityName, String widgetFactoryName) {
         return facilityName + "." + widgetFactoryName;
     }
 
     public final String name;
+    public final CFacility facility;
 
-    public WidgetFactoryBase(String _name, CFacility _cFacility) {
+    public WidgetFactoryBase(final String _name, final CFacility _facility) {
         name = _name;
-        super._initialize(_cFacility);
+        facility = _facility;
     }
 
     @Override
@@ -22,25 +23,24 @@ public class WidgetFactoryBase extends BladeBase implements WidgetFactory, Named
         return name;
     }
 
-    public CFacility getCFacility() {
-        return (CFacility) getReactor();
+    public CFacility getFacility() {
+        return facility;
     }
 
     @Override
     public String getFactoryKey() {
-        return factoryKey(getCFacility().name, name);
+        return factoryKey(getFacility().name, name);
     }
 
-    public Widget newWidget(Reactor _reactor, Widget _parentWidget) throws Exception {
-        return new WidgetBase(_reactor, _parentWidget);
+    public Widget newWidget(Widget _parentWidget) throws Exception {
+        return new WidgetBase(_parentWidget);
     }
 
-    protected class WidgetBase extends BladeBase implements Widget {
+    protected class WidgetBase implements Widget {
         private final Widget widgetParent;
 
-        WidgetBase(Reactor _reactor, Widget _widgetParent) {
+        WidgetBase(Widget _widgetParent) {
             widgetParent = _widgetParent;
-            _initialize(_reactor);
         }
 
         @Override

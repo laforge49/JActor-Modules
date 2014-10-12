@@ -10,7 +10,7 @@ public class WidgetTest extends TestCase {
         try {
             CFacility facility = (CFacility) CPlant.getInternalFacility();
             facility.addWidgetFactorySOp(new WidgetFactoryBase("test", facility)).call();
-            Widget widget = facility.newWidget("test", facility);
+            Widget widget = facility.newWidget("test");
             System.out.println(widget);
         } finally {
             CPlant.close();

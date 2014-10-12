@@ -1,5 +1,6 @@
 package org.agilewiki.jactor2.common.widgets;
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.core.blades.BladeBase;
 import org.agilewiki.jactor2.core.blades.NamedBlade;
@@ -14,6 +15,8 @@ public class WidgetFactoryBase implements WidgetFactory {
     public final CFacility facility;
 
     public WidgetFactoryBase(final String _name, final CFacility _facility) {
+        if (_name.contains("."))
+            throw new IllegalArgumentException("name must not contain a .");
         name = _name;
         facility = _facility;
     }

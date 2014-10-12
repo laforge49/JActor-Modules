@@ -8,12 +8,12 @@ import java.util.SortedMap;
  * Content passed to the validation and change notification bus subscribers.
  */
 public class DurableChanges {
-    public final UnmodifiableByteBufferFactory stateFactory;
+    public final UnmodifiableByteBufferFactory durableWidgetBufferFactory;
     public final SortedMap<String, DurableChange> unmodifiableChanges;
 
-    public DurableChanges(final UnmodifiableByteBufferFactory _stateFactory,
+    public DurableChanges(final UnmodifiableByteBufferFactory _durableWidgetBufferFactory,
                           final SortedMap<String, DurableChange> _unmodifiableChanges) {
-        stateFactory = _stateFactory;
+        durableWidgetBufferFactory = _durableWidgetBufferFactory;
         unmodifiableChanges = _unmodifiableChanges;
     }
 }

@@ -136,15 +136,15 @@ public class MFacility extends CFacility {
     }
 
     @Override
-    public WidgetFactory getWidgetFactory(final String _factoryName) {
-        WidgetFactory widgetFactory = super.getWidgetFactory(_factoryName);
+    public WidgetFactory getWidgetFactory(final String _factoryKey) {
+        WidgetFactory widgetFactory = super.getWidgetFactory(_factoryKey);
         if (widgetFactory != null)
             return widgetFactory;
         Iterator<String> it = dependencyNames().iterator();
         while (it.hasNext()) {
             String dependencyName = it.next();
             MFacility facility = MPlant.getFacility(dependencyName);
-            widgetFactory = facility.getWidgetFactory(_factoryName);
+            widgetFactory = facility.getWidgetFactory(_factoryKey);
             if (widgetFactory != null)
                 return widgetFactory;
         }

@@ -59,41 +59,43 @@ public class CFacility extends Facility {
         return widgetFactories;
     }
 
-    public WidgetFactory getWidgetFactory(final String _factoryName) {
-        return widgetFactories.get(_factoryName);
+    public WidgetFactory getWidgetFactory(String _factoryKey) {
+        if (!_factoryKey.contains("."))
+            _factoryKey = name + "." + _factoryKey;
+        return widgetFactories.get(_factoryKey);
     }
 
-    public Widget newWidget(final String _factoryName) throws Exception {
-        return newWidget(_factoryName, null);
+    public Widget newWidget(final String _factoryKey) throws Exception {
+        return newWidget(_factoryKey, null);
     }
 
-    public Widget newWidget(final String _factoryName, Widget _parentWidget) throws Exception {
-        return getWidgetFactory(_factoryName).newWidget(_parentWidget);
+    public Widget newWidget(final String _factoryKey, Widget _parentWidget) throws Exception {
+        return getWidgetFactory(_factoryKey).newWidget(_parentWidget);
     }
 
     public SOp<Void> addWidgetFactorySOp(final WidgetFactory _widgetFactory) {
-        final String _name = _widgetFactory.getName();
-        if (_name == null) {
-            throw new IllegalArgumentException("name may not be null");
+        final String factoryKey = _widgetFactory.getFactoryKey();
+        if (factoryKey == null) {
+            throw new IllegalArgumentException("factory key may not be null");
         }
-        if (_name.length() == 0) {
-            throw new IllegalArgumentException("name may not be empty");
+        if (factoryKey.length() == 0) {
+            throw new IllegalArgumentException("factory key may not be empty");
         }
-        if (_name.contains(" ")) {
-            throw new IllegalArgumentException("name may not contain spaces: "
-                    + _name);
+        if (factoryKey.contains(" ")) {
+            throw new IllegalArgumentException("factory key may not contain spaces: "
+                    + factoryKey);
         }
-        if (_name.contains(".")) {
-            throw new IllegalArgumentException("name may not contain .: "
-                    + _name);
+        if (!factoryKey.startsWith(name + ".")) {
+            throw new IllegalArgumentException("factory key must start with "
+                    + factoryKey);
         }
         return new SOp<Void>("addWidgetFactory", this) {
             @Override
             protected Void processSyncOperation(RequestImpl _requestImpl) throws Exception {
-                if (widgetFactories.containsKey(_name)) {
-                    throw new IllegalArgumentException("duplicate widget factory name");
+                if (widgetFactories.containsKey(factoryKey)) {
+                    throw new IllegalArgumentException("duplicate widget factory key");
                 }
-                widgetFactoriesTransmutable.put(_name, _widgetFactory);
+                widgetFactoriesTransmutable.put(factoryKey, _widgetFactory);
                 widgetFactories = widgetFactoriesTransmutable.createUnmodifiable();
                 return null;
             }
@@ -107,25 +109,25 @@ public class CFacility extends Facility {
                 Iterator<WidgetFactory> it = _widgetFactories.iterator();
                 while(it.hasNext()) {
                     WidgetFactory widgetFactory = it.next();
-                    final String _name = widgetFactory.getName();
-                    if (_name == null) {
-                        throw new IllegalArgumentException("name may not be null");
+                    final String factoryKey = widgetFactory.getFactoryKey();
+                    if (factoryKey == null) {
+                        throw new IllegalArgumentException("factory key may not be null");
                     }
-                    if (_name.length() == 0) {
-                        throw new IllegalArgumentException("name may not be empty");
+                    if (factoryKey.length() == 0) {
+                        throw new IllegalArgumentException("factory key may not be empty");
                     }
-                    if (_name.contains(" ")) {
-                        throw new IllegalArgumentException("name may not contain spaces: "
-                                + _name);
+                    if (factoryKey.contains(" ")) {
+                        throw new IllegalArgumentException("factory key may not contain spaces: "
+                                + factoryKey);
                     }
-                    if (_name.contains(".")) {
-                        throw new IllegalArgumentException("name may not contain .: "
-                                + _name);
+                    if (!factoryKey.startsWith(name + ".")) {
+                        throw new IllegalArgumentException("factory key must start with "
+                                + name);
                     }
-                    if (widgetFactories.containsKey(_name)) {
-                        throw new IllegalArgumentException("duplicate widget factory name");
+                    if (widgetFactories.containsKey(factoryKey)) {
+                        throw new IllegalArgumentException("duplicate widget factory key");
                     }
-                    widgetFactoriesTransmutable.put(_name, widgetFactory);
+                    widgetFactoriesTransmutable.put(factoryKey, widgetFactory);
                 }
                 widgetFactories = widgetFactoriesTransmutable.createUnmodifiable();
                 return null;

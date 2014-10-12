@@ -10,7 +10,7 @@ import org.agilewiki.jactor2.durable.transmutableBuffers.UnmodifiableByteBufferF
  */
 public interface DurableWidget
         extends Widget, Transmutable<UnmodifiableByteBufferFactory> {
-    public SyncOperation<UnmodifiableByteBufferFactory> applySOp(final String _path,
+    public UnmodifiableByteBufferFactory apply(final String _path,
                                         final String _params,
                                         final UnmodifiableByteBufferFactory _contentFactory);
 }

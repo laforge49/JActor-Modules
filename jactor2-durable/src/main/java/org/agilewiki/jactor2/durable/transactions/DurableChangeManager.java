@@ -21,10 +21,17 @@ public class DurableChangeManager implements AutoCloseable {
         durableWidget = _durableWidget;
     }
 
-    public SyncOperation<UnmodifiableByteBufferFactory> applySOp(final String _path,
+    public UnmodifiableByteBufferFactory apply(final String _path,
                                                                  final String _params,
                                                                  final UnmodifiableByteBufferFactory _contentFactory) {
-        return durableWidget.applySOp(_path, _params, _contentFactory);
+        if (closed) {
+            throw new IllegalStateException(
+                    "Already closed, the transaction is complete.");
+        }
+        UnmodifiableByteBufferFactory oldContentFactory = durableWidget.apply(_path, _params, _contentFactory);
+        DurableChange durableChange = new DurableChange(_path, _params, oldContentFactory, _contentFactory);
+        changes.put(_path, durableChange);
+        return oldContentFactory;
     }
 
     public DurableChanges durableChanges() {

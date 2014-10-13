@@ -90,21 +90,21 @@ public class MFacility extends CFacility {
 
     public AOp<Void> putPropertyAOp(final String _propertyName,
                                              final String _propertyValue) {
-        return new TSSMUpdateTransaction<String>(_propertyName, _propertyValue).
-                applyAOp(configuration);
+        return configuration.
+                applyAOp(new TSSMUpdateTransaction<String>(_propertyName, _propertyValue));
     }
 
     public AOp<Void> appendPropertyAOp(final String _prefix,
                                              final String _propertyValue) {
-        return new TSSMAppendTransaction<String>(_prefix, _propertyValue).
-                applyAOp(configuration);
+        return configuration.
+                applyAOp(new TSSMAppendTransaction<String>(_prefix, _propertyValue));
     }
 
     public AOp<Void> putPropertyAOp(final String _propertyName,
                                              final String _expectedValue,
                                              final String _propertyValue) {
-        return new TSSMUpdateTransaction<String>(_propertyName, _propertyValue, _expectedValue).
-                applyAOp(configuration);
+        return configuration.
+                applyAOp(new TSSMUpdateTransaction<String>(_propertyName, _propertyValue, _expectedValue));
     }
 
     public String toString() {

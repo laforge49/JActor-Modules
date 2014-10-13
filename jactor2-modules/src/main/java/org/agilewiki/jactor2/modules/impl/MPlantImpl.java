@@ -157,7 +157,7 @@ public class MPlantImpl extends PlantMtImpl {
                 final TSSMReference<String> propertiesReference = internalMFacility.configuration;
                 TSSMUpdateTransaction<String> t0 = new TSSMUpdateTransaction<String>(stoppedKey(_facilityName), stop);
                 TSSMUpdateTransaction<String> t1 = new TSSMUpdateTransaction<String>(failedKey(_facilityName), _reasonForFailure, t0);
-                _asyncRequestImpl.send(t1.applyAOp(propertiesReference), transactionResponseProcessor, null);
+                _asyncRequestImpl.send(propertiesReference.applyAOp(t1), transactionResponseProcessor, null);
             }
         };
     }
@@ -477,6 +477,6 @@ public class MPlantImpl extends PlantMtImpl {
     public AOp<Void> purgeFacilityAOp(final String _facilityName) {
         String prefix = FACILITY_PREFIX + _facilityName + ".";
         PrefixFilter filter = new PrefixFilter(prefix);
-        return new TSSMRemoveTransaction<String>(filter).applyAOp(propertiesReference);
+        return propertiesReference.applyAOp(new TSSMRemoveTransaction<String>(filter));
     }
 }

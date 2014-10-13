@@ -44,7 +44,8 @@ public class TSSMAppendTransaction<VALUE> extends TSSMTransaction<VALUE> {
 
     @Override
     protected void update() throws Exception {
-        SortedMap<String, VALUE> values = tssmChangeManager.getTSSMap().subMap(prefix + sep);
+        SortedMap<String, VALUE> values =
+                tssmChangeManager.getUnmodifiableTSSMap().subMap(prefix + sep, prefix + sep + Character.MAX_VALUE);
         int ndx;
         if (values.size() == 0) {
             ndx = 0;

@@ -6,7 +6,6 @@ import org.agilewiki.jactor2.common.widgets.WidgetFactory;
 import org.agilewiki.jactor2.core.blades.NamedBlade;
 import org.agilewiki.jactor2.core.blades.transmutable.TransmutableSortedMap;
 import org.agilewiki.jactor2.core.reactors.Facility;
-import org.agilewiki.jactor2.core.reactors.Reactor;
 import org.agilewiki.jactor2.core.requests.SOp;
 import org.agilewiki.jactor2.core.requests.impl.RequestImpl;
 import org.xeustechnologies.jcl.JarClassLoader;

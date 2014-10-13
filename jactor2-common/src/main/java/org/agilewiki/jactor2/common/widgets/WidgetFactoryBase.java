@@ -1,10 +1,6 @@
 package org.agilewiki.jactor2.common.widgets;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.agilewiki.jactor2.common.CFacility;
-import org.agilewiki.jactor2.core.blades.BladeBase;
-import org.agilewiki.jactor2.core.blades.NamedBlade;
-import org.agilewiki.jactor2.core.reactors.Reactor;
 
 public class WidgetFactoryBase implements WidgetFactory {
     public static String factoryKey(String facilityName, String widgetFactoryName) {

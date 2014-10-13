@@ -2,17 +2,17 @@ package org.agilewiki.jactor2.durable.transactions;
 
 import org.agilewiki.jactor2.durable.transmutableBuffers.UnmodifiableByteBufferFactory;
 
-import java.util.SortedMap;
+import java.util.List;
 
 /**
  * Content passed to the validation and change notification bus subscribers.
  */
 public class DurableChanges {
     public final UnmodifiableByteBufferFactory durableWidgetBufferFactory;
-    public final SortedMap<String, DurableChange> unmodifiableChanges;
+    public final List<DurableChange> unmodifiableChanges;
 
     public DurableChanges(final UnmodifiableByteBufferFactory _durableWidgetBufferFactory,
-                          final SortedMap<String, DurableChange> _unmodifiableChanges) {
+                          final List<DurableChange> _unmodifiableChanges) {
         durableWidgetBufferFactory = _durableWidgetBufferFactory;
         unmodifiableChanges = _unmodifiableChanges;
     }

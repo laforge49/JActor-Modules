@@ -2,7 +2,6 @@ package org.agilewiki.jactor2.durable.widgets;
 
 import org.agilewiki.jactor2.common.widgets.Widget;
 import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
-import org.agilewiki.jactor2.core.requests.SyncOperation;
 import org.agilewiki.jactor2.durable.transmutableBuffers.UnmodifiableByteBufferFactory;
 
 /**

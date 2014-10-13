@@ -18,6 +18,7 @@ import org.agilewiki.jactor2.modules.MFacility;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.SortedMap;
 
 public class MPlantImpl extends PlantMtImpl {
@@ -169,9 +170,9 @@ public class MPlantImpl extends PlantMtImpl {
                 getInternalFacility()) {
             protected void processContent(final TSSMChanges<String> _content)
                     throws Exception {
-                SortedMap<String, TSSMChange<String>> readOnlyChanges = _content.unmodifiableChanges;
+                List<TSSMChange<String>> readOnlyChanges = _content.unmodifiableChanges;
                 TSSMChange<String> pc;
-                final Iterator<TSSMChange<String>> it = readOnlyChanges.values().iterator();
+                final Iterator<TSSMChange<String>> it = readOnlyChanges.iterator();
                 while (it.hasNext()) {
                     pc = it.next();
                     String key = pc.name;
@@ -251,8 +252,8 @@ public class MPlantImpl extends PlantMtImpl {
                 getInternalFacility()) {
             protected void processContent(final TSSMChanges<String> _content)
                     throws Exception {
-                SortedMap<String, TSSMChange<String>> readOnlyChanges = _content.unmodifiableChanges;
-                final Iterator<TSSMChange<String>> it = readOnlyChanges.values().iterator();
+                List<TSSMChange<String>> readOnlyChanges = _content.unmodifiableChanges;
+                final Iterator<TSSMChange<String>> it = readOnlyChanges.iterator();
                 while (it.hasNext()) {
                     TSSMChange<String> pc = it.next();
                     String key = pc.name;

@@ -43,8 +43,8 @@ public class TSSMAppendTransaction<VALUE> extends TSSMTransaction<VALUE> {
     }
 
     @Override
-    protected void update(final TSSMap<VALUE> _transmutable) throws Exception {
-        SortedMap<String, VALUE> values = _transmutable.subMap(prefix + sep);
+    protected void update() throws Exception {
+        SortedMap<String, VALUE> values = tssmChangeManager.getTSSMap().subMap(prefix + sep);
         int ndx;
         if (values.size() == 0) {
             ndx = 0;

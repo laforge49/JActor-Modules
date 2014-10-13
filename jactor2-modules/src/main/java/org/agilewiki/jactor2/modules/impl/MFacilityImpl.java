@@ -24,6 +24,7 @@ import org.xeustechnologies.jcl.CompositeProxyClassLoader;
 
 import java.lang.reflect.Constructor;
 import java.util.Iterator;
+import java.util.List;
 import java.util.SortedMap;
 
 public class MFacilityImpl extends NonBlockingReactorMtImpl {
@@ -199,8 +200,8 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
             @Override
             protected void processContent(final TSSMChanges<String> _content)
                     throws Exception {
-                SortedMap<String, TSSMChange<String>> readOnlyChanges = _content.unmodifiableChanges;
-                final Iterator<TSSMChange<String>> it = readOnlyChanges.values().iterator();
+                List<TSSMChange<String>> readOnlyChanges = _content.unmodifiableChanges;
+                final Iterator<TSSMChange<String>> it = readOnlyChanges.iterator();
                 while (it.hasNext()) {
                     final TSSMChange<String> propertyChange = it.next();
                     String[] args = {

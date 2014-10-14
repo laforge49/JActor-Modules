@@ -5,7 +5,7 @@ package org.agilewiki.jactor2.common.widgets;
  */
 public class WidgetImpl {
     private final WidgetFactory widgetFactory;
-    private final Widget widget;
+    private final _Widget widget;
     private final WidgetImpl parent;
 
     public WidgetImpl(final WidgetFactory _widgetFactory, final WidgetImpl _parent) {
@@ -22,11 +22,11 @@ public class WidgetImpl {
         return parent;
     }
 
-    public Widget asWidget() {
+    public _Widget asWidget() {
         return widget;
     }
 
-    protected Widget newWidget() {
+    protected _Widget newWidget() {
         return new _Widget();
     }
 

@@ -9,8 +9,15 @@ import org.agilewiki.jactor2.durable.transmutableBuffers.UnmodifiableByteBufferF
  * Implements Durable as a nested class.
  */
 public class DurableImpl extends WidgetImpl {
-    public DurableImpl(WidgetFactory _widgetFactory, DurableImpl _parent) {
+    public DurableImpl(final WidgetFactory _widgetFactory, final DurableImpl _parent) {
         super(_widgetFactory, _parent);
+    }
+
+    public DurableImpl(final WidgetFactory _widgetFactory,
+                       final DurableImpl _parent,
+                       final UnmodifiableByteBufferFactory _unmodifiableByteBuffer) {
+        super(_widgetFactory, _parent);
+        asWidget().unmodifiableByteBufferFactory = _unmodifiableByteBuffer;
     }
 
     public WidgetFactory getWidgetFactory() {
@@ -21,18 +28,21 @@ public class DurableImpl extends WidgetImpl {
         return (DurableImpl) super.getParent();
     }
 
-    public Durable asWidget() {
-        return  (Durable) super.asWidget();
+    public _Durable asWidget() {
+        return  (_Durable) super.asWidget();
     }
 
-    protected Durable newWidget() {
+    protected _Durable newWidget() {
         return new _Durable();
     }
 
     protected class _Durable extends _Widget implements Durable {
+        UnmodifiableByteBufferFactory unmodifiableByteBufferFactory;
 
         @Override
-        public UnmodifiableByteBufferFactory apply(String _path, String _params, UnmodifiableByteBufferFactory _contentFactory) {
+        public UnmodifiableByteBufferFactory apply(String _path,
+                                                   String _params,
+                                                   UnmodifiableByteBufferFactory _contentFactory) {
             throw new UnsupportedOperationException();
         }
 
@@ -42,8 +52,11 @@ public class DurableImpl extends WidgetImpl {
         }
 
         @Override
-        public Transmutable<UnmodifiableByteBufferFactory> recreate(UnmodifiableByteBufferFactory unmodifiable) {
-            return new _Durable();
+        public Transmutable<UnmodifiableByteBufferFactory> recreate(
+                UnmodifiableByteBufferFactory _unmodifiableByteBufferFactory) {
+            _Durable newDurable = new _Durable();
+            newDurable.unmodifiableByteBufferFactory = _unmodifiableByteBufferFactory;
+            return newDurable;
         }
     }
 }

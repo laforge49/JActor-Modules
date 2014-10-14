@@ -1,9 +1,13 @@
 package org.agilewiki.jactor2.durable.transactions;
 
 import org.agilewiki.jactor2.core.blades.pubSub.RequestBus;
+import org.agilewiki.jactor2.core.blades.transmutable.transactions.Transaction;
 import org.agilewiki.jactor2.core.blades.transmutable.transactions.TransmutableReference;
 import org.agilewiki.jactor2.core.reactors.IsolationReactor;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
+import org.agilewiki.jactor2.core.requests.AOp;
+import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
+import org.agilewiki.jactor2.core.requests.impl.AsyncRequestImpl;
 import org.agilewiki.jactor2.durable.transmutableBuffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.durable.widgets.DurableWidget;
 
@@ -43,5 +47,52 @@ public class DurableReference
         super(_transmutable, _parentReactor);
         validationBus = new RequestBus<DurableChanges>(_parentReactor);
         changeBus = new RequestBus<DurableChanges>(_parentReactor);
+    }
+
+    @Override
+    public AOp<Void> applyAOp(final Transaction<UnmodifiableByteBufferFactory, DurableWidget> _durableTransaction) {
+        return new AOp<Void>("apply", getReactor()) {
+            private DurableChanges durableChanges;
+
+            @Override
+            protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
+                                                 final AsyncResponseProcessor<Void> _asyncResponseProcessor)
+                    throws Exception {
+                final DurableTransaction durableTransaction = (DurableTransaction) _durableTransaction;
+
+
+                final AsyncResponseProcessor<Void> validationResponseProcessor = new AsyncResponseProcessor<Void>() {
+                    @Override
+                    public void processAsyncResponse(final Void _response)
+                            throws Exception {
+                        durableTransaction.durableChangeManager.close();
+                        updateUnmodifiable();
+                        if (changeBus.noSubscriptions()) {
+                            _asyncResponseProcessor.processAsyncResponse(null);
+                        } else
+                            _asyncRequestImpl.send(changeBus
+                                            .sendsContentAOp(durableChanges),
+                                    _asyncResponseProcessor, getTransmutable());
+                    }
+                };
+
+                final AsyncResponseProcessor<Void> superResponseProcessor =
+                        new AsyncResponseProcessor<Void>() {
+                            @Override
+                            public void processAsyncResponse(final Void _response)
+                                    throws Exception {
+                                durableChanges = durableTransaction.durableChangeManager.durableChanges();
+                                if (validationBus.noSubscriptions()) {
+                                    validationResponseProcessor.processAsyncResponse(null);
+                                } else
+                                    _asyncRequestImpl.send(validationBus
+                                                    .sendsContentAOp(durableChanges),
+                                            validationResponseProcessor);
+                            }
+                        };
+
+                durableTransaction._eval(DurableReference.this, _asyncRequestImpl, superResponseProcessor);
+            }
+        };
     }
 }

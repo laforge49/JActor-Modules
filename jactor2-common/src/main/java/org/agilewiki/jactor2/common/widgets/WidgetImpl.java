@@ -27,11 +27,13 @@ public class WidgetImpl {
     }
 
     protected Widget newWidget() {
-        return new Widget() {
-            @Override
-            public WidgetFactory getWidgetFactory() {
-                return widgetFactory;
-            }
-        };
+        return new _Widget();
+    }
+
+    protected class _Widget implements Widget {
+        @Override
+        public WidgetFactory getWidgetFactory() {
+            return widgetFactory;
+        }
     }
 }

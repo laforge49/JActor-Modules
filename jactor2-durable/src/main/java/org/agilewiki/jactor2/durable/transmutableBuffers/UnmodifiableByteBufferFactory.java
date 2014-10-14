@@ -9,7 +9,7 @@ public class UnmodifiableByteBufferFactory {
     private final byte[] bytes;
     private final ByteBuffer readOnly;
 
-    UnmodifiableByteBufferFactory(final byte[] _bytes) {
+    public UnmodifiableByteBufferFactory(final byte[] _bytes) {
         bytes = new byte[_bytes.length];
         System.arraycopy(_bytes, 0, bytes, 0, bytes.length);
         readOnly = ByteBuffer.wrap(bytes).asReadOnlyBuffer();

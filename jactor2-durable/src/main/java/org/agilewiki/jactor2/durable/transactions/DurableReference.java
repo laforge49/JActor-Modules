@@ -10,7 +10,8 @@ import org.agilewiki.jactor2.durable.widgets.DurableWidget;
 /**
  * Supports validation and notifications of changes to a DurableWidget.
  */
-public class DurableReference extends TransmutableReference<UnmodifiableByteBufferFactory, DurableWidget> {
+public class DurableReference
+        extends TransmutableReference<UnmodifiableByteBufferFactory, DurableWidget> {
 
     /**
      * The RequestBus used to validate the changes made by a transaction.

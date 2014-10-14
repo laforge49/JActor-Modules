@@ -20,7 +20,7 @@ public class DependencyTest extends TestCase {
                     .call();
             final MFacility c = MPlant.createMFacilityAOp("C")
                     .call();
-            MPlant.stopFacility("C");
+            MPlant.getInternalFacility().unregisterBladeSOp("C").call();
             TSSMReference<String> propertiesReference = MPlant.getInternalFacility().configuration;
             SortedMap<String, String> properties = propertiesReference.getUnmodifiable();
             System.out.println("before: "+properties);

@@ -1,10 +1,10 @@
 package org.agilewiki.jactor2.modules;
 
 import org.agilewiki.jactor2.common.CFacility;
-import org.agilewiki.jactor2.common.TSSMAppendTransaction;
 import org.agilewiki.jactor2.common.services.ClassLoaderService;
 import org.agilewiki.jactor2.common.widgets.WidgetFactory;
 import org.agilewiki.jactor2.core.blades.NamedBlade;
+import org.agilewiki.jactor2.core.blades.transmutable.tssmTransactions.TSSMAppendTransaction;
 import org.agilewiki.jactor2.core.blades.transmutable.tssmTransactions.TSSMReference;
 import org.agilewiki.jactor2.core.blades.transmutable.tssmTransactions.TSSMUpdateTransaction;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;

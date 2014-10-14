@@ -9,13 +9,13 @@ import org.agilewiki.jactor2.core.requests.AOp;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.impl.AsyncRequestImpl;
 import org.agilewiki.jactor2.durable.transmutableBuffers.UnmodifiableByteBufferFactory;
-import org.agilewiki.jactor2.durable.widgets.DurableWidget;
+import org.agilewiki.jactor2.durable.widgets.Durable;
 
 /**
  * Supports validation and notifications of changes to a DurableWidget.
  */
 public class DurableReference
-        extends TransmutableReference<UnmodifiableByteBufferFactory, DurableWidget> {
+        extends TransmutableReference<UnmodifiableByteBufferFactory, Durable> {
 
     /**
      * The RequestBus used to validate the changes made by a transaction.
@@ -27,7 +27,7 @@ public class DurableReference
      */
     public final RequestBus<DurableChanges> changeBus;
 
-    public DurableReference(DurableWidget _transmutable) throws Exception {
+    public DurableReference(Durable _transmutable) throws Exception {
         super(_transmutable);
         final NonBlockingReactor parentReactor = (NonBlockingReactor) getReactor()
                 .getParentReactor();
@@ -35,7 +35,7 @@ public class DurableReference
         changeBus = new RequestBus<DurableChanges>(parentReactor);
     }
 
-    public DurableReference(DurableWidget _transmutable, IsolationReactor _reactor) {
+    public DurableReference(Durable _transmutable, IsolationReactor _reactor) {
         super(_transmutable, _reactor);
         final NonBlockingReactor parentReactor = (NonBlockingReactor) getReactor()
                 .getParentReactor();
@@ -43,14 +43,14 @@ public class DurableReference
         changeBus = new RequestBus<DurableChanges>(parentReactor);
     }
 
-    public DurableReference(DurableWidget _transmutable, NonBlockingReactor _parentReactor) throws Exception {
+    public DurableReference(Durable _transmutable, NonBlockingReactor _parentReactor) throws Exception {
         super(_transmutable, _parentReactor);
         validationBus = new RequestBus<DurableChanges>(_parentReactor);
         changeBus = new RequestBus<DurableChanges>(_parentReactor);
     }
 
     @Override
-    public AOp<Void> applyAOp(final Transaction<UnmodifiableByteBufferFactory, DurableWidget> _durableTransaction) {
+    public AOp<Void> applyAOp(final Transaction<UnmodifiableByteBufferFactory, Durable> _durableTransaction) {
         return new AOp<Void>("apply", getReactor()) {
             private DurableChanges durableChanges;
 

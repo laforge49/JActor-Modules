@@ -38,7 +38,7 @@ public class MFacility extends CFacility {
         return new AOp<MFacility>("startFacility", mFacility) {
             @Override
             protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
-                                              final AsyncResponseProcessor<MFacility> _asyncResponseProcessor)
+                                                 final AsyncResponseProcessor<MFacility> _asyncResponseProcessor)
                     throws Exception {
                 _asyncRequestImpl.send(mFacility.asFacilityImpl().startFacilityAOp(), _asyncResponseProcessor, mFacility);
             }
@@ -66,7 +66,7 @@ public class MFacility extends CFacility {
 
     @Override
     protected MFacilityImpl createReactorImpl(final NonBlockingReactor _parentReactorImpl,
-                                             final int _initialOutboxSize, final int _initialLocalQueueSize) {
+                                              final int _initialOutboxSize, final int _initialLocalQueueSize) {
         return new MFacilityImpl(_initialOutboxSize, _initialLocalQueueSize);
     }
 
@@ -89,20 +89,20 @@ public class MFacility extends CFacility {
     }
 
     public AOp<Void> putPropertyAOp(final String _propertyName,
-                                             final String _propertyValue) {
+                                    final String _propertyValue) {
         return configuration.
                 applyAOp(new TSSMUpdateTransaction<String>(_propertyName, _propertyValue));
     }
 
     public AOp<Void> appendPropertyAOp(final String _prefix,
-                                             final String _propertyValue) {
+                                       final String _propertyValue) {
         return configuration.
                 applyAOp(new TSSMAppendTransaction<String>(_prefix, _propertyValue));
     }
 
     public AOp<Void> putPropertyAOp(final String _propertyName,
-                                             final String _expectedValue,
-                                             final String _propertyValue) {
+                                    final String _expectedValue,
+                                    final String _propertyValue) {
         return configuration.
                 applyAOp(new TSSMUpdateTransaction<String>(_propertyName, _propertyValue, _expectedValue));
     }

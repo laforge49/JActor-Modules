@@ -106,7 +106,7 @@ public class CFacility extends Facility {
             @Override
             protected Void processSyncOperation(RequestImpl _requestImpl) throws Exception {
                 Iterator<WidgetFactory> it = _widgetFactories.iterator();
-                while(it.hasNext()) {
+                while (it.hasNext()) {
                     WidgetFactory widgetFactory = it.next();
                     final String factoryKey = widgetFactory.getFactoryKey();
                     if (factoryKey == null) {

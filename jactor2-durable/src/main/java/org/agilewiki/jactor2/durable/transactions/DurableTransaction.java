@@ -3,13 +3,13 @@ package org.agilewiki.jactor2.durable.transactions;
 import org.agilewiki.jactor2.core.blades.transmutable.transactions.SyncTransaction;
 import org.agilewiki.jactor2.core.blades.transmutable.transactions.Transaction;
 import org.agilewiki.jactor2.durable.transmutableBuffers.UnmodifiableByteBufferFactory;
-import org.agilewiki.jactor2.durable.widgets.DurableWidget;
+import org.agilewiki.jactor2.durable.widgets.Durable;
 
 /**
  * A DurableWidget transaction.
  */
 public abstract class DurableTransaction
-        extends SyncTransaction<UnmodifiableByteBufferFactory, DurableWidget> {
+        extends SyncTransaction<UnmodifiableByteBufferFactory, Durable> {
     protected DurableChangeManager durableChangeManager;
 
     public DurableTransaction() {
@@ -20,7 +20,7 @@ public abstract class DurableTransaction
     }
 
     @Override
-    protected final void update(DurableWidget transmutable) throws Exception {
+    protected final void update(Durable transmutable) throws Exception {
         update();
     }
 
@@ -39,7 +39,7 @@ public abstract class DurableTransaction
 
     @Override
     protected void applySourceTransaction(
-            final Transaction<UnmodifiableByteBufferFactory, DurableWidget> _transaction) {
+            final Transaction<UnmodifiableByteBufferFactory, Durable> _transaction) {
         super.applySourceTransaction(_transaction);
         @SuppressWarnings("unchecked")
         final DurableTransaction durableTransaction = (DurableTransaction) _transaction;

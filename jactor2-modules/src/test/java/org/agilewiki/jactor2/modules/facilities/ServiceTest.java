@@ -28,7 +28,7 @@ public class ServiceTest extends TestCase {
             new AOp<Void>("bingo", testReactor) {
                 @Override
                 protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
-                                                  final AsyncResponseProcessor<Void> _asyncResponseProcessor)
+                                                     final AsyncResponseProcessor<Void> _asyncResponseProcessor)
                         throws Exception {
                     _asyncRequestImpl.send(client.crossAOp(),
                             new AsyncResponseProcessor<Boolean>() {
@@ -67,7 +67,7 @@ class Client extends NonBlockingBladeBase {
         return new AOp<Boolean>("cross", getReactor()) {
             @Override
             protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
-                                              final AsyncResponseProcessor<Boolean> _asyncResponseProcessor)
+                                                 final AsyncResponseProcessor<Boolean> _asyncResponseProcessor)
                     throws Exception {
                 _asyncRequestImpl.setExceptionHandler(new ExceptionHandler<Boolean>() {
                     @Override
@@ -82,7 +82,7 @@ class Client extends NonBlockingBladeBase {
                 });
                 Thread.sleep(10);
                 AOp rb = server.hangAOp();
-                System.out.println("client send hang "+rb);
+                System.out.println("client send hang " + rb);
                 Thread.sleep(10);
                 _asyncRequestImpl.send(rb, _asyncResponseProcessor, true);
             }
@@ -99,7 +99,7 @@ class Server extends NonBlockingBladeBase {
         return new AOp<Void>("hang", getReactor()) {
             @Override
             protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
-                                              final AsyncResponseProcessor<Void> _asyncResponseProcessor)
+                                                 final AsyncResponseProcessor<Void> _asyncResponseProcessor)
                     throws Exception {
             }
         };

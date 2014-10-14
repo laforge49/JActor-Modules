@@ -19,7 +19,7 @@ public class SampleActivator extends Activator {
         return new AOp<Void>("start", getReactor()) {
             @Override
             protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
-                                            final AsyncResponseProcessor<Void> _asyncResponseProcessor)
+                                                 final AsyncResponseProcessor<Void> _asyncResponseProcessor)
                     throws Exception {
                 SampleService sampleService = new SampleService(getReactor());
                 _asyncRequestImpl.syncDirect(sampleService.registerSOp());

@@ -419,19 +419,19 @@ public class MPlantImpl extends PlantMtImpl {
     }
 
     public AOp<Void> initialLocalMessageQueueSizePropertyAOp(final String _facilityName,
-                                                                      final Integer _value) {
+                                                             final Integer _value) {
         return getInternalFacility().putPropertyAOp(initialLocalMessageQueueSizeKey(_facilityName),
                 new Integer(_value).toString());
     }
 
     public AOp<Void> initialBufferSizePropertyAOp(final String _facilityName,
-                                                           final Integer _value) {
+                                                  final Integer _value) {
         return getInternalFacility().putPropertyAOp(initialBufferSizeKey(_facilityName),
                 new Integer(_value).toString());
     }
 
     public AOp<Void> activatorPropertyAOp(final String _facilityName,
-                                                   final String _className) {
+                                          final String _className) {
         return getInternalFacility().putPropertyAOp(activatorKey(_facilityName), _className);
     }
 

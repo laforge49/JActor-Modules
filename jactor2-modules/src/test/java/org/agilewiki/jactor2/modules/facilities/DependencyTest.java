@@ -23,11 +23,11 @@ public class DependencyTest extends TestCase {
             MPlant.getInternalFacility().unregisterBladeSOp("C").call();
             TSSMReference<String> propertiesReference = MPlant.getInternalFacility().configuration;
             SortedMap<String, String> properties = propertiesReference.getUnmodifiable();
-            System.out.println("before: "+properties);
+            System.out.println("before: " + properties);
             MPlant.purgeFacilityAOp("C").call();
             MPlant.getInternalFacility().configuration.getReactor().nullSOp().call(); //synchronize for the properties update
             properties = propertiesReference.getUnmodifiable();
-            System.out.println("after: "+properties);
+            System.out.println("after: " + properties);
         } finally {
             Plant.close();
         }

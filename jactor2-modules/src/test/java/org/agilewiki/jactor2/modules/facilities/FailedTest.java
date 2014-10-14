@@ -20,13 +20,13 @@ public class FailedTest extends TestCase {
             MPlant.autoStartAOp("A", true).call();
             TSSMReference<String> propertiesReference = MPlant.getInternalFacility().configuration;
             propertiesReference.getReactor().nullSOp().call(); //synchronize for the properties update
-            System.out.println("before"+propertiesReference.getUnmodifiable());
+            System.out.println("before" + propertiesReference.getUnmodifiable());
             Thread.sleep(100); //give the activator a chance to run
             MPlant.clearFailedAOp("A").call();
             Thread.sleep(100); //give the activator a chance to run
             propertiesReference.getReactor().nullSOp().call(); //synchronize for the properties update
             MPlant.clearFailedAOp("A").call();
-            System.out.println("after"+propertiesReference.getUnmodifiable());
+            System.out.println("after" + propertiesReference.getUnmodifiable());
             Thread.sleep(500); //give the activator a chance to run
         } finally {
             Plant.close();

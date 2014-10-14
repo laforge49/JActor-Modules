@@ -20,10 +20,10 @@ public class StoppedTest extends TestCase {
             MPlant.autoStartAOp("A", true).call();
             TSSMReference<String> propertiesReference = MPlant.getInternalFacility().configuration;
             propertiesReference.getReactor().nullSOp().call(); //synchronize for the properties update
-            System.out.println("before"+propertiesReference.getUnmodifiable());
+            System.out.println("before" + propertiesReference.getUnmodifiable());
             MPlant.clearStoppedAOp("A").call();
             propertiesReference.getReactor().nullSOp().call(); //synchronize for the properties update
-            System.out.println("after"+propertiesReference.getUnmodifiable());
+            System.out.println("after" + propertiesReference.getUnmodifiable());
             Thread.sleep(500); //give the activator a chance to run
         } finally {
             Plant.close();

@@ -43,7 +43,8 @@ public class MapBladeTest extends TestCase {
 class MapBlade<K, V> extends NonBlockingBladeBase {
     private Map<K, V> m;
 
-    public MapBlade() throws Exception {}
+    public MapBlade() throws Exception {
+    }
 
     public static abstract class MapBladeSOp<RESPONSE_TYPE, K, V> extends SOp<RESPONSE_TYPE> {
         protected final MapBlade<K, V> mapBlade;

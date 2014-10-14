@@ -1,8 +1,8 @@
 package org.agilewiki.jactor2.common;
 
 import junit.framework.TestCase;
-import org.agilewiki.jactor2.common.widgets.Widget;
 import org.agilewiki.jactor2.common.widgets.WidgetFactoryBase;
+import org.agilewiki.jactor2.common.widgets.WidgetImpl;
 
 public class WidgetTest extends TestCase {
     public void test1() throws Exception {
@@ -10,8 +10,8 @@ public class WidgetTest extends TestCase {
         try {
             CFacility facility = (CFacility) CPlant.getInternalFacility();
             facility.addWidgetFactorySOp(new WidgetFactoryBase("test", facility)).call();
-            Widget widget = facility.newWidget("test");
-            System.out.println(widget);
+            WidgetImpl widgetImpl = facility.newWidgetImpl("test");
+            System.out.println(widgetImpl);
         } finally {
             CPlant.close();
         }

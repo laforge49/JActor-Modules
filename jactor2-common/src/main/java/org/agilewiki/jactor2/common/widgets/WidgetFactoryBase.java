@@ -31,25 +31,7 @@ public class WidgetFactoryBase implements WidgetFactory {
         return factoryKey(getFacility().name, name);
     }
 
-    public Widget newWidget(Widget _parentWidget) throws Exception {
-        return new WidgetBase(_parentWidget);
-    }
-
-    protected class WidgetBase implements Widget {
-        private final Widget widgetParent;
-
-        WidgetBase(Widget _widgetParent) {
-            widgetParent = _widgetParent;
-        }
-
-        @Override
-        public WidgetFactory getWidgetFactory() {
-            return WidgetFactoryBase.this;
-        }
-
-        @Override
-        public Widget getParentWidget() {
-            return widgetParent;
-        }
+    public WidgetImpl newWidgetImpl(final WidgetImpl _parent) throws Exception {
+        return new WidgetImpl(this, _parent);
     }
 }

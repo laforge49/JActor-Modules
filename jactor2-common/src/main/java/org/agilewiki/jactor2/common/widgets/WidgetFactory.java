@@ -1,7 +1,7 @@
 package org.agilewiki.jactor2.common.widgets;
 
 public interface WidgetFactory {
-    public Widget newWidget(Widget _parentWidget) throws Exception;
+    public WidgetImpl newWidgetImpl(WidgetImpl _parent) throws Exception;
 
     public String getFactoryKey();
 

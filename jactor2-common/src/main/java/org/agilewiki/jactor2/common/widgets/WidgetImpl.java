@@ -11,23 +11,27 @@ public class WidgetImpl {
     public WidgetImpl(final WidgetFactory _widgetFactory, final WidgetImpl _parent) {
         widgetFactory = _widgetFactory;
         parent = _parent;
-        widget = new Widget() {
-            @Override
-            public WidgetFactory getWidgetFactory() {
-                return widgetFactory;
-            }
-        };
+        widget = newWidget();
     }
 
     public WidgetFactory getWidgetFactory() {
         return widgetFactory;
     }
 
-    public WidgetImpl getParentWidget() {
+    public WidgetImpl getParent() {
         return parent;
     }
 
     public Widget asWidget() {
         return widget;
+    }
+
+    protected Widget newWidget() {
+        return new Widget() {
+            @Override
+            public WidgetFactory getWidgetFactory() {
+                return widgetFactory;
+            }
+        };
     }
 }

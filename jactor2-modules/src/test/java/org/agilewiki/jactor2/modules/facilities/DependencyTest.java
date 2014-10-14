@@ -20,10 +20,11 @@ public class DependencyTest extends TestCase {
                     .call();
             final MFacility c = MPlant.createMFacilityAOp("C")
                     .call();
+            MPlant.stopFacility("C");
             TSSMReference<String> propertiesReference = MPlant.getInternalFacility().configuration;
             SortedMap<String, String> properties = propertiesReference.getUnmodifiable();
             System.out.println("before: "+properties);
-            MPlant.purgeFacilityAOp("A").call();
+            MPlant.purgeFacilityAOp("C").call();
             MPlant.getInternalFacility().configuration.getReactor().nullSOp().call(); //synchronize for the properties update
             properties = propertiesReference.getUnmodifiable();
             System.out.println("after: "+properties);

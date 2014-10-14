@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.agilewiki.jactor2</groupId>
         <artifactId>jactor-modules</artifactId>
-        <version>0.2.0</version>
+        <version>0.3.0</version>
     </parent>
 
     <artifactId>jactor2-common</artifactId>
@@ -44,12 +44,12 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>jactor2-core</artifactId>
-            <version>0.12.0</version>
+            <version>0.13.0</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>jactor2-coreMt</artifactId>
-            <version>0.12.0</version>
+            <version>0.13.0</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

@@ -476,7 +476,7 @@ public class MPlantImpl extends PlantMtImpl {
     }
 
     public AOp<Void> purgeFacilityAOp(final String _facilityName) {
-        String prefix = FACILITY_PREFIX + _facilityName + ".";
+        String prefix = FACILITY_PREFIX + _facilityName + "~";
         PrefixFilter filter = new PrefixFilter(prefix);
         return propertiesReference.applyAOp(new TSSMRemoveTransaction<String>(filter));
     }

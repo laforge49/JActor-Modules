@@ -27,10 +27,10 @@ public class DurableChangeManager implements AutoCloseable {
             throw new IllegalStateException(
                     "Already closed, the transaction is complete.");
         }
-        UnmodifiableByteBufferFactory oldContentFactory = durable.apply(_path, _params, _contentFactory);
-        DurableChange durableChange = new DurableChange(_path, _params, oldContentFactory, _contentFactory);
+        UnmodifiableByteBufferFactory resultFactory = durable.apply(_path, _params, _contentFactory);
+        DurableChange durableChange = new DurableChange(_path, _params, resultFactory, _contentFactory);
         changes.add(durableChange);
-        return oldContentFactory;
+        return resultFactory;
     }
 
     public DurableChanges durableChanges() {

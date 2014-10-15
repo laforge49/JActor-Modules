@@ -13,11 +13,11 @@ public class DurableChange {
 
     public DurableChange(final String _path,
                          final String _params,
-                         final UnmodifiableByteBufferFactory _oldContentFactory,
+                         final UnmodifiableByteBufferFactory _resultFactory,
                          final UnmodifiableByteBufferFactory _newContentFactory) {
         path = _path;
         params = _params;
-        oldContentFactory = _oldContentFactory;
+        oldContentFactory = _resultFactory;
         newContentFactory = _newContentFactory;
     }
 }

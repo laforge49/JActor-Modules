@@ -8,24 +8,35 @@ import org.agilewiki.jactor2.durable.widgets.Durable;
 /**
  * A DurableWidget transaction.
  */
-public abstract class DurableTransaction
+public class DurableTransaction
         extends SyncTransaction<UnmodifiableByteBufferFactory, Durable> {
     protected DurableChangeManager durableChangeManager;
+    protected final String path;
+    protected final String params;
+    protected final UnmodifiableByteBufferFactory contentFactory;
 
-    public DurableTransaction() {
+    public DurableTransaction(final String _path,
+                              final String _params,
+                              final UnmodifiableByteBufferFactory _contentFactory) {
+        path = _path;
+        params = _params;
+        contentFactory = _contentFactory;
     }
 
-    public DurableTransaction(final DurableTransaction _parent) {
+    public DurableTransaction(final String _path,
+                              final String _params,
+                              final UnmodifiableByteBufferFactory _contentFactory,
+                              final DurableTransaction _parent) {
         super(_parent);
+        path = _path;
+        params = _params;
+        contentFactory = _contentFactory;
     }
 
     @Override
     protected final void update(Durable transmutable) throws Exception {
-        update();
+        durableChangeManager.apply(path, params, contentFactory);
     }
-
-    abstract protected void update()
-            throws Exception;
 
     public DurableChangeManager getDurableChangeManager() {
         return durableChangeManager;

@@ -36,7 +36,9 @@ public abstract class WidgetImpl<DATATYPE> implements Transmutable<DATATYPE> {
         return widget;
     }
 
-    protected abstract _Widget newWidget();
+    protected _Widget newWidget() {
+        return new _Widget();
+    }
 
     protected class _Widget implements Widget {
     }

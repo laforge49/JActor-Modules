@@ -50,7 +50,7 @@ public class DurableImpl extends WidgetImpl<UnmodifiableByteBufferFactory> {
     public Transmutable<UnmodifiableByteBufferFactory> recreate(
             UnmodifiableByteBufferFactory _unmodifiableByteBufferFactory) {
         DurableImpl newDurableImpl = new DurableImpl(getWidgetFactory(),
-                null, _unmodifiableByteBufferFactory);
+                getParent(), _unmodifiableByteBufferFactory);
         return newDurableImpl;
     }
 

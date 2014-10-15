@@ -8,7 +8,7 @@ import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 import org.agilewiki.jactor2.core.requests.AOp;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.impl.AsyncRequestImpl;
-import org.agilewiki.jactor2.durable.transmutableBuffers.UnmodifiableByteBufferFactory;
+import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.durable.widgets.DurableImpl;
 
 /**

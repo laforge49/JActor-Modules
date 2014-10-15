@@ -1,6 +1,6 @@
 package org.agilewiki.jactor2.durable.transactions;
 
-import org.agilewiki.jactor2.durable.transmutableBuffers.UnmodifiableByteBufferFactory;
+import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 
 import java.util.List;
 

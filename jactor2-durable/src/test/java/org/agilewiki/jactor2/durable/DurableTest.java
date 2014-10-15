@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.CPlant;
 import org.agilewiki.jactor2.common.widgets.WidgetImpl;
-import org.agilewiki.jactor2.durable.transmutableBuffers.UnmodifiableByteBufferFactory;
+import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.durable.widgets.DurableFactory;
 import org.agilewiki.jactor2.durable.widgets.DurableImpl;
 

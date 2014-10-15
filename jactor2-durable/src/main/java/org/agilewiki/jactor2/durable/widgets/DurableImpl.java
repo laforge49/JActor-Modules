@@ -44,6 +44,11 @@ public class DurableImpl extends WidgetImpl<UnmodifiableByteBufferFactory> {
         UnmodifiableByteBufferFactory unmodifiableByteBufferFactory;
 
         @Override
+        public DurableFactory getWidgetFactory() {
+            return (DurableFactory) super.getWidgetFactory();
+        }
+
+        @Override
         public UnmodifiableByteBufferFactory apply(String _path,
                                                    String _params,
                                                    UnmodifiableByteBufferFactory _contentFactory) {

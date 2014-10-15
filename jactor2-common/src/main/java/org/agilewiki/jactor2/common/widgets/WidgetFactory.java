@@ -2,7 +2,7 @@ package org.agilewiki.jactor2.common.widgets;
 
 import org.agilewiki.jactor2.common.CFacility;
 
-public class WidgetFactory {
+public abstract class WidgetFactory<DATATYPE> {
     public static String factoryKey(String facilityName, String widgetFactoryName) {
         return facilityName + "." + widgetFactoryName;
     }
@@ -29,7 +29,5 @@ public class WidgetFactory {
         return factoryKey(getFacility().name, name);
     }
 
-    public WidgetImpl newWidgetImpl(final WidgetImpl _parent) throws Exception {
-        return new WidgetImpl(this, _parent);
-    }
+    public abstract WidgetImpl<DATATYPE> newWidgetImpl(final WidgetImpl<DATATYPE> _parent) throws Exception;
 }

@@ -8,35 +8,39 @@ import org.agilewiki.jactor2.durable.transmutableBuffers.UnmodifiableByteBufferF
 /**
  * Implements Durable as a nested class.
  */
-public class DurableImpl extends WidgetImpl {
-    public DurableImpl(final WidgetFactory _widgetFactory, final DurableImpl _parent) {
+public class DurableImpl extends WidgetImpl<UnmodifiableByteBufferFactory> {
+    public DurableImpl(final DurableFactory _widgetFactory, final DurableImpl _parent) {
         super(_widgetFactory, _parent);
     }
 
-    public DurableImpl(final WidgetFactory _widgetFactory,
+    public DurableImpl(final DurableFactory _widgetFactory,
                        final DurableImpl _parent,
                        final UnmodifiableByteBufferFactory _unmodifiableByteBuffer) {
         super(_widgetFactory, _parent);
         asWidget().unmodifiableByteBufferFactory = _unmodifiableByteBuffer;
     }
 
-    public WidgetFactory getWidgetFactory() {
-        return super.getWidgetFactory();
+    @Override
+    public DurableFactory getWidgetFactory() {
+        return (DurableFactory) super.getWidgetFactory();
     }
 
+    @Override
     public DurableImpl getParent() {
         return (DurableImpl) super.getParent();
     }
 
+    @Override
     public _Durable asWidget() {
         return  (_Durable) super.asWidget();
     }
 
+    @Override
     protected _Durable newWidget() {
         return new _Durable();
     }
 
-    protected class _Durable extends _Widget implements Durable {
+    protected class _Durable extends _Widget<UnmodifiableByteBufferFactory> implements Durable {
         UnmodifiableByteBufferFactory unmodifiableByteBufferFactory;
 
         @Override

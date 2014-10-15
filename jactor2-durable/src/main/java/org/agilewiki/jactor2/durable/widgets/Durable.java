@@ -8,7 +8,7 @@ import org.agilewiki.jactor2.durable.transmutableBuffers.UnmodifiableByteBufferF
  * A durable widget.
  */
 public interface Durable
-        extends Widget, Transmutable<UnmodifiableByteBufferFactory> {
+        extends Widget<UnmodifiableByteBufferFactory> {
     public UnmodifiableByteBufferFactory apply(final String _path,
                                                final String _params,
                                                final UnmodifiableByteBufferFactory _contentFactory);

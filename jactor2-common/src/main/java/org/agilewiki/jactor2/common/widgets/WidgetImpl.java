@@ -1,9 +1,11 @@
 package org.agilewiki.jactor2.common.widgets;
 
+import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
+
 /**
  * Implements Widget as a nested class.
  */
-public class WidgetImpl {
+public abstract class WidgetImpl<DATATYPE> {
     private final WidgetFactory widgetFactory;
     private final _Widget widget;
     private final WidgetImpl parent;
@@ -26,11 +28,9 @@ public class WidgetImpl {
         return widget;
     }
 
-    protected _Widget newWidget() {
-        return new _Widget();
-    }
+    protected abstract _Widget newWidget();
 
-    protected class _Widget implements Widget {
+    protected abstract class _Widget<DATATYPE> implements Widget<DATATYPE> {
         @Override
         public WidgetFactory getWidgetFactory() {
             return widgetFactory;

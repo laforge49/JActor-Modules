@@ -12,15 +12,32 @@ public class WidgetImpl implements Transmutable<UnmodifiableByteBufferFactory> {
     private final WidgetFactory widgetFactory;
     private final _Widget widget;
     private final WidgetImpl parent;
-    protected final ByteBuffer byteBuffer;
+    protected ByteBuffer byteBuffer;
+    protected int startPosition;
 
     public WidgetImpl(final WidgetFactory _widgetFactory,
                       final WidgetImpl _parent,
-                      ByteBuffer _byteBuffer) {
+                      final ByteBuffer _byteBuffer) {
         widgetFactory = _widgetFactory;
         parent = _parent;
-        byteBuffer = _byteBuffer;
+        initBuffer(_byteBuffer);
         widget = newWidget();
+    }
+
+    protected void initBuffer(final ByteBuffer _byteBuffer) {
+        if (_byteBuffer == null)
+            byteBuffer = null;
+        else {
+            startPosition = _byteBuffer.position();
+            int endPosition = startPosition + getLength();
+            byteBuffer = _byteBuffer.asReadOnlyBuffer();
+            _byteBuffer.position(endPosition);
+            byteBuffer.limit(endPosition);
+        }
+    }
+
+    protected int getLength() {
+        return 0;
     }
 
     public WidgetFactory getWidgetFactory() {

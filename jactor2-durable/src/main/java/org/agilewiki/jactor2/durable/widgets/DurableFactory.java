@@ -11,8 +11,9 @@ public class DurableFactory extends WidgetFactory<UnmodifiableByteBufferFactory>
     }
 
     @Override
-    public DurableImpl newWidgetImpl(final WidgetImpl<UnmodifiableByteBufferFactory> _parent)
+    public DurableImpl newWidgetImpl(final WidgetImpl<UnmodifiableByteBufferFactory> _parent,
+                                     final UnmodifiableByteBufferFactory _unmodifiable)
             throws Exception {
-        return new DurableImpl(this, (DurableImpl) _parent);
+        return new DurableImpl(this, (DurableImpl) _parent, _unmodifiable);
     }
 }

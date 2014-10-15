@@ -50,7 +50,7 @@ public class CFacility extends Facility {
         return ClassLoader.getSystemClassLoader();
     }
 
-    public Class loadClass(String _className) throws Exception {
+    public Class loadClass(final String _className) throws Exception {
         return getClassLoader().loadClass(_className);
     }
 
@@ -58,18 +58,17 @@ public class CFacility extends Facility {
         return widgetFactories;
     }
 
-    public WidgetFactory getWidgetFactory(String _factoryKey) {
+    public <DATATYPE> WidgetFactory<DATATYPE> getWidgetFactory(String _factoryKey) {
         if (!_factoryKey.contains("."))
             _factoryKey = name + "." + _factoryKey;
-        return widgetFactories.get(_factoryKey);
+        return (WidgetFactory<DATATYPE>) widgetFactories.get(_factoryKey);
     }
 
-    public WidgetImpl newWidgetImpl(final String _factoryKey) throws Exception {
-        return newWidgetImpl(_factoryKey, null);
-    }
-
-    public WidgetImpl newWidgetImpl(final String _factoryKey, WidgetImpl _parentWidget) throws Exception {
-        return getWidgetFactory(_factoryKey).newWidgetImpl(_parentWidget);
+    public <DATATYPE> WidgetImpl<DATATYPE> newWidgetImpl(final String _factoryKey,
+                                                         final WidgetImpl _parentWidget,
+                                                         final DATATYPE _unmodifiable) throws Exception {
+        return ((WidgetFactory<DATATYPE>) getWidgetFactory(_factoryKey)).
+                newWidgetImpl(_parentWidget, _unmodifiable);
     }
 
     public SOp<Void> addWidgetFactorySOp(final WidgetFactory _widgetFactory) {

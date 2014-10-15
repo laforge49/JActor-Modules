@@ -29,5 +29,7 @@ public abstract class WidgetFactory<DATATYPE> {
         return factoryKey(getFacility().name, name);
     }
 
-    public abstract WidgetImpl<DATATYPE> newWidgetImpl(final WidgetImpl<DATATYPE> _parent) throws Exception;
+    public abstract WidgetImpl<DATATYPE> newWidgetImpl(final WidgetImpl<DATATYPE> _parent,
+                                                       DATATYPE _unmodifiable)
+            throws Exception;
 }

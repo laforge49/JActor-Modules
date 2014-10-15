@@ -2,7 +2,9 @@ package org.agilewiki.jactor2.common.widgets;
 
 import org.agilewiki.jactor2.common.CFacility;
 
-public abstract class WidgetFactory<DATATYPE> {
+import java.nio.ByteBuffer;
+
+public abstract class WidgetFactory {
     public static String factoryKey(String facilityName, String widgetFactoryName) {
         return facilityName + "." + widgetFactoryName;
     }
@@ -29,7 +31,7 @@ public abstract class WidgetFactory<DATATYPE> {
         return factoryKey(getFacility().name, name);
     }
 
-    public abstract WidgetImpl<DATATYPE> newWidgetImpl(final WidgetImpl<DATATYPE> _parent,
-                                                       DATATYPE _unmodifiable)
+    public abstract WidgetImpl newWidgetImpl(final WidgetImpl _parent,
+                                             ByteBuffer _byteBuffer)
             throws Exception;
 }

@@ -1,5 +1,6 @@
 package org.agilewiki.jactor2.durable.transactions;
 
+import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.core.blades.pubSub.RequestBus;
 import org.agilewiki.jactor2.core.blades.transmutable.transactions.Transaction;
 import org.agilewiki.jactor2.core.blades.transmutable.transactions.TransmutableReference;
@@ -8,7 +9,6 @@ import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 import org.agilewiki.jactor2.core.requests.AOp;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.impl.AsyncRequestImpl;
-import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.durable.widgets.DurableImpl;
 
 /**

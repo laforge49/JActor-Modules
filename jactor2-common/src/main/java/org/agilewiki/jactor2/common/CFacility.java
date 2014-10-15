@@ -10,6 +10,7 @@ import org.agilewiki.jactor2.core.requests.SOp;
 import org.agilewiki.jactor2.core.requests.impl.RequestImpl;
 import org.xeustechnologies.jcl.JarClassLoader;
 
+import java.nio.ByteBuffer;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.SortedMap;
@@ -58,17 +59,17 @@ public class CFacility extends Facility {
         return widgetFactories;
     }
 
-    public <DATATYPE> WidgetFactory<DATATYPE> getWidgetFactory(String _factoryKey) {
+    public WidgetFactory getWidgetFactory(String _factoryKey) {
         if (!_factoryKey.contains("."))
             _factoryKey = name + "." + _factoryKey;
-        return (WidgetFactory<DATATYPE>) widgetFactories.get(_factoryKey);
+        return (WidgetFactory) widgetFactories.get(_factoryKey);
     }
 
-    public <DATATYPE> WidgetImpl<DATATYPE> newWidgetImpl(final String _factoryKey,
-                                                         final WidgetImpl _parentWidget,
-                                                         final DATATYPE _unmodifiable) throws Exception {
-        return ((WidgetFactory<DATATYPE>) getWidgetFactory(_factoryKey)).
-                newWidgetImpl(_parentWidget, _unmodifiable);
+    public WidgetImpl newWidgetImpl(final String _factoryKey,
+                                    final WidgetImpl _parentWidget,
+                                    final ByteBuffer _byteBufffer) throws Exception {
+        return ((WidgetFactory) getWidgetFactory(_factoryKey)).
+                newWidgetImpl(_parentWidget, _byteBufffer);
     }
 
     public SOp<Void> addWidgetFactorySOp(final WidgetFactory _widgetFactory) {

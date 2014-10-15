@@ -1,18 +1,20 @@
 package org.agilewiki.jactor2.durable.widgets;
 
 import org.agilewiki.jactor2.common.widgets.WidgetImpl;
-import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
+import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
+
+import java.nio.ByteBuffer;
 
 /**
  * Implements Durable as a nested class.
  */
-public class DurableImpl extends WidgetImpl<UnmodifiableByteBufferFactory> {
+public class DurableImpl extends WidgetImpl {
 
     public DurableImpl(final DurableFactory _widgetFactory,
                        final DurableImpl _parent,
-                       final UnmodifiableByteBufferFactory _unmodifiableByteBuffer) {
-        super(_widgetFactory, _parent, _unmodifiableByteBuffer);
+                       final ByteBuffer _byteBuffer) {
+        super(_widgetFactory, _parent, _byteBuffer);
     }
 
     @Override
@@ -42,16 +44,10 @@ public class DurableImpl extends WidgetImpl<UnmodifiableByteBufferFactory> {
     }
 
     @Override
-    public UnmodifiableByteBufferFactory createUnmodifiable() {
-        return new UnmodifiableByteBufferFactory(new byte[0]);
-    }
-
-    @Override
     public Transmutable<UnmodifiableByteBufferFactory> recreate(
-            UnmodifiableByteBufferFactory _unmodifiableByteBufferFactory) {
-        DurableImpl newDurableImpl = new DurableImpl(getWidgetFactory(),
-                getParent(), _unmodifiableByteBufferFactory);
-        return newDurableImpl;
+            final UnmodifiableByteBufferFactory _unmodifiable) {
+        return new DurableImpl(getWidgetFactory(),
+                getParent(), _unmodifiable.duplicateByteBuffer());
     }
 
     protected class _Durable extends _Widget implements Durable {

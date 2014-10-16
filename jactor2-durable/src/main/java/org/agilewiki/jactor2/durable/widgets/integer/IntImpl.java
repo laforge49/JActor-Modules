@@ -13,6 +13,8 @@ public class IntImpl extends DurableImpl {
                    final DurableImpl _parent,
                    final ByteBuffer _byteBuffer) {
         super(_widgetFactory, _parent, _byteBuffer);
+        if (byteBuffer != null)
+            value = null;
     }
 
     @Override
@@ -50,8 +52,7 @@ public class IntImpl extends DurableImpl {
     }
 
     @Override
-    protected void serialize(final ByteBuffer _byteBuffer) {
-        super.serialize(_byteBuffer);
+    protected void _serialize(final ByteBuffer _byteBuffer) {
         _byteBuffer.putInt(value);
     }
 

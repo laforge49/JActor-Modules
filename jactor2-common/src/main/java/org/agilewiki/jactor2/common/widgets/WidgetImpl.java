@@ -39,7 +39,15 @@ public class WidgetImpl implements Transmutable<UnmodifiableByteBufferFactory> {
     }
 
     protected void serialize(final ByteBuffer _byteBuffer) {
-        initBuffer(_byteBuffer);
+        startPosition = _byteBuffer.position();
+        _serialize(_byteBuffer);
+        int endPosition = startPosition + getLength();
+        byteBuffer = _byteBuffer.asReadOnlyBuffer();
+        byteBuffer.position(startPosition);
+        byteBuffer.limit(endPosition);
+    }
+
+    protected void _serialize(final ByteBuffer _byteBuffer) {
     }
 
     protected void deserializde() {
@@ -71,7 +79,7 @@ public class WidgetImpl implements Transmutable<UnmodifiableByteBufferFactory> {
         if (byteBuffer == null) {
             byteBuffer = ByteBuffer.allocate(getLength());
             serialize(byteBuffer);
-            byteBuffer.flip();
+            byteBuffer.rewind();
         }
         return new UnmodifiableByteBufferFactory(byteBuffer);
     }

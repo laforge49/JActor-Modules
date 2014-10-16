@@ -73,7 +73,7 @@ public class WidgetImpl implements Transmutable<UnmodifiableByteBufferFactory> {
             serialize(byteBuffer);
             byteBuffer.flip();
         }
-        return new UnmodifiableByteBufferFactory(byteBuffer.array());
+        return new UnmodifiableByteBufferFactory(byteBuffer);
     }
 
     @Override

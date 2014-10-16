@@ -63,7 +63,8 @@ public class IntImpl extends DurableImpl {
     protected class _Int extends _Durable implements DurableInt {
         @Override
         public Integer getValue() throws Exception {
-            //todo
+            if (value == null)
+                deserializde();
             return value;
         }
 

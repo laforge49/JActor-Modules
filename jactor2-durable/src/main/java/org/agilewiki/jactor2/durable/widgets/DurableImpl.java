@@ -39,8 +39,9 @@ public class DurableImpl extends WidgetImpl {
 
     public UnmodifiableByteBufferFactory apply(final String _path,
                                                final String _params,
-                                               final UnmodifiableByteBufferFactory _contentFactory) {
-        throw new UnsupportedOperationException();
+                                               final UnmodifiableByteBufferFactory _contentFactory)
+            throws Exception {
+        throw new InvalidDurableParamsException(_params);
     }
 
     @Override

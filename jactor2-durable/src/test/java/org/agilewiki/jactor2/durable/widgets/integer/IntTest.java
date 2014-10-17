@@ -3,6 +3,9 @@ package org.agilewiki.jactor2.durable.widgets.integer;
 import junit.framework.TestCase;
 import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.CPlant;
+import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
+import org.agilewiki.jactor2.durable.transactions.DurableReference;
+import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
 
 import java.nio.ByteBuffer;
 
@@ -26,12 +29,21 @@ public class IntTest extends TestCase {
             assertEquals(4, buffer1.limit());
             assertEquals(1, buffer1.getInt());
             buffer1.rewind();
-            DurableInt dint2 = (DurableInt) facility.
-                    newWidgetImpl("int", null, buffer).asWidget();
+            IntImpl intImpl2 = (IntImpl) facility.newWidgetImpl("int", null, buffer);
+            DurableInt dint2 = intImpl2.asWidget();
             assertEquals(0, dint2.getValue().intValue());
-            DurableInt dint3 = (DurableInt) facility.
-                    newWidgetImpl("int", null, buffer1).asWidget();
+            IntImpl intImpl3 = (IntImpl) facility.
+                    newWidgetImpl("int", null, buffer1);
+            DurableInt dint3 = intImpl3.asWidget();
             assertEquals(1, dint3.getValue().intValue());
+
+            ByteBuffer bb42 = ByteBuffer.allocate(4);
+            bb42.putInt(42).rewind();
+            DurableTransaction setTrans = new DurableTransaction("", "setValue",
+                    new UnmodifiableByteBufferFactory(bb42));
+            DurableReference durableReference = new DurableReference(intImpl3);
+            durableReference.applyAOp(setTrans).call();
+            assertEquals(42, dint3.getValue().intValue());
         } finally {
             CPlant.close();
         }

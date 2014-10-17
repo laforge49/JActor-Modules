@@ -22,7 +22,8 @@ public class DurableChangeManager implements AutoCloseable {
 
     public UnmodifiableByteBufferFactory apply(final String _path,
                                                final String _params,
-                                               final UnmodifiableByteBufferFactory _contentFactory) {
+                                               final UnmodifiableByteBufferFactory _contentFactory)
+            throws Exception {
         if (closed) {
             throw new IllegalStateException(
                     "Already closed, the transaction is complete.");

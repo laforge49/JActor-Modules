@@ -3,6 +3,8 @@ package org.agilewiki.jactor2.durable.widgets.integer;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
 import org.agilewiki.jactor2.durable.widgets.DurableImpl;
+import org.agilewiki.jactor2.durable.widgets.InvalidDurableParamsException;
+import org.agilewiki.jactor2.durable.widgets.InvalidDurablePathException;
 
 import java.nio.ByteBuffer;
 
@@ -35,8 +37,16 @@ public class IntImpl extends DurableImpl {
     @Override
     public UnmodifiableByteBufferFactory apply(final String _path,
                                                final String _params,
-                                               final UnmodifiableByteBufferFactory _contentFactory) {
-        throw new UnsupportedOperationException();
+                                               final UnmodifiableByteBufferFactory _contentFactory)
+            throws Exception {
+        if (_path.length() != 0)
+            throw new InvalidDurablePathException(_path);
+        if ("setValue".equals(_params)) {
+            UnmodifiableByteBufferFactory old = createUnmodifiable();
+            value = _contentFactory.duplicateByteBuffer().getInt();
+            return old;
+        }
+        throw new InvalidDurableParamsException(_params);
     }
 
     @Override

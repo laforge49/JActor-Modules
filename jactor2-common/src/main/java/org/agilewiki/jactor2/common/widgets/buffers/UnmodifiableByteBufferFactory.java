@@ -25,8 +25,4 @@ public class UnmodifiableByteBufferFactory {
     public ByteBuffer duplicateByteBuffer() {
         return readOnly.duplicate();
     }
-
-    TransmutableByteBuffer transmutableByteBuffer() {
-        return new TransmutableByteBuffer(readOnly.duplicate());
-    }
 }

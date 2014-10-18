@@ -27,9 +27,6 @@ public class UnmodifiableByteBufferFactory {
     }
 
     TransmutableByteBuffer transmutableByteBuffer() {
-        byte[] ba = new byte[readOnly.limit()];
-        readOnly.get(ba);
-        readOnly.rewind();
-        return new TransmutableByteBuffer(ba);
+        return new TransmutableByteBuffer(readOnly.duplicate());
     }
 }

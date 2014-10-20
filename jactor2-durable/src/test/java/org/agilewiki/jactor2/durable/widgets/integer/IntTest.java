@@ -6,6 +6,7 @@ import org.agilewiki.jactor2.common.CPlant;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.durable.transactions.DurableReference;
 import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
+import org.agilewiki.jactor2.durable.widgets.InvalidDurableException;
 
 import java.nio.ByteBuffer;
 
@@ -45,6 +46,16 @@ public class IntTest extends TestCase {
             durableReference.applyAOp(setTrans).call();
             assertEquals(42, dint3.getValue().intValue());
             System.out.println(setTrans.toString());
+
+            ByteBuffer bb43 = ByteBuffer.allocate(4);
+            bb43.putInt(43).rewind();
+            DurableTransaction expectTrans = new DurableTransaction("", "expect",
+                    new UnmodifiableByteBufferFactory(bb43));
+            try {
+                durableReference.applyAOp(expectTrans).call();
+            } catch (InvalidDurableException ide) {
+                System.out.println(ide);
+            }
         } finally {
             CPlant.close();
         }

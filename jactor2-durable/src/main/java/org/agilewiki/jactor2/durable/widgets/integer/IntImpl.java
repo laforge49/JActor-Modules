@@ -2,9 +2,7 @@ package org.agilewiki.jactor2.durable.widgets.integer;
 
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
-import org.agilewiki.jactor2.durable.widgets.DurableImpl;
-import org.agilewiki.jactor2.durable.widgets.InvalidDurableParamsException;
-import org.agilewiki.jactor2.durable.widgets.InvalidDurablePathException;
+import org.agilewiki.jactor2.durable.widgets.*;
 
 import java.nio.ByteBuffer;
 
@@ -43,8 +41,15 @@ public class IntImpl extends DurableImpl {
             throw new InvalidDurablePathException(_path);
         if ("setValue".equals(_params)) {
             int old = value;
-            value = _contentFactory.duplicateByteBuffer().getInt();
+            int newValue = _contentFactory.duplicateByteBuffer().getInt();
+            asWidget().setValue(newValue);
             return "" + old + " -> " + value;
+        }
+        if ("expect".equals(_params)) {
+            int old = value;
+            int newValue = _contentFactory.duplicateByteBuffer().getInt();
+            asWidget().expect(newValue);
+            return null;
         }
         throw new InvalidDurableParamsException(_params);
     }
@@ -83,6 +88,14 @@ public class IntImpl extends DurableImpl {
         public void setValue(Integer _value) {
             value = _value;
             byteBuffer = null;
+        }
+
+        @Override
+        public void expect(Integer _value) throws InvalidDurableException {
+            if (value == null)
+                deserializde();
+            if (value != _value)
+                throw new InvalidDurableContentException("expected " + _value + ", not " + value);
         }
     }
 }

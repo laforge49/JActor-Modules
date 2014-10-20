@@ -21,8 +21,8 @@ public class DurableChangeManager implements AutoCloseable {
     }
 
     public String apply(final String _path,
-                                               final String _params,
-                                               final UnmodifiableByteBufferFactory _contentFactory)
+                        final String _params,
+                        final UnmodifiableByteBufferFactory _contentFactory)
             throws Exception {
         if (closed) {
             throw new IllegalStateException(

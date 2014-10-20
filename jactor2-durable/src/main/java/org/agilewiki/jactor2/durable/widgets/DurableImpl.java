@@ -38,8 +38,8 @@ public class DurableImpl extends WidgetImpl {
     }
 
     public String apply(final String _path,
-                                               final String _params,
-                                               final UnmodifiableByteBufferFactory _contentFactory)
+                        final String _params,
+                        final UnmodifiableByteBufferFactory _contentFactory)
             throws Exception {
         throw new InvalidDurableParamsException(_params);
     }

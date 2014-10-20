@@ -34,8 +34,8 @@ public class IntImpl extends DurableImpl {
 
     @Override
     public String apply(final String _path,
-                                               final String _params,
-                                               final UnmodifiableByteBufferFactory _contentFactory)
+                        final String _params,
+                        final UnmodifiableByteBufferFactory _contentFactory)
             throws Exception {
         if (_path.length() != 0)
             throw new InvalidDurablePathException(_path);
@@ -80,22 +80,24 @@ public class IntImpl extends DurableImpl {
         @Override
         public Integer getValue() throws Exception {
             if (value == null)
-                deserializde();
+                deserialize();
             return value;
         }
 
         @Override
-        public void setValue(Integer _value) {
+        public void setValue(Integer _value) throws InvalidDurableContentException {
+            if (_value == null)
+                throw new InvalidDurableContentException("null is not valid");
             value = _value;
             byteBuffer = null;
         }
 
         @Override
-        public void expect(Integer _value) throws InvalidDurableException {
+        public void expect(Integer _value) throws UnexpectedValueException {
             if (value == null)
-                deserializde();
+                deserialize();
             if (value != _value)
-                throw new InvalidDurableContentException("expected " + _value + ", not " + value);
+                throw new UnexpectedValueException("expected " + _value + ", not " + value);
         }
     }
 }

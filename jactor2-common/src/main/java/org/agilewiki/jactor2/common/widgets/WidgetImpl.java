@@ -50,7 +50,7 @@ public class WidgetImpl implements Transmutable<UnmodifiableByteBufferFactory> {
     protected void _serialize(final ByteBuffer _byteBuffer) {
     }
 
-    protected void deserializde() {
+    protected void deserialize() {
         _deserialize();
         byteBuffer.position(startPosition);
     }

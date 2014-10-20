@@ -52,5 +52,11 @@ public class DurableImpl extends WidgetImpl {
     }
 
     protected class _Durable extends _Widget implements Durable {
+        @Override
+        public _Durable resolve(final String _path) throws InvalidDurablePathException {
+            if (_path.length() == 0)
+                return this;
+            throw new InvalidDurablePathException("Unsupported path: " + _path);
+        }
     }
 }

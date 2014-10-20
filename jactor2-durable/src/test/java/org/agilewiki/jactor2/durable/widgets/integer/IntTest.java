@@ -44,6 +44,7 @@ public class IntTest extends TestCase {
             DurableReference durableReference = new DurableReference(intImpl3);
             durableReference.applyAOp(setTrans).call();
             assertEquals(42, dint3.getValue().intValue());
+            System.out.println(setTrans.toString());
         } finally {
             CPlant.close();
         }

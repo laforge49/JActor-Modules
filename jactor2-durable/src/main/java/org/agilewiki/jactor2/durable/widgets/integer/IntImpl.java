@@ -35,16 +35,16 @@ public class IntImpl extends DurableImpl {
     }
 
     @Override
-    public UnmodifiableByteBufferFactory apply(final String _path,
+    public String apply(final String _path,
                                                final String _params,
                                                final UnmodifiableByteBufferFactory _contentFactory)
             throws Exception {
         if (_path.length() != 0)
             throw new InvalidDurablePathException(_path);
         if ("setValue".equals(_params)) {
-            UnmodifiableByteBufferFactory old = createUnmodifiable();
+            int old = value;
             value = _contentFactory.duplicateByteBuffer().getInt();
-            return old;
+            return "" + old + " -> " + value;
         }
         throw new InvalidDurableParamsException(_params);
     }

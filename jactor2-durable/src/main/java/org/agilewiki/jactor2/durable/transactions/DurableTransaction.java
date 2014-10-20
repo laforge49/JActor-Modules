@@ -35,7 +35,13 @@ public class DurableTransaction
 
     @Override
     protected final void update(DurableImpl transmutable) throws Exception {
-        durableChangeManager.apply(path, params, contentFactory);
+        String result = durableChangeManager.apply(path, params, contentFactory);
+        trace.insert(0, "\nRESULT; " + result);
+    }
+
+    @Override
+    public void updateTrace() {
+        trace.insert(0, "\nTRACE: " + path + "  " + params);
     }
 
     public DurableChangeManager getDurableChangeManager() {

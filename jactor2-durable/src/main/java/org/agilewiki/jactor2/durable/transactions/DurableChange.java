@@ -8,16 +8,16 @@ import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactor
 public class DurableChange {
     public final String path;
     public final String params;
-    public final UnmodifiableByteBufferFactory oldContentFactory;
     public final UnmodifiableByteBufferFactory newContentFactory;
+    public final String trace;
 
     public DurableChange(final String _path,
                          final String _params,
-                         final UnmodifiableByteBufferFactory _resultFactory,
-                         final UnmodifiableByteBufferFactory _newContentFactory) {
+                         final UnmodifiableByteBufferFactory _newContentFactory,
+                         final String _trace) {
         path = _path;
         params = _params;
-        oldContentFactory = _resultFactory;
         newContentFactory = _newContentFactory;
+        trace = _trace;
     }
 }

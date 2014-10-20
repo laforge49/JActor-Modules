@@ -20,7 +20,7 @@ public class DurableChangeManager implements AutoCloseable {
         durableImpl = _durableImpl;
     }
 
-    public UnmodifiableByteBufferFactory apply(final String _path,
+    public String apply(final String _path,
                                                final String _params,
                                                final UnmodifiableByteBufferFactory _contentFactory)
             throws Exception {
@@ -28,10 +28,10 @@ public class DurableChangeManager implements AutoCloseable {
             throw new IllegalStateException(
                     "Already closed, the transaction is complete.");
         }
-        UnmodifiableByteBufferFactory resultFactory = durableImpl.apply(_path, _params, _contentFactory);
-        DurableChange durableChange = new DurableChange(_path, _params, resultFactory, _contentFactory);
+        String trace = durableImpl.apply(_path, _params, _contentFactory);
+        DurableChange durableChange = new DurableChange(_path, _params, _contentFactory, trace);
         changes.add(durableChange);
-        return resultFactory;
+        return trace;
     }
 
     public DurableChanges durableChanges() {

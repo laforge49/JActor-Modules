@@ -37,7 +37,7 @@ public class DurableImpl extends WidgetImpl {
         return new _Durable();
     }
 
-    public UnmodifiableByteBufferFactory apply(final String _path,
+    public String apply(final String _path,
                                                final String _params,
                                                final UnmodifiableByteBufferFactory _contentFactory)
             throws Exception {

@@ -15,42 +15,37 @@ public class IntTest extends TestCase {
         new CPlant();
         try {
             CFacility facility = (CFacility) CPlant.getInternalFacility();
-            facility.addWidgetFactorySOp(new IntFactory("int", facility)).call();
-            IntImpl intImpl = (IntImpl) facility.
-                    newWidgetImpl("int", null, null);
+            IntFactory.addFactorySOp(facility).call();
+
+            IntImpl intImpl = new IntImpl(facility, null, null);
             ByteBuffer buffer = intImpl.createUnmodifiable().duplicateByteBuffer();
             assertEquals(4, buffer.limit());
-            assertEquals(0, buffer.getInt());
-            buffer.rewind();
+            assertEquals(0, buffer.duplicate().getInt());
             DurableInt dint = intImpl.asWidget();
-            assertEquals(0, dint.getValue().intValue());
+            assertEquals(Integer.valueOf(0), dint.getValue());
+
             dint.setValue(1);
-            assertEquals(1, dint.getValue().intValue());
+            assertEquals(Integer.valueOf(1), dint.getValue());
             ByteBuffer buffer1 = intImpl.createUnmodifiable().duplicateByteBuffer();
             assertEquals(4, buffer1.limit());
-            assertEquals(1, buffer1.getInt());
-            buffer1.rewind();
-            IntImpl intImpl2 = (IntImpl) facility.newWidgetImpl("int", null, buffer);
-            DurableInt dint2 = intImpl2.asWidget();
-            assertEquals(0, dint2.getValue().intValue());
-            IntImpl intImpl3 = (IntImpl) facility.
-                    newWidgetImpl("int", null, buffer1);
-            DurableInt dint3 = intImpl3.asWidget();
-            assertEquals(1, dint3.getValue().intValue());
+            assertEquals(1, buffer1.duplicate().getInt());
 
-            ByteBuffer bb42 = ByteBuffer.allocate(4);
-            bb42.putInt(42).rewind();
-            DurableTransaction setTrans = new DurableTransaction("", "setValue",
-                    new UnmodifiableByteBufferFactory(bb42));
+            IntImpl intImpl2 = new IntImpl(facility, null, 0);
+            DurableInt dint2 = intImpl2.asWidget();
+            assertEquals(Integer.valueOf(0), dint2.getValue());
+
+            IntImpl intImpl3 = (IntImpl) facility.
+                    newWidgetImpl(IntFactory.FACTORY_NAME, null, buffer1);
+            DurableInt dint3 = intImpl3.asWidget();
+            assertEquals(Integer.valueOf(1), dint3.getValue());
+
+            DurableTransaction setTrans = IntImpl.setValueTransaction("", 42);
             DurableReference durableReference = new DurableReference(intImpl3);
             durableReference.applyAOp(setTrans).call();
-            assertEquals(42, dint3.getValue().intValue());
+            assertEquals(Integer.valueOf(42), dint3.getValue());
             System.out.println(setTrans.toString());
 
-            ByteBuffer bb43 = ByteBuffer.allocate(4);
-            bb43.putInt(43).rewind();
-            DurableTransaction expectTrans = new DurableTransaction("", "expect",
-                    new UnmodifiableByteBufferFactory(bb43));
+            DurableTransaction expectTrans = IntImpl.expectTransaction("", 43);
             try {
                 durableReference.applyAOp(expectTrans).call();
             } catch (InvalidDurableException ide) {

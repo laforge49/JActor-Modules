@@ -1,12 +1,30 @@
 package org.agilewiki.jactor2.durable.widgets.integer;
 
+import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
+import org.agilewiki.jactor2.core.requests.SOp;
+import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
 import org.agilewiki.jactor2.durable.widgets.*;
 
 import java.nio.ByteBuffer;
 
 public class IntImpl extends DurableImpl {
+
+    public static DurableTransaction setValueTransaction(final String _path, final int _value) {
+        ByteBuffer bb = ByteBuffer.allocate(4);
+        bb.putInt(_value).rewind();
+        return new DurableTransaction(_path, "setValue",
+                new UnmodifiableByteBufferFactory(bb));
+    }
+
+    public static DurableTransaction expectTransaction(final String _path, final int _value) {
+        ByteBuffer bb = ByteBuffer.allocate(4);
+        bb.putInt(_value).rewind();
+        return new DurableTransaction(_path, "expect",
+                new UnmodifiableByteBufferFactory(bb));
+    }
+
     protected Integer value = 0;
 
     public IntImpl(final IntFactory _widgetFactory,
@@ -15,6 +33,13 @@ public class IntImpl extends DurableImpl {
         super(_widgetFactory, _parent, _byteBuffer);
         if (byteBuffer != null)
             value = null;
+    }
+
+    public IntImpl(final CFacility _facility,
+                   final DurableImpl _parent,
+                   final Integer _value) {
+        super(IntFactory.getFactory(_facility), _parent, null);
+        value = _value == null ? 0 : _value;
     }
 
     @Override

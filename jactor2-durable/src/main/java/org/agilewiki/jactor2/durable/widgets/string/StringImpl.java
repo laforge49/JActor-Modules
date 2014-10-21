@@ -49,8 +49,6 @@ public class StringImpl extends DurableImpl {
         super(_widgetFactory, _parent, _byteBuffer);
         if (byteBuffer != null) {
             value = null;
-            readLength(_byteBuffer);
-            byteBuffer.position(startPosition);
         } else
             byteLen = 4 + 2 * value.length();
     }
@@ -65,7 +63,7 @@ public class StringImpl extends DurableImpl {
 
     @Override
     protected void readLength(final ByteBuffer _bb) {
-        byteLen = _bb.getInt();
+        byteLen = _bb.getInt() + 4;
     }
 
     @Override

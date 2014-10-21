@@ -38,11 +38,13 @@ public class WidgetImpl implements InternalWidget {
     protected void readLength(final ByteBuffer _bb) {
     }
 
+    @Override
     public int getLength() {
         return 0;
     }
 
-    protected void serialize(final ByteBuffer _byteBuffer) {
+    @Override
+    public void serialize(final ByteBuffer _byteBuffer) {
         byte[] bytes = null;
         if (byteBuffer != null) {
             bytes = new byte[getLength()];
@@ -69,10 +71,12 @@ public class WidgetImpl implements InternalWidget {
     protected void _deserialize() {
     }
 
-    public WidgetFactory getWidgetFactory() {
+    @Override
+    public WidgetFactory getInternalWidgetFactory() {
         return widgetFactory;
     }
 
+    @Override
     public InternalWidget getParent() {
         return parent;
     }
@@ -98,7 +102,7 @@ public class WidgetImpl implements InternalWidget {
 
     @Override
     public Transmutable<UnmodifiableByteBufferFactory> recreate(final UnmodifiableByteBufferFactory _unmodifiable) {
-        return new WidgetImpl(getWidgetFactory(),
+        return new WidgetImpl(getInternalWidgetFactory(),
                 getParent(), _unmodifiable.duplicateByteBuffer());
     }
 

@@ -18,8 +18,8 @@ public class DurableImpl extends WidgetImpl {
     }
 
     @Override
-    public DurableFactory getWidgetFactory() {
-        return (DurableFactory) super.getWidgetFactory();
+    public DurableFactory getInternalWidgetFactory() {
+        return (DurableFactory) super.getInternalWidgetFactory();
     }
 
     @Override
@@ -47,7 +47,7 @@ public class DurableImpl extends WidgetImpl {
     @Override
     public Transmutable<UnmodifiableByteBufferFactory> recreate(
             final UnmodifiableByteBufferFactory _unmodifiable) {
-        return new DurableImpl(getWidgetFactory(),
+        return new DurableImpl(getInternalWidgetFactory(),
                 getParent(), _unmodifiable.duplicateByteBuffer());
     }
 

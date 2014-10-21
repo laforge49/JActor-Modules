@@ -67,8 +67,8 @@ public class StringImpl extends DurableImpl {
     }
 
     @Override
-    public StringFactory getWidgetFactory() {
-        return (StringFactory) super.getWidgetFactory();
+    public StringFactory getInternalWidgetFactory() {
+        return (StringFactory) super.getInternalWidgetFactory();
     }
 
     @Override
@@ -106,7 +106,7 @@ public class StringImpl extends DurableImpl {
     @Override
     public Transmutable<UnmodifiableByteBufferFactory> recreate(
             final UnmodifiableByteBufferFactory _unmodifiable) {
-        return new StringImpl(getWidgetFactory(),
+        return new StringImpl(getInternalWidgetFactory(),
                 getParent(), _unmodifiable.duplicateByteBuffer());
     }
 

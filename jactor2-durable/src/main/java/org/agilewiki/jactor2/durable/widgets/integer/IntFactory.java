@@ -1,7 +1,7 @@
 package org.agilewiki.jactor2.durable.widgets.integer;
 
 import org.agilewiki.jactor2.common.CFacility;
-import org.agilewiki.jactor2.common.widgets.WidgetImpl;
+import org.agilewiki.jactor2.common.widgets.InternalWidget;
 import org.agilewiki.jactor2.core.requests.SOp;
 import org.agilewiki.jactor2.durable.widgets.DurableFactory;
 
@@ -12,11 +12,11 @@ public class IntFactory extends DurableFactory {
     public static final String FACTORY_NAME = "int";
 
     public static SOp<Void> addFactorySOp(final CFacility _facility) {
-        return _facility.addWidgetFactorySOp(new IntFactory(_facility));
+        return _facility.addInternalWidgetFactorySOp(new IntFactory(_facility));
     }
 
     public static IntFactory getFactory(final CFacility _facility) {
-        return (IntFactory) _facility.getWidgetFactory(FACTORY_NAME);
+        return (IntFactory) _facility.getInternalWidgetFactory(FACTORY_NAME);
     }
 
     public IntFactory(CFacility _facility) {
@@ -28,8 +28,8 @@ public class IntFactory extends DurableFactory {
     }
 
     @Override
-    public IntImpl newWidgetImpl(final WidgetImpl _parent,
-                                 final ByteBuffer _byteBuffer)
+    public IntImpl newInternalWidget(final InternalWidget _parent,
+                                     final ByteBuffer _byteBuffer)
             throws Exception {
         return new IntImpl(this, (IntImpl) _parent, _byteBuffer);
     }

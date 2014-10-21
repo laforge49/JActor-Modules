@@ -8,15 +8,15 @@ import java.nio.ByteBuffer;
 /**
  * Implements Widget as a nested class.
  */
-public class WidgetImpl implements Transmutable<UnmodifiableByteBufferFactory> {
+public class WidgetImpl implements InternalWidget {
     private final WidgetFactory widgetFactory;
     private final _Widget widget;
-    private final WidgetImpl parent;
+    private final InternalWidget parent;
     protected ByteBuffer byteBuffer;
     protected int startPosition;
 
     public WidgetImpl(final WidgetFactory _widgetFactory,
-                      final WidgetImpl _parent,
+                      final InternalWidget _parent,
                       final ByteBuffer _byteBuffer) {
         widgetFactory = _widgetFactory;
         parent = _parent;
@@ -73,7 +73,7 @@ public class WidgetImpl implements Transmutable<UnmodifiableByteBufferFactory> {
         return widgetFactory;
     }
 
-    public WidgetImpl getParent() {
+    public InternalWidget getParent() {
         return parent;
     }
 

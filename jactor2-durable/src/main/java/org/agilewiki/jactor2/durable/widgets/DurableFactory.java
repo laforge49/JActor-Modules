@@ -1,6 +1,7 @@
 package org.agilewiki.jactor2.durable.widgets;
 
 import org.agilewiki.jactor2.common.CFacility;
+import org.agilewiki.jactor2.common.widgets.InternalWidget;
 import org.agilewiki.jactor2.common.widgets.WidgetFactory;
 import org.agilewiki.jactor2.common.widgets.WidgetImpl;
 
@@ -12,8 +13,8 @@ public class DurableFactory extends WidgetFactory {
     }
 
     @Override
-    public DurableImpl newWidgetImpl(final WidgetImpl _parent,
-                                     final ByteBuffer _byteBuffer)
+    public DurableImpl newInternalWidget(final InternalWidget _parent,
+                                         final ByteBuffer _byteBuffer)
             throws Exception {
         return new DurableImpl(this, (DurableImpl) _parent, _byteBuffer);
     }

@@ -36,7 +36,7 @@ public class StringTest extends TestCase {
             assertEquals("-", dstr2.getValue());
 
             StringImpl strImpl3 = (StringImpl) facility.
-                    newWidgetImpl(StringFactory.FACTORY_NAME, null, buffer1);
+                    newInternalWidget(StringFactory.FACTORY_NAME, null, buffer1);
             DurableString dstr3 = strImpl3.asWidget();
             assertEquals("1", dstr3.getValue());
 

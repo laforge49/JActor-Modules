@@ -11,9 +11,9 @@ public class DurableTest extends TestCase {
         new CPlant();
         try {
             CFacility facility = (CFacility) CPlant.getInternalFacility();
-            facility.addWidgetFactorySOp(new DurableFactory("durable", facility)).call();
+            facility.addInternalWidgetFactorySOp(new DurableFactory("durable", facility)).call();
             DurableImpl durableImpl = (DurableImpl) facility.
-                    newWidgetImpl("durable", null, null);
+                    newInternalWidget("durable", null, null);
             ByteBuffer buffer = durableImpl.createUnmodifiable().duplicateByteBuffer();
             assertEquals(0, buffer.limit());
         } finally {

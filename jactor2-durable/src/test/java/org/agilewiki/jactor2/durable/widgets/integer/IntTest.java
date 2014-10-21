@@ -34,7 +34,7 @@ public class IntTest extends TestCase {
             assertEquals(Integer.valueOf(0), dint2.getValue());
 
             IntImpl intImpl3 = (IntImpl) facility.
-                    newWidgetImpl(IntFactory.FACTORY_NAME, null, buffer1);
+                    newInternalWidget(IntFactory.FACTORY_NAME, null, buffer1);
             DurableInt dint3 = intImpl3.asWidget();
             assertEquals(Integer.valueOf(1), dint3.getValue());
 

@@ -13,7 +13,6 @@ public class WidgetImpl implements InternalWidget {
     private final _Widget widget;
     private final InternalWidget parent;
     protected ByteBuffer byteBuffer;
-    protected int startPosition;
 
     public WidgetImpl(final WidgetFactory _widgetFactory,
                       final InternalWidget _parent,
@@ -27,12 +26,11 @@ public class WidgetImpl implements InternalWidget {
     protected void initBuffer(final ByteBuffer _byteBuffer) {
         if (_byteBuffer == null)
             return;
-        startPosition = _byteBuffer.position();
-        byteBuffer = _byteBuffer.asReadOnlyBuffer();
+        int startPosition = _byteBuffer.position();
+        byteBuffer = _byteBuffer.asReadOnlyBuffer().slice();
         readLength(_byteBuffer);
-        int endPosition = startPosition + getLength();
-        _byteBuffer.position(endPosition);
-        byteBuffer.limit(endPosition);
+        _byteBuffer.position(startPosition + getLength());
+        byteBuffer.limit(getLength());
     }
 
     protected void readLength(final ByteBuffer _bb) {
@@ -50,10 +48,8 @@ public class WidgetImpl implements InternalWidget {
             bytes = new byte[getLength()];
             byteBuffer.get(bytes);
         }
-        startPosition = _byteBuffer.position();
-        byteBuffer = _byteBuffer.asReadOnlyBuffer();
-        int endPosition = startPosition + getLength();
-        byteBuffer.limit(endPosition);
+        byteBuffer = _byteBuffer.asReadOnlyBuffer().slice();
+        byteBuffer.limit(getLength());
         if (bytes == null)
             _serialize(_byteBuffer);
         else
@@ -65,7 +61,7 @@ public class WidgetImpl implements InternalWidget {
 
     protected void deserialize() {
         _deserialize();
-        byteBuffer.position(startPosition);
+        byteBuffer.rewind();
     }
 
     protected void _deserialize() {

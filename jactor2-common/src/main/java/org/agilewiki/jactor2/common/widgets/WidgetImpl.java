@@ -28,10 +28,14 @@ public class WidgetImpl implements Transmutable<UnmodifiableByteBufferFactory> {
         if (_byteBuffer == null)
             return;
         startPosition = _byteBuffer.position();
-        int endPosition = startPosition + getLength();
         byteBuffer = _byteBuffer.asReadOnlyBuffer();
+        readLength(_byteBuffer);
+        int endPosition = startPosition + getLength();
         _byteBuffer.position(endPosition);
         byteBuffer.limit(endPosition);
+    }
+
+    protected void readLength(final ByteBuffer _bb) {
     }
 
     public int getLength() {
@@ -39,12 +43,19 @@ public class WidgetImpl implements Transmutable<UnmodifiableByteBufferFactory> {
     }
 
     protected void serialize(final ByteBuffer _byteBuffer) {
+        byte[] bytes = null;
+        if (byteBuffer != null) {
+            bytes = new byte[getLength()];
+            byteBuffer.get(bytes);
+        }
         startPosition = _byteBuffer.position();
-        _serialize(_byteBuffer);
-        int endPosition = startPosition + getLength();
         byteBuffer = _byteBuffer.asReadOnlyBuffer();
-        byteBuffer.position(startPosition);
+        int endPosition = startPosition + getLength();
         byteBuffer.limit(endPosition);
+        if (bytes == null)
+            _serialize(_byteBuffer);
+        else
+            _byteBuffer.put(bytes);
     }
 
     protected void _serialize(final ByteBuffer _byteBuffer) {
@@ -77,9 +88,10 @@ public class WidgetImpl implements Transmutable<UnmodifiableByteBufferFactory> {
     @Override
     public UnmodifiableByteBufferFactory createUnmodifiable() {
         if (byteBuffer == null) {
-            byteBuffer = ByteBuffer.allocate(getLength());
-            serialize(byteBuffer);
-            byteBuffer.rewind();
+            ByteBuffer _byteBuffer = ByteBuffer.allocate(getLength());
+            serialize(_byteBuffer);
+            _byteBuffer.rewind();
+            return new UnmodifiableByteBufferFactory(_byteBuffer);
         }
         return new UnmodifiableByteBufferFactory(byteBuffer);
     }

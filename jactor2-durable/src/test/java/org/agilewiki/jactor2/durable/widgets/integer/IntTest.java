@@ -3,7 +3,6 @@ package org.agilewiki.jactor2.durable.widgets.integer;
 import junit.framework.TestCase;
 import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.CPlant;
-import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.durable.transactions.DurableReference;
 import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
 import org.agilewiki.jactor2.durable.widgets.InvalidDurableException;

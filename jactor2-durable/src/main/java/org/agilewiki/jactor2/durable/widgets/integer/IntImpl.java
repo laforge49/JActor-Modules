@@ -3,7 +3,6 @@ package org.agilewiki.jactor2.durable.widgets.integer;
 import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
-import org.agilewiki.jactor2.core.requests.SOp;
 import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
 import org.agilewiki.jactor2.durable.widgets.*;
 
@@ -31,8 +30,10 @@ public class IntImpl extends DurableImpl {
                    final DurableImpl _parent,
                    final ByteBuffer _byteBuffer) {
         super(_widgetFactory, _parent, _byteBuffer);
-        if (byteBuffer != null)
+        if (byteBuffer != null) {
             value = null;
+
+        }
     }
 
     public IntImpl(final CFacility _facility,
@@ -103,7 +104,7 @@ public class IntImpl extends DurableImpl {
 
     protected class _Int extends _Durable implements DurableInt {
         @Override
-        public Integer getValue() throws Exception {
+        public Integer getValue() {
             if (value == null)
                 deserialize();
             return value;

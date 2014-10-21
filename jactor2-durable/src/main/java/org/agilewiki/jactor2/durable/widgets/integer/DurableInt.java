@@ -14,7 +14,7 @@ public interface DurableInt extends Durable {
      *
      * @return The value.
      */
-    Integer getValue() throws Exception;
+    Integer getValue();
 
     /**
      * Assigns a value.

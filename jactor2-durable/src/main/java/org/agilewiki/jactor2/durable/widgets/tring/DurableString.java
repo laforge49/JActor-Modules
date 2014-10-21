@@ -1,4 +1,4 @@
-package org.agilewiki.jactor2.durable.widgets.String;
+package org.agilewiki.jactor2.durable.widgets.tring;
 
 import org.agilewiki.jactor2.durable.widgets.Durable;
 import org.agilewiki.jactor2.durable.widgets.InvalidDurableContentException;

@@ -233,7 +233,7 @@ public class MPlantImpl extends PlantMtImpl {
                                         "a plant can not have an activator property");
                             if (newValue != null && !(newValue instanceof String))
                                 throw new IllegalArgumentException(
-                                        "the activator property value must be a String");
+                                        "the activator property value must be a string");
                         }
                     }
                 }

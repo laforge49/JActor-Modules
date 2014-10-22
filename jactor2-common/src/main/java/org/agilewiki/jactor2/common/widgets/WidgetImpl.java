@@ -125,5 +125,11 @@ public class WidgetImpl implements InternalWidget {
     }
 
     public class _Widget implements Widget {
+        @Override
+        public _Widget resolve(final String _path) throws InvalidWidgetPathException {
+            if (_path.length() == 0)
+                return this;
+            throw new InvalidWidgetPathException("Unsupported path: " + _path);
+        }
     }
 }

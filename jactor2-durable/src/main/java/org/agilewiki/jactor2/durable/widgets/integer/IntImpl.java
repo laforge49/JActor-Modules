@@ -2,6 +2,7 @@ package org.agilewiki.jactor2.durable.widgets.integer;
 
 import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.widgets.InternalWidget;
+import org.agilewiki.jactor2.common.widgets.InvalidWidgetPathException;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
 import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
@@ -65,7 +66,7 @@ public class IntImpl extends DurableImpl {
                         final UnmodifiableByteBufferFactory _contentFactory)
             throws Exception {
         if (_path.length() != 0)
-            throw new InvalidDurablePathException(_path);
+            throw new InvalidWidgetPathException(_path);
         if ("setValue".equals(_params)) {
             int old = value;
             int newValue = _contentFactory.duplicateByteBuffer().getInt();

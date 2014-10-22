@@ -2,6 +2,7 @@ package org.agilewiki.jactor2.durable.widgets;
 
 import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.widgets.InternalWidget;
+import org.agilewiki.jactor2.common.widgets.InvalidWidgetPathException;
 import org.agilewiki.jactor2.common.widgets.WidgetImpl;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
@@ -30,11 +31,6 @@ public class DurableImpl extends WidgetImpl {
     }
 
     @Override
-    public DurableImpl getParent() {
-        return (DurableImpl) super.getParent();
-    }
-
-    @Override
     public _Durable asWidget() {
         return (_Durable) super.asWidget();
     }
@@ -59,11 +55,5 @@ public class DurableImpl extends WidgetImpl {
     }
 
     public class _Durable extends _Widget implements Durable {
-        @Override
-        public _Durable resolve(final String _path) throws InvalidDurablePathException {
-            if (_path.length() == 0)
-                return this;
-            throw new InvalidDurablePathException("Unsupported path: " + _path);
-        }
     }
 }

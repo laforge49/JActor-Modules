@@ -7,5 +7,4 @@ import org.agilewiki.jactor2.common.widgets.Widget;
  */
 public interface Durable
         extends Widget {
-    public Durable resolve(String _path) throws InvalidDurablePathException;
 }

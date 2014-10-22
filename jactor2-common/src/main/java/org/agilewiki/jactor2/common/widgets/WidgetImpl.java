@@ -86,7 +86,11 @@ public class WidgetImpl implements InternalWidget {
         return widgetFactory;
     }
 
-    @Override
+    /**
+     * Returns the container widget.
+     *
+     * @return The container widget, or null.
+     */
     public InternalWidget getParent() {
         return parent;
     }

@@ -38,13 +38,6 @@ public interface InternalWidget extends Transmutable<UnmodifiableByteBufferFacto
     InternalWidgetFactory getInternalWidgetFactory();
 
     /**
-     * Returns the container widget.
-     *
-     * @return The container widget, or null.
-     */
-    InternalWidget getParent();
-
-    /**
      * Clear the parent reference.
      */
     void clearParent();

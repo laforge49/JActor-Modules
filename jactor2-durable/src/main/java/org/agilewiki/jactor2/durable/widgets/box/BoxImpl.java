@@ -79,6 +79,12 @@ public class BoxImpl extends DurableImpl {
         content.serialize(_byteBuffer);
     }
 
+    @Override
+    public void childChange(final int _delta) {
+        byteLen += _delta;
+        notifyParent(_delta);
+    }
+
     public class _Box extends _Durable implements DurableBox {
 
         @Override

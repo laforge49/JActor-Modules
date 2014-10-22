@@ -109,7 +109,7 @@ public class BoxImpl extends DurableImpl {
             factoryKey.asWidget().setValue(_internalWidget.getInternalWidgetFactory().getFactoryKey());
             int oldContentLength = content.getBufferSize();
             content.clearParent();
-            content = (InternalWidget) _internalWidget.recreate(_internalWidget.createUnmodifiable());
+            content = (InternalWidget) _internalWidget.deepCopy();
             byteBuffer = null;
             int delta = content.getBufferSize() - oldContentLength;
             byteLen += delta;

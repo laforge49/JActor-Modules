@@ -48,4 +48,11 @@ public interface InternalWidget extends Transmutable<UnmodifiableByteBufferFacto
      * Clear the parent reference.
      */
     void clearParent();
+
+    /**
+     * Create a deep copy.
+     *
+     * @return The copy.
+     */
+    WidgetImpl deepCopy();
 }

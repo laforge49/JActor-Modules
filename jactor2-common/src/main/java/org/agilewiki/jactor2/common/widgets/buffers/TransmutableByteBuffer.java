@@ -28,7 +28,7 @@ public class TransmutableByteBuffer implements Transmutable<UnmodifiableByteBuff
     }
 
     @Override
-    public Transmutable recreate(UnmodifiableByteBufferFactory unmodifiable) {
+    public TransmutableByteBuffer recreate(UnmodifiableByteBufferFactory unmodifiable) {
         return new TransmutableByteBuffer(unmodifiable.duplicateByteBuffer());
     }
 }

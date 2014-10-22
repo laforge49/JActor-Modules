@@ -6,6 +6,7 @@ import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactor
 import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
 import org.agilewiki.jactor2.durable.widgets.DurableFactory;
 import org.agilewiki.jactor2.durable.widgets.DurableImpl;
+import org.agilewiki.jactor2.durable.widgets.InvalidDurableContentException;
 import org.agilewiki.jactor2.durable.widgets.UnexpectedValueException;
 import org.agilewiki.jactor2.durable.widgets.string.StringFactory;
 import org.agilewiki.jactor2.durable.widgets.string.StringImpl;
@@ -89,22 +90,30 @@ public class BoxImpl extends DurableImpl {
 
         @Override
         public String boxedFactoryKey() {
-            return null;
+            return factoryKey.asWidget().getValue();
         }
 
         @Override
-        public void expectedFactoryKey(String _expected) throws UnexpectedValueException {
-
+        public void expectedFactoryKey(String _value) throws UnexpectedValueException {
+            if (!_value.equals(factoryKey.asWidget().getValue()))
+                throw new UnexpectedValueException("expected " + _value + ", not " + factoryKey.asWidget().getValue());
         }
 
         @Override
         public InternalWidget getBoxedInternalWidget() {
-            return null;
+            return content;
         }
 
         @Override
-        public void putCopy(InternalWidget _internalWidget) {
-
+        public void putCopy(InternalWidget _internalWidget) throws InvalidDurableContentException {
+            factoryKey.asWidget().setValue(_internalWidget.getInternalWidgetFactory().getFactoryKey());
+            int oldContentLength = content.getBufferSize();
+            content.clearParent();
+            content = (InternalWidget) _internalWidget.recreate(_internalWidget.createUnmodifiable());
+            byteBuffer = null;
+            int delta = content.getBufferSize() - oldContentLength;
+            byteLen += delta;
+            notifyParent(delta);
         }
     }
 }

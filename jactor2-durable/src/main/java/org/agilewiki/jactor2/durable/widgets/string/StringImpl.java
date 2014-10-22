@@ -154,7 +154,7 @@ public class StringImpl extends DurableImpl {
         public void expect(String _value) throws UnexpectedValueException {
             if (value == null)
                 deserialize();
-            if (value != _value)
+            if (!value.equals(_value))
                 throw new UnexpectedValueException("expected " + _value + ", not " + value);
         }
     }

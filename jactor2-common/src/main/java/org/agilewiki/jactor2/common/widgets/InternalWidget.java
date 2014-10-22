@@ -15,6 +15,13 @@ public interface InternalWidget extends Transmutable<UnmodifiableByteBufferFacto
     int getBufferSize();
 
     /**
+     * Signals the change of a child.
+     *
+     * @param _delta    The difference in size of the serialized data.
+     */
+    void childChange(int _delta);
+
+    /**
      * Serialize to a ByteBuffer, starting at the current position.
      * Once written, the content should not change (append only), as a view
      * of the content is retained.

@@ -116,6 +116,7 @@ public class IntImpl extends DurableImpl {
                 throw new InvalidDurableContentException("null is not valid");
             value = _value;
             byteBuffer = null;
+            notifyParent(0);
         }
 
         @Override

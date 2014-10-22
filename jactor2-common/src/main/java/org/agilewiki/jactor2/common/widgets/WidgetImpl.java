@@ -42,6 +42,16 @@ public class WidgetImpl implements InternalWidget {
     }
 
     @Override
+    public void childChange(int _delta) {
+        throw new UnsupportedOperationException("not a container");
+    }
+
+    protected void notifyParent(int _delta) {
+        if (parent != null)
+            parent.childChange(_delta);
+    }
+
+    @Override
     public void serialize(final ByteBuffer _byteBuffer) {
         byte[] bytes = null;
         if (byteBuffer != null) {

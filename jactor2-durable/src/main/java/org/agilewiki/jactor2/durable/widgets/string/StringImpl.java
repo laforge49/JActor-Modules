@@ -143,8 +143,10 @@ public class StringImpl extends DurableImpl {
             if (_value == null)
                 throw new InvalidDurableContentException("null is not valid");
             value = _value;
+            int oldLen = byteLen;
             byteLen = 4 + 2 * value.length();
             byteBuffer = null;
+            notifyParent(byteLen - oldLen);
         }
 
         @Override

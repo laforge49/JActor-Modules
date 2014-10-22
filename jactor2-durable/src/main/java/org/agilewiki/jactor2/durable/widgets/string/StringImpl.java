@@ -2,7 +2,7 @@ package org.agilewiki.jactor2.durable.widgets.string;
 
 import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.widgets.InternalWidget;
-import org.agilewiki.jactor2.common.widgets.InvalidWidgetPathException;
+import org.agilewiki.jactor2.common.widgets.InvalidWidgetParamsException;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
 import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
@@ -99,7 +99,7 @@ public class StringImpl extends DurableImpl {
             asWidget().expect(newValue);
             return null;
         }
-        throw new InvalidDurableParamsException(_params);
+        throw new InvalidWidgetParamsException(_params);
     }
 
     @Override

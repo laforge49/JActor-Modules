@@ -125,12 +125,24 @@ public class WidgetImpl implements InternalWidget {
         return (WidgetImpl) recreate(createUnmodifiable());
     }
 
+    public String apply(final String _params,
+                        final UnmodifiableByteBufferFactory _contentFactory)
+            throws Exception {
+        throw new InvalidWidgetParamsException(_params);
+    }
+
     public class _Widget implements Widget {
         @Override
         public _Widget resolve(final String _path) throws InvalidWidgetPathException {
             if (_path.length() == 0)
                 return this;
             throw new InvalidWidgetPathException("Unsupported path: " + _path);
+        }
+
+        public String apply(final String _params,
+                            final UnmodifiableByteBufferFactory _contentFactory)
+                throws Exception {
+            return WidgetImpl.this.apply(_params, _contentFactory);
         }
     }
 }

@@ -84,12 +84,9 @@ public class StringImpl extends DurableImpl {
     }
 
     @Override
-    public String apply(final String _path,
-                        final String _params,
+    public String apply(final String _params,
                         final UnmodifiableByteBufferFactory _contentFactory)
             throws Exception {
-        if (_path.length() != 0)
-            throw new InvalidWidgetPathException(_path);
         if ("setValue".equals(_params)) {
             String old = value;
             String newValue = readString(_contentFactory.duplicateByteBuffer());

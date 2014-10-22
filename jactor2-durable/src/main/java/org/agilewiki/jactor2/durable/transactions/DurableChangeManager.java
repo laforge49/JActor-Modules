@@ -28,7 +28,8 @@ public class DurableChangeManager implements AutoCloseable {
             throw new IllegalStateException(
                     "Already closed, the transaction is complete.");
         }
-        String trace = durableImpl.apply(_path, _params, _contentFactory);
+        DurableImpl._Durable did = (DurableImpl._Durable) durableImpl.asWidget().resolve(_path);
+        String trace = did.apply(_params, _contentFactory);
         DurableChange durableChange = new DurableChange(_path, _params, _contentFactory, trace);
         changes.add(durableChange);
         return trace;

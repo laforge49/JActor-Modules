@@ -40,8 +40,7 @@ public class DurableImpl extends WidgetImpl {
         return new _Durable();
     }
 
-    public String apply(final String _path,
-                        final String _params,
+    public String apply(final String _params,
                         final UnmodifiableByteBufferFactory _contentFactory)
             throws Exception {
         throw new InvalidDurableParamsException(_params);
@@ -55,5 +54,10 @@ public class DurableImpl extends WidgetImpl {
     }
 
     public class _Durable extends _Widget implements Durable {
+        public String apply(final String _params,
+                            final UnmodifiableByteBufferFactory _contentFactory)
+                throws Exception {
+            return DurableImpl.this.apply(_params, _contentFactory);
+        }
     }
 }

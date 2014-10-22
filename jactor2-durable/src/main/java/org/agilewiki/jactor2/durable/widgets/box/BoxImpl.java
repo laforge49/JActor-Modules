@@ -56,8 +56,7 @@ public class BoxImpl extends DurableImpl {
     }
 
     @Override
-    public String apply(final String _path,
-                        final String _params,
+    public String apply(final String _params,
                         final UnmodifiableByteBufferFactory _contentFactory)
             throws Exception {
         return null;

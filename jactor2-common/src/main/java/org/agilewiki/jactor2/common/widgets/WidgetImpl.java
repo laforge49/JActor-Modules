@@ -95,6 +95,7 @@ public class WidgetImpl implements InternalWidget {
         return parent;
     }
 
+    @Override
     public _Widget asWidget() {
         return widget;
     }

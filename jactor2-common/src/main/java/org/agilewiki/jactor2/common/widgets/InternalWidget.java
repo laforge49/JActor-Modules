@@ -8,6 +8,13 @@ import java.nio.ByteBuffer;
 public interface InternalWidget extends Transmutable<UnmodifiableByteBufferFactory> {
 
     /**
+     * Returns the Widget wrapped by InternalWidget.
+     *
+     * @return The Widget.
+     */
+    WidgetImpl._Widget asWidget();
+
+    /**
      * Returns the size of the serialized data.
      *
      * @return The number of bytes.

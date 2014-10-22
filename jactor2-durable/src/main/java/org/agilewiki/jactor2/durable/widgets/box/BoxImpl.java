@@ -2,6 +2,7 @@ package org.agilewiki.jactor2.durable.widgets.box;
 
 import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.widgets.InternalWidget;
+import org.agilewiki.jactor2.common.widgets.InvalidWidgetPathException;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
 import org.agilewiki.jactor2.durable.widgets.DurableFactory;
@@ -87,6 +88,18 @@ public class BoxImpl extends DurableImpl {
     }
 
     public class _Box extends _Durable implements DurableBox {
+        @Override
+        public _Widget resolve(final String _path) throws InvalidWidgetPathException {
+            if (_path.length() == 0)
+                return this;
+            if ("factoryKey".equals(_path))
+                return factoryKey.asWidget();
+            if ("content".equals(_path))
+                return content.asWidget();
+            if (_path.startsWith("content/"))
+                return content.asWidget().resolve(_path.substring(8));
+            throw new InvalidWidgetPathException("Unsupported path: " + _path);
+        }
 
         @Override
         public String boxedFactoryKey() {

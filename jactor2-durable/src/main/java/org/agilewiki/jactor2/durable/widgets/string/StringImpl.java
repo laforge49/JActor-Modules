@@ -55,7 +55,7 @@ public class StringImpl extends DurableImpl {
     }
 
     public StringImpl(final CFacility _facility,
-                      final DurableImpl _parent,
+                      final InternalWidget _parent,
                       final String _value) {
         super(StringFactory.getFactory(_facility), _parent, null);
         value = _value == null ? "" : _value;
@@ -126,9 +126,9 @@ public class StringImpl extends DurableImpl {
         value = readString(byteBuffer);
     }
 
-    protected class _String extends _Durable implements DurableString {
+    public class _String extends _Durable implements DurableString {
         @Override
-        public String getValue() throws Exception {
+        public String getValue() {
             if (value == null)
                 deserialize();
             return value;

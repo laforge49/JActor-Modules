@@ -3,7 +3,6 @@ package org.agilewiki.jactor2.durable.widgets;
 import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.widgets.InternalWidget;
 import org.agilewiki.jactor2.common.widgets.WidgetFactory;
-import org.agilewiki.jactor2.common.widgets.WidgetImpl;
 import org.agilewiki.jactor2.core.requests.SOp;
 
 import java.nio.ByteBuffer;
@@ -30,8 +29,7 @@ public class DurableFactory extends WidgetFactory {
 
     @Override
     public DurableImpl newInternalWidget(final InternalWidget _parent,
-                                         final ByteBuffer _byteBuffer)
-            throws Exception {
+                                         final ByteBuffer _byteBuffer) {
         return new DurableImpl(this, (DurableImpl) _parent, _byteBuffer);
     }
 }

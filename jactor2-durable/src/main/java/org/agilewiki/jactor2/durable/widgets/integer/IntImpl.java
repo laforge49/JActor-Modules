@@ -38,7 +38,7 @@ public class IntImpl extends DurableImpl {
     }
 
     public IntImpl(final CFacility _facility,
-                   final DurableImpl _parent,
+                   final InternalWidget _parent,
                    final Integer _value) {
         super(IntFactory.getFactory(_facility), _parent, null);
         value = _value == null ? 0 : _value;
@@ -103,7 +103,7 @@ public class IntImpl extends DurableImpl {
         value = byteBuffer.getInt();
     }
 
-    protected class _Int extends _Durable implements DurableInt {
+    public class _Int extends _Durable implements DurableInt {
         @Override
         public Integer getValue() {
             if (value == null)

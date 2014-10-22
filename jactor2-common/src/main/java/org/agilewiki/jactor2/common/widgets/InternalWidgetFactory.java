@@ -32,6 +32,5 @@ public abstract class InternalWidgetFactory {
     }
 
     public abstract InternalWidget newInternalWidget(final InternalWidget _parent,
-                                                     ByteBuffer _byteBuffer)
-            throws Exception;
+                                                     ByteBuffer _byteBuffer);
 }

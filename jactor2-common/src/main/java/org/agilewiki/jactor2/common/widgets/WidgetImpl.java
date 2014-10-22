@@ -116,6 +116,6 @@ public class WidgetImpl implements InternalWidget {
                 getParent(), _unmodifiable.duplicateByteBuffer());
     }
 
-    protected class _Widget implements Widget {
+    public class _Widget implements Widget {
     }
 }

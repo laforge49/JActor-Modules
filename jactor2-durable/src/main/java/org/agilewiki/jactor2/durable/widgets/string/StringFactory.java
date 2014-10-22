@@ -29,8 +29,7 @@ public class StringFactory extends DurableFactory {
 
     @Override
     public StringImpl newInternalWidget(final InternalWidget _parent,
-                                        final ByteBuffer _byteBuffer)
-            throws Exception {
+                                        final ByteBuffer _byteBuffer) {
         return new StringImpl(this, (StringImpl) _parent, _byteBuffer);
     }
 }

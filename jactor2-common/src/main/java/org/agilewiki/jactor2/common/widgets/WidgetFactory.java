@@ -11,6 +11,5 @@ public abstract class WidgetFactory extends InternalWidgetFactory {
 
     @Override
     public abstract WidgetImpl newInternalWidget(final InternalWidget _parent,
-                                                 ByteBuffer _byteBuffer)
-            throws Exception;
+                                                 ByteBuffer _byteBuffer);
 }

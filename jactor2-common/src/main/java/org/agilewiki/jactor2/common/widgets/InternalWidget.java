@@ -17,7 +17,7 @@ public interface InternalWidget extends Transmutable<UnmodifiableByteBufferFacto
     /**
      * Signals the change of a child.
      *
-     * @param _delta    The difference in size of the serialized data.
+     * @param _delta The difference in size of the serialized data.
      */
     void childChange(int _delta);
 
@@ -26,7 +26,7 @@ public interface InternalWidget extends Transmutable<UnmodifiableByteBufferFacto
      * Once written, the content should not change (append only), as a view
      * of the content is retained.
      *
-     * @param _byteBuffer    A ByteBuffer to be updated.
+     * @param _byteBuffer A ByteBuffer to be updated.
      */
     void serialize(final ByteBuffer _byteBuffer);
 
@@ -43,4 +43,9 @@ public interface InternalWidget extends Transmutable<UnmodifiableByteBufferFacto
      * @return The container widget, or null.
      */
     InternalWidget getParent();
+
+    /**
+     * Clear the parent reference.
+     */
+    void clearParent();
 }

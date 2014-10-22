@@ -1,5 +1,6 @@
 package org.agilewiki.jactor2.durable.widgets;
 
+import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.widgets.InternalWidget;
 import org.agilewiki.jactor2.common.widgets.WidgetImpl;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
@@ -16,6 +17,11 @@ public class DurableImpl extends WidgetImpl {
                        final InternalWidget _parent,
                        final ByteBuffer _byteBuffer) {
         super(_widgetFactory, _parent, _byteBuffer);
+    }
+
+    public DurableImpl(final CFacility _facility,
+                       final InternalWidget _parent) {
+        super(DurableFactory.getFactory(_facility), _parent, null);
     }
 
     @Override
@@ -52,7 +58,7 @@ public class DurableImpl extends WidgetImpl {
                 getParent(), _unmodifiable.duplicateByteBuffer());
     }
 
-    protected class _Durable extends _Widget implements Durable {
+    public class _Durable extends _Widget implements Durable {
         @Override
         public _Durable resolve(final String _path) throws InvalidDurablePathException {
             if (_path.length() == 0)

@@ -14,7 +14,7 @@ public interface DurableBox {
     /**
      * Asserts the factory key.
      *
-     * @param _expected    The expected factory key or the empty string.
+     * @param _expected The expected factory key or the empty string.
      */
     void expectedFactoryKey(String _expected) throws UnexpectedValueException;
 
@@ -23,12 +23,12 @@ public interface DurableBox {
      *
      * @return The contents of the box.
      */
-    InternalWidget boxedInternalWidget();
+    InternalWidget getBoxedInternalWidget();
 
     /**
      * Makes a deep copy of a widget and puts that copy in the box.
      *
-     * @param _internalWidget    The widget to be copied.
+     * @param _internalWidget The widget to be copied.
      */
     void putCopy(InternalWidget _internalWidget);
 }

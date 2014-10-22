@@ -29,8 +29,7 @@ public class BoxFactory extends DurableFactory {
 
     @Override
     public BoxImpl newInternalWidget(final InternalWidget _parent,
-                                     final ByteBuffer _byteBuffer)
-            throws Exception {
+                                     final ByteBuffer _byteBuffer) {
         return new BoxImpl(this, (BoxImpl) _parent, _byteBuffer);
     }
 }

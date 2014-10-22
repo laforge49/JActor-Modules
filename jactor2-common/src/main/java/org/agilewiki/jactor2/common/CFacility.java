@@ -1,8 +1,8 @@
 package org.agilewiki.jactor2.common;
 
 import org.agilewiki.jactor2.common.services.ClassLoaderService;
-import org.agilewiki.jactor2.common.widgets.InternalWidgetFactory;
 import org.agilewiki.jactor2.common.widgets.InternalWidget;
+import org.agilewiki.jactor2.common.widgets.InternalWidgetFactory;
 import org.agilewiki.jactor2.core.blades.NamedBlade;
 import org.agilewiki.jactor2.core.blades.transmutable.TransmutableSortedMap;
 import org.agilewiki.jactor2.core.reactors.Facility;
@@ -67,7 +67,7 @@ public class CFacility extends Facility {
 
     public InternalWidget newInternalWidget(final String _factoryKey,
                                             final InternalWidget _parentWidget,
-                                            final ByteBuffer _byteBufffer) throws Exception {
+                                            final ByteBuffer _byteBufffer) {
         return ((InternalWidgetFactory) getInternalWidgetFactory(_factoryKey)).
                 newInternalWidget(_parentWidget, _byteBufffer);
     }

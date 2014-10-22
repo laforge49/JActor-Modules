@@ -88,7 +88,7 @@ public class IntImpl extends DurableImpl {
     }
 
     @Override
-    public int getLength() {
+    public int getBufferSize() {
         return 4;
     }
 

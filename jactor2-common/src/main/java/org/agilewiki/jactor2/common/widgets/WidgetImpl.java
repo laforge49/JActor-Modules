@@ -29,15 +29,15 @@ public class WidgetImpl implements InternalWidget {
         int startPosition = _byteBuffer.position();
         byteBuffer = _byteBuffer.asReadOnlyBuffer().slice();
         readLength(_byteBuffer);
-        _byteBuffer.position(startPosition + getLength());
-        byteBuffer.limit(getLength());
+        _byteBuffer.position(startPosition + getBufferSize());
+        byteBuffer.limit(getBufferSize());
     }
 
     protected void readLength(final ByteBuffer _bb) {
     }
 
     @Override
-    public int getLength() {
+    public int getBufferSize() {
         return 0;
     }
 
@@ -45,11 +45,11 @@ public class WidgetImpl implements InternalWidget {
     public void serialize(final ByteBuffer _byteBuffer) {
         byte[] bytes = null;
         if (byteBuffer != null) {
-            bytes = new byte[getLength()];
+            bytes = new byte[getBufferSize()];
             byteBuffer.get(bytes);
         }
         byteBuffer = _byteBuffer.asReadOnlyBuffer().slice();
-        byteBuffer.limit(getLength());
+        byteBuffer.limit(getBufferSize());
         if (bytes == null)
             _serialize(_byteBuffer);
         else
@@ -88,7 +88,7 @@ public class WidgetImpl implements InternalWidget {
     @Override
     public UnmodifiableByteBufferFactory createUnmodifiable() {
         if (byteBuffer == null) {
-            ByteBuffer _byteBuffer = ByteBuffer.allocate(getLength());
+            ByteBuffer _byteBuffer = ByteBuffer.allocate(getBufferSize());
             serialize(_byteBuffer);
             _byteBuffer.rewind();
             return new UnmodifiableByteBufferFactory(_byteBuffer);

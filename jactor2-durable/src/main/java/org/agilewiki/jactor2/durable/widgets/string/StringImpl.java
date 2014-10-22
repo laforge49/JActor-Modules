@@ -111,7 +111,7 @@ public class StringImpl extends DurableImpl {
     }
 
     @Override
-    public int getLength() {
+    public int getBufferSize() {
         return byteLen;
     }
 

@@ -6,8 +6,34 @@ import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
 import java.nio.ByteBuffer;
 
 public interface InternalWidget extends Transmutable<UnmodifiableByteBufferFactory> {
-    int getLength();
+
+    /**
+     * Returns the size of the serialized data.
+     *
+     * @return The number of bytes.
+     */
+    int getBufferSize();
+
+    /**
+     * Serialize to a ByteBuffer, starting at the current position.
+     * Once written, the content should not change (append only), as a view
+     * of the content is retained.
+     *
+     * @param _byteBuffer    A ByteBuffer to be updated.
+     */
     void serialize(final ByteBuffer _byteBuffer);
+
+    /**
+     * Returns the factory that created the widget.
+     *
+     * @return The factory.
+     */
     InternalWidgetFactory getInternalWidgetFactory();
+
+    /**
+     * Returns the container widget.
+     *
+     * @return The container widget, or null.
+     */
     InternalWidget getParent();
 }

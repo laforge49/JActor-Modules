@@ -11,7 +11,7 @@ import java.nio.ByteBuffer;
 public class WidgetImpl implements InternalWidget {
     private final WidgetFactory widgetFactory;
     private final _Widget widget;
-    private final InternalWidget parent;
+    private InternalWidget parent;
     protected ByteBuffer byteBuffer;
 
     public WidgetImpl(final WidgetFactory _widgetFactory,
@@ -49,6 +49,10 @@ public class WidgetImpl implements InternalWidget {
     protected void notifyParent(int _delta) {
         if (parent != null)
             parent.childChange(_delta);
+    }
+
+    public void clearParent() {
+        parent = null;
     }
 
     @Override

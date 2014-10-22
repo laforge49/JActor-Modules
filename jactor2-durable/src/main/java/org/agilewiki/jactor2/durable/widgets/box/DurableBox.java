@@ -7,7 +7,7 @@ public interface DurableBox {
     /**
      * Returns the factory key of the widget held by the box.
      *
-     * @return The factory key, or the empty string.
+     * @return The factory key.
      */
     String boxedFactoryKey();
 
@@ -21,21 +21,9 @@ public interface DurableBox {
     /**
      * Returns the contents of the box.
      *
-     * @return The contents of the box, or null.
+     * @return The contents of the box.
      */
     InternalWidget boxedInternalWidget();
-
-    /**
-     * Empties the box.
-     */
-    void empty();
-
-    /**
-     * Returns true if the box is empty.
-     *
-     * @return True if the box is empty.
-     */
-    boolean isEmpty();
 
     /**
      * Makes a deep copy of a widget and puts that copy in the box.

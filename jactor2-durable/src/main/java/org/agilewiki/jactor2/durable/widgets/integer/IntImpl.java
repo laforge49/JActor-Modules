@@ -1,6 +1,7 @@
 package org.agilewiki.jactor2.durable.widgets.integer;
 
 import org.agilewiki.jactor2.common.CFacility;
+import org.agilewiki.jactor2.common.widgets.InternalWidget;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
 import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
@@ -27,7 +28,7 @@ public class IntImpl extends DurableImpl {
     protected Integer value = 0;
 
     public IntImpl(final IntFactory _widgetFactory,
-                   final DurableImpl _parent,
+                   final InternalWidget _parent,
                    final ByteBuffer _byteBuffer) {
         super(_widgetFactory, _parent, _byteBuffer);
         if (byteBuffer != null) {

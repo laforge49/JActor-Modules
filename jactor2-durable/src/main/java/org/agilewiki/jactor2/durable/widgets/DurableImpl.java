@@ -1,5 +1,6 @@
 package org.agilewiki.jactor2.durable.widgets;
 
+import org.agilewiki.jactor2.common.widgets.InternalWidget;
 import org.agilewiki.jactor2.common.widgets.WidgetImpl;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
@@ -12,7 +13,7 @@ import java.nio.ByteBuffer;
 public class DurableImpl extends WidgetImpl {
 
     public DurableImpl(final DurableFactory _widgetFactory,
-                       final DurableImpl _parent,
+                       final InternalWidget _parent,
                        final ByteBuffer _byteBuffer) {
         super(_widgetFactory, _parent, _byteBuffer);
     }

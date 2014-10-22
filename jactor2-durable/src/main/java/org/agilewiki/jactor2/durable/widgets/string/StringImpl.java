@@ -1,6 +1,7 @@
 package org.agilewiki.jactor2.durable.widgets.string;
 
 import org.agilewiki.jactor2.common.CFacility;
+import org.agilewiki.jactor2.common.widgets.InternalWidget;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
 import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
@@ -45,7 +46,7 @@ public class StringImpl extends DurableImpl {
 
     protected int byteLen;
 
-    public StringImpl(DurableFactory _widgetFactory, DurableImpl _parent, ByteBuffer _byteBuffer) {
+    public StringImpl(DurableFactory _widgetFactory, InternalWidget _parent, ByteBuffer _byteBuffer) {
         super(_widgetFactory, _parent, _byteBuffer);
         if (byteBuffer != null) {
             value = null;

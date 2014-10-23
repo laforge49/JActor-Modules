@@ -24,6 +24,7 @@ public class DurableChangeManager implements AutoCloseable {
 
     public String apply(final String _path,
                         final String _params,
+                        final String _contentType,
                         final UnmodifiableByteBufferFactory _contentFactory)
             throws Exception {
         if (closed) {
@@ -33,8 +34,8 @@ public class DurableChangeManager implements AutoCloseable {
         Widget widget = internalWidget.asWidget().resolve(_path);
         if (widget == null)
             throw new InvalidWidgetPathException(_path);
-        String trace = widget.apply(_params, _contentFactory);
-        DurableChange durableChange = new DurableChange(_path, _params, _contentFactory, trace);
+        String trace = widget.apply(_params, _contentType, _contentFactory);
+        DurableChange durableChange = new DurableChange(_path, _params, _contentType, _contentFactory, trace);
         changes.add(durableChange);
         return trace;
     }

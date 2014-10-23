@@ -119,7 +119,7 @@ public class BoxImpl extends WidgetImpl {
         }
 
         @Override
-        public String apply(final String _params,
+        public String apply(final String _params, final String _contentType,
                             final UnmodifiableByteBufferFactory _contentFactory)
                 throws WidgetException {
             if ("expectedFactoryKey".equals(_params)) {

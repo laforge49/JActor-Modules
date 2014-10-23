@@ -141,7 +141,7 @@ public class WidgetImpl implements InternalWidget {
         }
 
         @Override
-        public String apply(final String _params,
+        public String apply(final String _params, final String _contentType,
                             final UnmodifiableByteBufferFactory _contentFactory)
                 throws WidgetException {
             throw new InvalidWidgetParamsException(_params);

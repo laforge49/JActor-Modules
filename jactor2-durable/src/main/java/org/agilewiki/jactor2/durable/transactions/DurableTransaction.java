@@ -13,29 +13,34 @@ public class DurableTransaction
     protected DurableChangeManager durableChangeManager;
     protected final String path;
     protected final String params;
+    protected final String contentType;
     protected final UnmodifiableByteBufferFactory contentFactory;
 
     public DurableTransaction(final String _path,
                               final String _params,
+                              final String _contentType,
                               final UnmodifiableByteBufferFactory _contentFactory) {
         path = _path;
         params = _params;
+        contentType = _contentType;
         contentFactory = _contentFactory;
     }
 
     public DurableTransaction(final String _path,
                               final String _params,
+                              final String _contentType,
                               final UnmodifiableByteBufferFactory _contentFactory,
                               final DurableTransaction _parent) {
         super(_parent);
         path = _path;
         params = _params;
+        contentType = _contentType;
         contentFactory = _contentFactory;
     }
 
     @Override
     protected final void update(WidgetImpl transmutable) throws Exception {
-        String result = durableChangeManager.apply(path, params, contentFactory);
+        String result = durableChangeManager.apply(path, params, contentType, contentFactory);
         if (result != null)
             trace.insert(0, "\nRESULT; " + result);
     }

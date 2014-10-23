@@ -19,7 +19,7 @@ public interface Widget {
      * @param _contentFactory The unmodifiable data used in the operation.
      * @return A description of what happened.
      */
-    String apply(final String _params,
+    String apply(final String _params, final String _contentType,
                  final UnmodifiableByteBufferFactory _contentFactory)
             throws WidgetException;
 }

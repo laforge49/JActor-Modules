@@ -31,7 +31,7 @@ public class StringImpl extends WidgetImpl {
         ByteBuffer bb = ByteBuffer.allocate(4 + 2 * _value.length());
         writeString(bb, _value);
         bb.rewind();
-        return new DurableTransaction(_path, "setValue",
+        return new DurableTransaction(_path, "setValue", StringFactory.FACTORY_NAME,
                 new UnmodifiableByteBufferFactory(bb));
     }
 
@@ -39,7 +39,7 @@ public class StringImpl extends WidgetImpl {
         ByteBuffer bb = ByteBuffer.allocate(4 + 2 * _value.length());
         writeString(bb, _value);
         bb.rewind();
-        return new DurableTransaction(_path, "expect",
+        return new DurableTransaction(_path, "expect", StringFactory.FACTORY_NAME,
                 new UnmodifiableByteBufferFactory(bb));
     }
 
@@ -138,9 +138,12 @@ public class StringImpl extends WidgetImpl {
         }
 
         @Override
-        public String apply(final String _params,
+        public String apply(final String _params, final String _contentType,
                             final UnmodifiableByteBufferFactory _contentFactory)
                 throws WidgetException {
+            if (_contentType != StringFactory.FACTORY_NAME)
+                throw new UnexpectedValueException(
+                        "expected "+StringFactory.FACTORY_NAME+" content type, not "+_contentType);
             if ("setValue".equals(_params)) {
                 String old = value;
                 String newValue = readString(_contentFactory.duplicateByteBuffer());

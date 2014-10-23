@@ -2,12 +2,12 @@ package org.agilewiki.jactor2.durable.widgets;
 
 import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.widgets.InternalWidget;
-import org.agilewiki.jactor2.common.widgets.WidgetFactory;
+import org.agilewiki.jactor2.common.widgets.InternalWidgetFactory;
 import org.agilewiki.jactor2.core.requests.SOp;
 
 import java.nio.ByteBuffer;
 
-public class DurableFactory extends WidgetFactory {
+public class DurableFactory extends InternalWidgetFactory {
 
     public static final String FACTORY_NAME = "null";
 

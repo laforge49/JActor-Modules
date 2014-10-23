@@ -9,12 +9,12 @@ import java.nio.ByteBuffer;
  * Implements Widget as a nested class.
  */
 public class WidgetImpl implements InternalWidget {
-    private final WidgetFactory widgetFactory;
+    private final InternalWidgetFactory widgetFactory;
     private final _Widget widget;
     private InternalWidget parent;
     protected ByteBuffer byteBuffer;
 
-    public WidgetImpl(final WidgetFactory _widgetFactory,
+    public WidgetImpl(final InternalWidgetFactory _widgetFactory,
                       final InternalWidget _parent,
                       final ByteBuffer _byteBuffer) {
         widgetFactory = _widgetFactory;
@@ -82,7 +82,7 @@ public class WidgetImpl implements InternalWidget {
     }
 
     @Override
-    public WidgetFactory getInternalWidgetFactory() {
+    public InternalWidgetFactory getInternalWidgetFactory() {
         return widgetFactory;
     }
 

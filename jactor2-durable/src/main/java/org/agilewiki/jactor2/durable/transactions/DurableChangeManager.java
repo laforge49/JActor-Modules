@@ -1,16 +1,15 @@
 package org.agilewiki.jactor2.durable.transactions;
 
 import org.agilewiki.jactor2.common.widgets.InternalWidget;
-import org.agilewiki.jactor2.common.widgets.WidgetImpl;
+import org.agilewiki.jactor2.common.widgets.Widget;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
-import org.agilewiki.jactor2.durable.widgets.DurableImpl;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * Change manager used by durable transaction to update a durable widget.
+ * Change manager used by durable transaction to update a widget.
  */
 public class DurableChangeManager implements AutoCloseable {
     private final InternalWidget internalWidget;
@@ -30,7 +29,7 @@ public class DurableChangeManager implements AutoCloseable {
             throw new IllegalStateException(
                     "Already closed, the transaction is complete.");
         }
-        WidgetImpl._Widget widget = internalWidget.asWidget().resolve(_path);
+        Widget widget = internalWidget.asWidget().resolve(_path);
         String trace = widget.apply(_params, _contentFactory);
         DurableChange durableChange = new DurableChange(_path, _params, _contentFactory, trace);
         changes.add(durableChange);

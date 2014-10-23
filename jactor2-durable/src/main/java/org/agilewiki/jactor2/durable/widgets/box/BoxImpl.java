@@ -111,7 +111,7 @@ public class BoxImpl extends WidgetImpl {
             factoryKey.asWidget().setValue(_internalWidget.getInternalWidgetFactory().getFactoryKey());
             int oldContentLength = content.getBufferSize();
             content.clearParent();
-            content = _internalWidget.deepCopy();
+            content = _internalWidget.deepCopy(BoxImpl.this);
             byteBuffer = null;
             int delta = content.getBufferSize() - oldContentLength;
             byteLen += delta;
@@ -122,6 +122,17 @@ public class BoxImpl extends WidgetImpl {
         public String apply(final String _params,
                             final UnmodifiableByteBufferFactory _contentFactory)
                 throws WidgetException {
+            if ("expectedFactoryKey".equals(_params)) {
+                String newValue = StringImpl.readString(_contentFactory.duplicateByteBuffer());
+                asWidget().expectedFactoryKey(newValue);
+                return null;
+            }
+            if ("putCopy".equals(_params)) {
+                _Box db = ((BoxImpl) recreate(_contentFactory)).asWidget();
+                InternalWidget iw = db.getBoxedInternalWidget();
+                putCopy(iw);
+                return null;
+            }
             throw new InvalidWidgetParamsException(_params);
         }
     }

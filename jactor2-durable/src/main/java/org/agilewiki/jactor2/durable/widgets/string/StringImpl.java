@@ -148,7 +148,6 @@ public class StringImpl extends WidgetImpl {
                 return "" + old + " -> " + value;
             }
             if ("expect".equals(_params)) {
-                String old = value;
                 String newValue = readString(_contentFactory.duplicateByteBuffer());
                 asWidget().expect(newValue);
                 return null;

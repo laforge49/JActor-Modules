@@ -127,8 +127,9 @@ public class WidgetImpl implements InternalWidget {
                 getParent(), _unmodifiable.duplicateByteBuffer());
     }
 
-    public WidgetImpl deepCopy() {
-        return (WidgetImpl) recreate(createUnmodifiable());
+    public WidgetImpl deepCopy(final InternalWidget _parent) {
+        return new WidgetImpl(getInternalWidgetFactory(),
+                _parent, createUnmodifiable().duplicateByteBuffer());
     }
 
     public class _Widget implements Widget {

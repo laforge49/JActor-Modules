@@ -52,7 +52,8 @@ public interface InternalWidget extends Transmutable<UnmodifiableByteBufferFacto
     /**
      * Create a deep copy.
      *
+     * @param _parent The parent of the copy, or null.
      * @return The copy.
      */
-    WidgetImpl deepCopy();
+    WidgetImpl deepCopy(InternalWidget _parent);
 }

@@ -3,9 +3,9 @@ package org.agilewiki.jactor2.durable.widgets.string;
 import junit.framework.TestCase;
 import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.CPlant;
+import org.agilewiki.jactor2.common.widgets.WidgetException;
 import org.agilewiki.jactor2.durable.transactions.DurableReference;
 import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
-import org.agilewiki.jactor2.common.widgets.WidgetException;
 
 import java.nio.ByteBuffer;
 

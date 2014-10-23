@@ -3,6 +3,7 @@ package org.agilewiki.jactor2.durable.widgets.integer;
 import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.widgets.InternalWidget;
 import org.agilewiki.jactor2.common.widgets.InvalidWidgetParamsException;
+import org.agilewiki.jactor2.common.widgets.WidgetException;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
 import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
@@ -63,25 +64,6 @@ public class IntImpl extends DurableImpl {
     }
 
     @Override
-    public String apply(final String _params,
-                        final UnmodifiableByteBufferFactory _contentFactory)
-            throws Exception {
-        if ("setValue".equals(_params)) {
-            int old = value;
-            int newValue = _contentFactory.duplicateByteBuffer().getInt();
-            asWidget().setValue(newValue);
-            return "" + old + " -> " + value;
-        }
-        if ("expect".equals(_params)) {
-            int old = value;
-            int newValue = _contentFactory.duplicateByteBuffer().getInt();
-            asWidget().expect(newValue);
-            return null;
-        }
-        throw new InvalidWidgetParamsException(_params);
-    }
-
-    @Override
     public Transmutable<UnmodifiableByteBufferFactory> recreate(
             final UnmodifiableByteBufferFactory _unmodifiable) {
         return new IntImpl(getInternalWidgetFactory(),
@@ -126,6 +108,25 @@ public class IntImpl extends DurableImpl {
                 deserialize();
             if (value != _value)
                 throw new UnexpectedValueException("expected " + _value + ", not " + value);
+        }
+
+        @Override
+        public String apply(final String _params,
+                            final UnmodifiableByteBufferFactory _contentFactory)
+                throws WidgetException {
+            if ("setValue".equals(_params)) {
+                int old = value;
+                int newValue = _contentFactory.duplicateByteBuffer().getInt();
+                asWidget().setValue(newValue);
+                return "" + old + " -> " + value;
+            }
+            if ("expect".equals(_params)) {
+                int old = value;
+                int newValue = _contentFactory.duplicateByteBuffer().getInt();
+                asWidget().expect(newValue);
+                return null;
+            }
+            throw new InvalidWidgetParamsException(_params);
         }
     }
 }

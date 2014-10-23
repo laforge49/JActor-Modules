@@ -21,5 +21,5 @@ public interface Widget {
      */
     String apply(final String _params,
                  final UnmodifiableByteBufferFactory _contentFactory)
-            throws Exception;
+            throws WidgetException;
 }

@@ -125,12 +125,6 @@ public class WidgetImpl implements InternalWidget {
         return (WidgetImpl) recreate(createUnmodifiable());
     }
 
-    public String apply(final String _params,
-                        final UnmodifiableByteBufferFactory _contentFactory)
-            throws Exception {
-        throw new InvalidWidgetParamsException(_params);
-    }
-
     public class _Widget implements Widget {
         @Override
         public _Widget resolve(final String _path) {
@@ -139,10 +133,11 @@ public class WidgetImpl implements InternalWidget {
             return null;
         }
 
+        @Override
         public String apply(final String _params,
                             final UnmodifiableByteBufferFactory _contentFactory)
-                throws Exception {
-            return WidgetImpl.this.apply(_params, _contentFactory);
+                throws WidgetException {
+            throw new InvalidWidgetParamsException(_params);
         }
     }
 }

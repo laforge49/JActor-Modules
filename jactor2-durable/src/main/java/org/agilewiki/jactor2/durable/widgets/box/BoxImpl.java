@@ -2,6 +2,8 @@ package org.agilewiki.jactor2.durable.widgets.box;
 
 import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.widgets.InternalWidget;
+import org.agilewiki.jactor2.common.widgets.InvalidWidgetParamsException;
+import org.agilewiki.jactor2.common.widgets.WidgetException;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
 import org.agilewiki.jactor2.durable.widgets.DurableFactory;
@@ -52,13 +54,6 @@ public class BoxImpl extends DurableImpl {
     @Override
     protected _Box newWidget() {
         return new _Box();
-    }
-
-    @Override
-    public String apply(final String _params,
-                        final UnmodifiableByteBufferFactory _contentFactory)
-            throws Exception {
-        return null;
     }
 
     @Override
@@ -125,6 +120,13 @@ public class BoxImpl extends DurableImpl {
             int delta = content.getBufferSize() - oldContentLength;
             byteLen += delta;
             notifyParent(delta);
+        }
+
+        @Override
+        public String apply(final String _params,
+                            final UnmodifiableByteBufferFactory _contentFactory)
+                throws WidgetException {
+            throw new InvalidWidgetParamsException(_params);
         }
     }
 }

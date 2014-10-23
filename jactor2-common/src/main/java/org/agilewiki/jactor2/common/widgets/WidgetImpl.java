@@ -133,10 +133,10 @@ public class WidgetImpl implements InternalWidget {
 
     public class _Widget implements Widget {
         @Override
-        public _Widget resolve(final String _path) throws InvalidWidgetPathException {
+        public _Widget resolve(final String _path) {
             if (_path.length() == 0)
                 return this;
-            throw new InvalidWidgetPathException("Unsupported path: " + _path);
+            return null;
         }
 
         public String apply(final String _params,

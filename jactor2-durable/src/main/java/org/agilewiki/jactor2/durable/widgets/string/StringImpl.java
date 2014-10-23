@@ -8,7 +8,7 @@ import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
 import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
 import org.agilewiki.jactor2.durable.widgets.DurableFactory;
 import org.agilewiki.jactor2.durable.widgets.DurableImpl;
-import org.agilewiki.jactor2.durable.widgets.InvalidDurableContentException;
+import org.agilewiki.jactor2.durable.widgets.InvalidWidgetContentException;
 import org.agilewiki.jactor2.durable.widgets.UnexpectedValueException;
 
 import java.nio.ByteBuffer;
@@ -141,9 +141,9 @@ public class StringImpl extends DurableImpl {
         }
 
         @Override
-        public void setValue(String _value) throws InvalidDurableContentException {
+        public void setValue(String _value) throws InvalidWidgetContentException {
             if (_value == null)
-                throw new InvalidDurableContentException("null is not valid");
+                throw new InvalidWidgetContentException("null is not valid");
             value = _value;
             int oldLen = byteLen;
             byteLen = 4 + 2 * value.length();

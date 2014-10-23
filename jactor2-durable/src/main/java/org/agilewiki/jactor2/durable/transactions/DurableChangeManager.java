@@ -3,6 +3,7 @@ package org.agilewiki.jactor2.durable.transactions;
 import org.agilewiki.jactor2.common.widgets.InternalWidget;
 import org.agilewiki.jactor2.common.widgets.Widget;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
+import org.agilewiki.jactor2.durable.widgets.InvalidWidgetPathException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +31,8 @@ public class DurableChangeManager implements AutoCloseable {
                     "Already closed, the transaction is complete.");
         }
         Widget widget = internalWidget.asWidget().resolve(_path);
+        if (widget == null)
+            throw new InvalidWidgetPathException(_path);
         String trace = widget.apply(_params, _contentFactory);
         DurableChange durableChange = new DurableChange(_path, _params, _contentFactory, trace);
         changes.add(durableChange);

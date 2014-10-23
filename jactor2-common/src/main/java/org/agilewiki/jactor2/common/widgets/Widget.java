@@ -8,9 +8,9 @@ public interface Widget {
      * The widget itself is returned when the path is empty.
      *
      * @param _path A set of keys with / as Separators.
-     * @return The identified widget.
+     * @return The identified widget, or null.
      */
-    Widget resolve(String _path) throws InvalidWidgetPathException;
+    Widget resolve(String _path);
 
     /**
      * Update the widget.

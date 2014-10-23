@@ -2,12 +2,11 @@ package org.agilewiki.jactor2.durable.widgets.box;
 
 import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.widgets.InternalWidget;
-import org.agilewiki.jactor2.common.widgets.InvalidWidgetPathException;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
 import org.agilewiki.jactor2.durable.widgets.DurableFactory;
 import org.agilewiki.jactor2.durable.widgets.DurableImpl;
-import org.agilewiki.jactor2.durable.widgets.InvalidDurableContentException;
+import org.agilewiki.jactor2.durable.widgets.InvalidWidgetContentException;
 import org.agilewiki.jactor2.durable.widgets.UnexpectedValueException;
 import org.agilewiki.jactor2.durable.widgets.string.StringFactory;
 import org.agilewiki.jactor2.durable.widgets.string.StringImpl;
@@ -88,7 +87,7 @@ public class BoxImpl extends DurableImpl {
 
     public class _Box extends _Durable implements DurableBox {
         @Override
-        public _Widget resolve(final String _path) throws InvalidWidgetPathException {
+        public _Widget resolve(final String _path) {
             if (_path.length() == 0)
                 return this;
             if ("factoryKey".equals(_path))
@@ -97,7 +96,7 @@ public class BoxImpl extends DurableImpl {
                 return content.asWidget();
             if (_path.startsWith("content/"))
                 return content.asWidget().resolve(_path.substring(8));
-            throw new InvalidWidgetPathException("Unsupported path: " + _path);
+            return null;
         }
 
         @Override
@@ -117,7 +116,7 @@ public class BoxImpl extends DurableImpl {
         }
 
         @Override
-        public void putCopy(InternalWidget _internalWidget) throws InvalidDurableContentException {
+        public void putCopy(InternalWidget _internalWidget) throws InvalidWidgetContentException {
             factoryKey.asWidget().setValue(_internalWidget.getInternalWidgetFactory().getFactoryKey());
             int oldContentLength = content.getBufferSize();
             content.clearParent();

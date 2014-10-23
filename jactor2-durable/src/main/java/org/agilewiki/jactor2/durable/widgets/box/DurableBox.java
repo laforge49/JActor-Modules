@@ -1,7 +1,7 @@
 package org.agilewiki.jactor2.durable.widgets.box;
 
 import org.agilewiki.jactor2.common.widgets.InternalWidget;
-import org.agilewiki.jactor2.durable.widgets.InvalidDurableContentException;
+import org.agilewiki.jactor2.durable.widgets.InvalidWidgetContentException;
 import org.agilewiki.jactor2.durable.widgets.UnexpectedValueException;
 
 public interface DurableBox {
@@ -31,5 +31,5 @@ public interface DurableBox {
      *
      * @param _internalWidget The widget to be copied.
      */
-    void putCopy(InternalWidget _internalWidget) throws InvalidDurableContentException;
+    void putCopy(InternalWidget _internalWidget) throws InvalidWidgetContentException;
 }

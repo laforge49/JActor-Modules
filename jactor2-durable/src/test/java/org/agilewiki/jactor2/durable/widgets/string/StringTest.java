@@ -5,7 +5,7 @@ import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.CPlant;
 import org.agilewiki.jactor2.durable.transactions.DurableReference;
 import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
-import org.agilewiki.jactor2.durable.widgets.InvalidDurableException;
+import org.agilewiki.jactor2.common.widgets.WidgetException;
 
 import java.nio.ByteBuffer;
 
@@ -49,7 +49,7 @@ public class StringTest extends TestCase {
             DurableTransaction expectTrans = StringImpl.expectTransaction("", "43");
             try {
                 durableReference.applyAOp(expectTrans).call();
-            } catch (InvalidDurableException ide) {
+            } catch (WidgetException ide) {
                 System.out.println(ide);
             }
         } finally {

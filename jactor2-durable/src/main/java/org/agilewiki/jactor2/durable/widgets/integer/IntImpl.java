@@ -7,7 +7,7 @@ import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactor
 import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
 import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
 import org.agilewiki.jactor2.durable.widgets.DurableImpl;
-import org.agilewiki.jactor2.durable.widgets.InvalidDurableContentException;
+import org.agilewiki.jactor2.durable.widgets.InvalidWidgetContentException;
 import org.agilewiki.jactor2.durable.widgets.UnexpectedValueException;
 
 import java.nio.ByteBuffer;
@@ -112,9 +112,9 @@ public class IntImpl extends DurableImpl {
         }
 
         @Override
-        public void setValue(Integer _value) throws InvalidDurableContentException {
+        public void setValue(Integer _value) throws InvalidWidgetContentException {
             if (_value == null)
-                throw new InvalidDurableContentException("null is not valid");
+                throw new InvalidWidgetContentException("null is not valid");
             value = _value;
             byteBuffer = null;
             notifyParent(0);

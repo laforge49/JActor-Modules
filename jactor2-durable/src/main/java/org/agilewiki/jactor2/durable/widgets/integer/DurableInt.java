@@ -1,7 +1,7 @@
 package org.agilewiki.jactor2.durable.widgets.integer;
 
 import org.agilewiki.jactor2.durable.widgets.Durable;
-import org.agilewiki.jactor2.durable.widgets.InvalidDurableContentException;
+import org.agilewiki.jactor2.durable.widgets.InvalidWidgetContentException;
 import org.agilewiki.jactor2.durable.widgets.UnexpectedValueException;
 
 /**
@@ -21,7 +21,7 @@ public interface DurableInt extends Durable {
      *
      * @param _value The new value.
      */
-    void setValue(final Integer _value) throws InvalidDurableContentException;
+    void setValue(final Integer _value) throws InvalidWidgetContentException;
 
     /**
      * Asserts a value.

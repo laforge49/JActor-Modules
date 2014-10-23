@@ -1,13 +1,13 @@
 package org.agilewiki.jactor2.durable.widgets.string;
 
-import org.agilewiki.jactor2.durable.widgets.Durable;
+import org.agilewiki.jactor2.common.widgets.Widget;
 import org.agilewiki.jactor2.durable.widgets.InvalidWidgetContentException;
 import org.agilewiki.jactor2.durable.widgets.UnexpectedValueException;
 
 /**
  * A serializable string.
  */
-public interface DurableString extends Durable {
+public interface DurableString extends Widget {
 
     /**
      * Returns the value.

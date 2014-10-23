@@ -1,5 +1,6 @@
 package org.agilewiki.jactor2.common.widgets;
 
+import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
 
@@ -21,6 +22,11 @@ public class WidgetImpl implements InternalWidget {
         parent = _parent;
         initBuffer(_byteBuffer);
         widget = newWidget();
+    }
+
+    public WidgetImpl(final CFacility _facility,
+                      final InternalWidget _parent) {
+        this(InternalWidgetFactory.getFactory(_facility), _parent, null);
     }
 
     protected void initBuffer(final ByteBuffer _byteBuffer) {

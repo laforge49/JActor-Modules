@@ -1,13 +1,9 @@
 package org.agilewiki.jactor2.durable.widgets.box;
 
 import org.agilewiki.jactor2.common.CFacility;
-import org.agilewiki.jactor2.common.widgets.InternalWidget;
-import org.agilewiki.jactor2.common.widgets.InvalidWidgetParamsException;
-import org.agilewiki.jactor2.common.widgets.WidgetException;
+import org.agilewiki.jactor2.common.widgets.*;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
-import org.agilewiki.jactor2.durable.widgets.DurableFactory;
-import org.agilewiki.jactor2.durable.widgets.DurableImpl;
 import org.agilewiki.jactor2.durable.widgets.InvalidWidgetContentException;
 import org.agilewiki.jactor2.durable.widgets.UnexpectedValueException;
 import org.agilewiki.jactor2.durable.widgets.string.StringFactory;
@@ -15,7 +11,7 @@ import org.agilewiki.jactor2.durable.widgets.string.StringImpl;
 
 import java.nio.ByteBuffer;
 
-public class BoxImpl extends DurableImpl {
+public class BoxImpl extends WidgetImpl {
 
     protected InternalWidget content;
 
@@ -23,7 +19,7 @@ public class BoxImpl extends DurableImpl {
 
     protected int byteLen;
 
-    public BoxImpl(DurableFactory _widgetFactory, InternalWidget _parent, ByteBuffer _byteBuffer) {
+    public BoxImpl(InternalWidgetFactory _widgetFactory, InternalWidget _parent, ByteBuffer _byteBuffer) {
         super(_widgetFactory, _parent, _byteBuffer);
         CFacility facility = _widgetFactory.getFacility();
         factoryKey = (StringImpl) facility.newInternalWidget(StringFactory.FACTORY_NAME, this,
@@ -35,7 +31,7 @@ public class BoxImpl extends DurableImpl {
 
     public BoxImpl(CFacility _facility, InternalWidget _parent) {
         super(BoxFactory.getFactory(_facility), _parent, null);
-        content = new DurableImpl(_facility, this);
+        content = new WidgetImpl(_facility, this);
         factoryKey = new StringImpl(_facility, this,
                 content.getInternalWidgetFactory().getFactoryKey());
         byteLen = factoryKey.getBufferSize() + content.getBufferSize();
@@ -80,7 +76,7 @@ public class BoxImpl extends DurableImpl {
         notifyParent(_delta);
     }
 
-    public class _Box extends _Durable implements DurableBox {
+    public class _Box extends _Widget implements DurableBox {
         @Override
         public _Widget resolve(final String _path) {
             if (_path.length() == 0)

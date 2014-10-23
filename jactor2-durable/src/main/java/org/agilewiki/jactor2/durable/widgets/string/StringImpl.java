@@ -1,20 +1,16 @@
 package org.agilewiki.jactor2.durable.widgets.string;
 
 import org.agilewiki.jactor2.common.CFacility;
-import org.agilewiki.jactor2.common.widgets.InternalWidget;
-import org.agilewiki.jactor2.common.widgets.InvalidWidgetParamsException;
-import org.agilewiki.jactor2.common.widgets.WidgetException;
+import org.agilewiki.jactor2.common.widgets.*;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
 import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
-import org.agilewiki.jactor2.durable.widgets.DurableFactory;
-import org.agilewiki.jactor2.durable.widgets.DurableImpl;
 import org.agilewiki.jactor2.durable.widgets.InvalidWidgetContentException;
 import org.agilewiki.jactor2.durable.widgets.UnexpectedValueException;
 
 import java.nio.ByteBuffer;
 
-public class StringImpl extends DurableImpl {
+public class StringImpl extends WidgetImpl {
 
     public static String readString(final ByteBuffer _bb) {
         int len = _bb.getInt();
@@ -51,7 +47,7 @@ public class StringImpl extends DurableImpl {
 
     protected int byteLen;
 
-    public StringImpl(DurableFactory _widgetFactory, InternalWidget _parent, ByteBuffer _byteBuffer) {
+    public StringImpl(InternalWidgetFactory _widgetFactory, InternalWidget _parent, ByteBuffer _byteBuffer) {
         super(_widgetFactory, _parent, _byteBuffer);
         if (byteBuffer != null) {
             value = null;
@@ -109,7 +105,7 @@ public class StringImpl extends DurableImpl {
         value = readString(byteBuffer);
     }
 
-    public class _String extends _Durable implements DurableString {
+    public class _String extends _Widget implements DurableString {
         @Override
         public String getValue() {
             if (value == null)

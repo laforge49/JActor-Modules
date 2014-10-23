@@ -1,13 +1,13 @@
 package org.agilewiki.jactor2.durable.widgets.integer;
 
-import org.agilewiki.jactor2.durable.widgets.Durable;
+import org.agilewiki.jactor2.common.widgets.Widget;
 import org.agilewiki.jactor2.durable.widgets.InvalidWidgetContentException;
 import org.agilewiki.jactor2.durable.widgets.UnexpectedValueException;
 
 /**
  * Serializable Integer.
  */
-public interface DurableInt extends Durable {
+public interface DurableInt extends Widget {
 
     /**
      * Returns the value.

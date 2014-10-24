@@ -17,20 +17,17 @@ public class BoxImpl extends WidgetImpl {
     public static DurableTransaction expectedFactoryKeyTransaction(final CFacility facility,
                                                                    final String _path,
                                                                    final String _value) {
-        ByteBuffer bb = ByteBuffer.allocate(4 + 2 * _value.length());
-        StringImpl.writeString(bb, _value);
-        bb.rewind();
+        StringImpl ii = new StringImpl(facility, null, _value);
         return new DurableTransaction(_path, "expectedFactoryKey",
-                StringFactory.factoryKey(facility),
-                new UnmodifiableByteBufferFactory(bb));
+                ii.getInternalWidgetFactory().getFactoryKey(),
+                ii.createUnmodifiable());
     }
 
     public static DurableTransaction putCopyTransaction(final CFacility facility,
                                                         final String _path,
                                                                    final InternalWidget _value) {
-        String factoryKey = _value.getInternalWidgetFactory().getFactoryKey();
         return new DurableTransaction(_path, "putCopy",
-                factoryKey,
+                _value.getInternalWidgetFactory().getFactoryKey(),
                 _value.createUnmodifiable());
     }
 

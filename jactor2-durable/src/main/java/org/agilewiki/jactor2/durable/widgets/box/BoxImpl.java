@@ -17,18 +17,13 @@ public class BoxImpl extends WidgetImpl {
     public static DurableTransaction expectedFactoryKeyTransaction(final CFacility facility,
                                                                    final String _path,
                                                                    final String _value) {
-        StringImpl ii = new StringImpl(facility, null, _value);
-        return new DurableTransaction(_path, "expectedFactoryKey",
-                ii.getInternalWidgetFactory().getFactoryKey(),
-                ii.createUnmodifiable());
+        return new DurableTransaction(_path, "expectedFactoryKey", new StringImpl(facility, null, _value));
     }
 
     public static DurableTransaction putCopyTransaction(final CFacility facility,
                                                         final String _path,
                                                                    final InternalWidget _value) {
-        return new DurableTransaction(_path, "putCopy",
-                _value.getInternalWidgetFactory().getFactoryKey(),
-                _value.createUnmodifiable());
+        return new DurableTransaction(_path, "putCopy", _value);
     }
 
     protected InternalWidget content;

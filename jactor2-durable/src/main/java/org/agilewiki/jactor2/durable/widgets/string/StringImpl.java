@@ -29,18 +29,12 @@ public class StringImpl extends WidgetImpl {
 
     public static DurableTransaction setValueTransaction(final CFacility facility,
                                                          final String _path, final String _value) {
-        StringImpl ii = new StringImpl(facility, null, _value);
-        return new DurableTransaction(_path, "setValue",
-                ii.getInternalWidgetFactory().getFactoryKey(),
-                ii.createUnmodifiable());
+        return new DurableTransaction(_path, "setValue", new StringImpl(facility, null, _value));
     }
 
     public static DurableTransaction expectTransaction(final CFacility facility,
                                                        final String _path, final String _value) {
-        StringImpl ii = new StringImpl(facility, null, _value);
-        return new DurableTransaction(_path, "expect",
-                ii.getInternalWidgetFactory().getFactoryKey(),
-                ii.createUnmodifiable());
+        return new DurableTransaction(_path, "expect", new StringImpl(facility, null, _value));
     }
 
     protected String value = "";

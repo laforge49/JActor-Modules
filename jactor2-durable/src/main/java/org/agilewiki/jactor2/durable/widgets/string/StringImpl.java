@@ -29,22 +29,18 @@ public class StringImpl extends WidgetImpl {
 
     public static DurableTransaction setValueTransaction(final CFacility facility,
                                                          final String _path, final String _value) {
-        ByteBuffer bb = ByteBuffer.allocate(4 + 2 * _value.length());
-        writeString(bb, _value);
-        bb.rewind();
+        StringImpl ii = new StringImpl(facility, null, _value);
         return new DurableTransaction(_path, "setValue",
-                StringFactory.factoryKey(facility),
-                new UnmodifiableByteBufferFactory(bb));
+                ii.getInternalWidgetFactory().getFactoryKey(),
+                ii.createUnmodifiable());
     }
 
     public static DurableTransaction expectTransaction(final CFacility facility,
                                                        final String _path, final String _value) {
-        ByteBuffer bb = ByteBuffer.allocate(4 + 2 * _value.length());
-        writeString(bb, _value);
-        bb.rewind();
+        StringImpl ii = new StringImpl(facility, null, _value);
         return new DurableTransaction(_path, "expect",
-                StringFactory.factoryKey(facility),
-                new UnmodifiableByteBufferFactory(bb));
+                ii.getInternalWidgetFactory().getFactoryKey(),
+                ii.createUnmodifiable());
     }
 
     protected String value = "";
@@ -145,19 +141,21 @@ public class StringImpl extends WidgetImpl {
         public String apply(final String _params, final String _contentType,
                             final UnmodifiableByteBufferFactory _contentFactory)
                 throws WidgetException {
-            if (!_contentType.equals(StringFactory.factoryKey(getInternalWidgetFactory().getFacility())))
+            InternalWidget iw = getInternalWidgetFactory().getFacility().newInternalWidget(_contentType, null,
+                    _contentFactory.duplicateByteBuffer());
+            if (!(iw instanceof StringImpl))
                 throw new UnexpectedValueException(
                         "expected "+StringFactory.factoryKey(getInternalWidgetFactory().getFacility())+
-                                " content type, not "+_contentType);
+                                " content type, not "+
+                                iw.getInternalWidgetFactory().getFactoryKey());
+            StringImpl ii = (StringImpl) iw;
             if ("setValue".equals(_params)) {
                 String old = value;
-                String newValue = readString(_contentFactory.duplicateByteBuffer());
-                asWidget().setValue(newValue);
+                asWidget().setValue(ii.asWidget().getValue());
                 return "" + old + " -> " + value;
             }
             if ("expect".equals(_params)) {
-                String newValue = readString(_contentFactory.duplicateByteBuffer());
-                asWidget().expect(newValue);
+                asWidget().expect(ii.asWidget().getValue());
                 return null;
             }
             throw new InvalidWidgetParamsException(_params);

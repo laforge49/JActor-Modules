@@ -4,6 +4,7 @@ import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.widgets.*;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
+import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
 import org.agilewiki.jactor2.durable.widgets.InvalidWidgetContentException;
 import org.agilewiki.jactor2.durable.widgets.UnexpectedValueException;
 import org.agilewiki.jactor2.durable.widgets.string.StringFactory;
@@ -12,6 +13,26 @@ import org.agilewiki.jactor2.durable.widgets.string.StringImpl;
 import java.nio.ByteBuffer;
 
 public class BoxImpl extends WidgetImpl {
+
+    public static DurableTransaction expectedFactoryKeyTransaction(final CFacility facility,
+                                                                   final String _path,
+                                                                   final String _value) {
+        ByteBuffer bb = ByteBuffer.allocate(4 + 2 * _value.length());
+        StringImpl.writeString(bb, _value);
+        bb.rewind();
+        return new DurableTransaction(_path, "expectedFactoryKey",
+                StringFactory.factoryKey(facility),
+                new UnmodifiableByteBufferFactory(bb));
+    }
+
+    public static DurableTransaction putCopyTransaction(final CFacility facility,
+                                                        final String _path,
+                                                                   final InternalWidget _value) {
+        String factoryKey = _value.getInternalWidgetFactory().getFactoryKey();
+        return new DurableTransaction(_path, "putCopy",
+                factoryKey,
+                _value.createUnmodifiable());
+    }
 
     protected InternalWidget content;
 

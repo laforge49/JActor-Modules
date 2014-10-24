@@ -19,7 +19,7 @@ public class IntImpl extends WidgetImpl {
                                                          final String _path, final int _value) {
         ByteBuffer bb = ByteBuffer.allocate(4);
         bb.putInt(_value).rewind();
-        return new DurableTransaction(_path, "setValue", IntFactory.FACTORY_NAME,
+        return new DurableTransaction(_path, "setValue", IntFactory.factoryKey(facility),
                 new UnmodifiableByteBufferFactory(bb));
     }
 
@@ -27,7 +27,7 @@ public class IntImpl extends WidgetImpl {
                                                        final String _path, final int _value) {
         ByteBuffer bb = ByteBuffer.allocate(4);
         bb.putInt(_value).rewind();
-        return new DurableTransaction(_path, "expect", IntFactory.FACTORY_NAME,
+        return new DurableTransaction(_path, "expect", IntFactory.factoryKey(facility),
                 new UnmodifiableByteBufferFactory(bb));
     }
 

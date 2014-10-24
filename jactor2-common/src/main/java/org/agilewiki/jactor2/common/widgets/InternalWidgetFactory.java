@@ -14,11 +14,11 @@ public class InternalWidgetFactory {
     }
 
     public static InternalWidgetFactory getFactory(final CFacility _facility) {
-        return (InternalWidgetFactory) _facility.getInternalWidgetFactory(FACTORY_NAME);
+        return _facility.getInternalWidgetFactory(FACTORY_NAME);
     }
 
-    public static String factoryKey(String facilityName, String widgetFactoryName) {
-        return facilityName + "." + widgetFactoryName;
+    public static String factoryKey(final CFacility _facility) {
+        return getFactory(_facility).getFactoryKey();
     }
 
     private final String name;
@@ -44,7 +44,7 @@ public class InternalWidgetFactory {
     }
 
     public String getFactoryKey() {
-        return factoryKey(getFacility().name, name);
+        return getFacility().name + "." + name;
     }
 
     public InternalWidget newInternalWidget(final InternalWidget _parent,

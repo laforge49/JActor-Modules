@@ -40,13 +40,13 @@ public class StringTest extends TestCase {
             DurableString dstr3 = strImpl3.asWidget();
             assertEquals("1", dstr3.getValue());
 
-            DurableTransaction setTrans = StringImpl.setValueTransaction("", "42");
+            DurableTransaction setTrans = StringImpl.setValueTransaction(facility, "", "42");
             DurableReference durableReference = new DurableReference(strImpl3);
             durableReference.applyAOp(setTrans).call();
             assertEquals("42", dstr3.getValue());
             System.out.println(setTrans.toString());
 
-            DurableTransaction expectTrans = StringImpl.expectTransaction("", "43");
+            DurableTransaction expectTrans = StringImpl.expectTransaction(facility, "", "43");
             try {
                 durableReference.applyAOp(expectTrans).call();
             } catch (WidgetException ide) {

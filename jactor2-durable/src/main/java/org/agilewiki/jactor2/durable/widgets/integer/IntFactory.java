@@ -19,6 +19,10 @@ public class IntFactory extends InternalWidgetFactory {
         return (IntFactory) _facility.getInternalWidgetFactory(FACTORY_NAME);
     }
 
+    public static String factoryKey(final CFacility _facility) {
+        return getFactory(_facility).getFactoryKey();
+    }
+
     public IntFactory(CFacility _facility) {
         super(FACTORY_NAME, _facility);
     }

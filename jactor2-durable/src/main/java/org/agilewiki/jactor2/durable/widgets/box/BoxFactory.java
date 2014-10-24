@@ -19,6 +19,10 @@ public class BoxFactory extends InternalWidgetFactory {
         return (BoxFactory) _facility.getInternalWidgetFactory(FACTORY_NAME);
     }
 
+    public static String factoryKey(final CFacility _facility) {
+        return getFactory(_facility).getFactoryKey();
+    }
+
     public BoxFactory(CFacility _facility) {
         super(FACTORY_NAME, _facility);
     }

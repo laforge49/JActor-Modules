@@ -128,9 +128,18 @@ public class BoxImpl extends WidgetImpl {
                 return null;
             }
             if ("putCopy".equals(_params)) {
-                _Box db = ((BoxImpl) recreate(_contentFactory)).asWidget();
-                InternalWidget iw = db.getBoxedInternalWidget();
-                putCopy(iw);
+                InternalWidgetFactory iwf =
+                        getInternalWidgetFactory().getFacility().getInternalWidgetFactory(_contentType);
+                InternalWidget iw = iwf.newInternalWidget(BoxImpl.this,
+                        _contentFactory.duplicateByteBuffer());
+                factoryKey.asWidget().setValue(iwf.getFactoryKey());
+                int oldContentLength = content.getBufferSize();
+                content.clearParent();
+                content = iw;
+                byteBuffer = null;
+                int delta = content.getBufferSize() - oldContentLength;
+                byteLen += delta;
+                notifyParent(delta);
                 return null;
             }
             throw new InvalidWidgetParamsException(_params);

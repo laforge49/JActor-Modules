@@ -27,19 +27,23 @@ public class StringImpl extends WidgetImpl {
         _bb.position(_bb.position() + len);
     }
 
-    public static DurableTransaction setValueTransaction(final String _path, final String _value) {
+    public static DurableTransaction setValueTransaction(final CFacility facility,
+                                                         final String _path, final String _value) {
         ByteBuffer bb = ByteBuffer.allocate(4 + 2 * _value.length());
         writeString(bb, _value);
         bb.rewind();
-        return new DurableTransaction(_path, "setValue", StringFactory.FACTORY_NAME,
+        return new DurableTransaction(_path, "setValue",
+                StringFactory.factoryKey(facility),
                 new UnmodifiableByteBufferFactory(bb));
     }
 
-    public static DurableTransaction expectTransaction(final String _path, final String _value) {
+    public static DurableTransaction expectTransaction(final CFacility facility,
+                                                       final String _path, final String _value) {
         ByteBuffer bb = ByteBuffer.allocate(4 + 2 * _value.length());
         writeString(bb, _value);
         bb.rewind();
-        return new DurableTransaction(_path, "expect", StringFactory.FACTORY_NAME,
+        return new DurableTransaction(_path, "expect",
+                StringFactory.factoryKey(facility),
                 new UnmodifiableByteBufferFactory(bb));
     }
 
@@ -141,9 +145,10 @@ public class StringImpl extends WidgetImpl {
         public String apply(final String _params, final String _contentType,
                             final UnmodifiableByteBufferFactory _contentFactory)
                 throws WidgetException {
-            if (_contentType != StringFactory.FACTORY_NAME)
+            if (!_contentType.equals(StringFactory.factoryKey(getInternalWidgetFactory().getFacility())))
                 throw new UnexpectedValueException(
-                        "expected "+StringFactory.FACTORY_NAME+" content type, not "+_contentType);
+                        "expected "+StringFactory.factoryKey(getInternalWidgetFactory().getFacility())+
+                                " content type, not "+_contentType);
             if ("setValue".equals(_params)) {
                 String old = value;
                 String newValue = readString(_contentFactory.duplicateByteBuffer());

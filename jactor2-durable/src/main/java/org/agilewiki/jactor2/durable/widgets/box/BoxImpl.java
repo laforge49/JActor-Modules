@@ -66,7 +66,7 @@ public class BoxImpl extends WidgetImpl {
     }
 
     @Override
-    public Transmutable<UnmodifiableByteBufferFactory> recreate(
+    public BoxImpl recreate(
             final UnmodifiableByteBufferFactory _unmodifiable) {
         return new BoxImpl(getInternalWidgetFactory(),
                 getInternalWidgetParent(), _unmodifiable.duplicateByteBuffer());

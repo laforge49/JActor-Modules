@@ -1,8 +1,9 @@
 package org.agilewiki.jactor2.common.widgets;
 
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
+import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
 
-public interface Widget {
+public interface Widget extends Transmutable<UnmodifiableByteBufferFactory> {
     /**
      * Returns the widget identified by the path.
      * The widget itself is returned when the path is empty.

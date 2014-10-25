@@ -122,7 +122,7 @@ public class WidgetImpl implements InternalWidget {
     }
 
     @Override
-    public Transmutable<UnmodifiableByteBufferFactory> recreate(final UnmodifiableByteBufferFactory _unmodifiable) {
+    public WidgetImpl recreate(final UnmodifiableByteBufferFactory _unmodifiable) {
         return new WidgetImpl(getInternalWidgetFactory(),
                 getInternalWidgetParent(), _unmodifiable.duplicateByteBuffer());
     }
@@ -155,6 +155,16 @@ public class WidgetImpl implements InternalWidget {
         @Override
         public InternalWidgetFactory getInternalWidgetFactory() {
             return widgetFactory;
+        }
+
+        @Override
+        public UnmodifiableByteBufferFactory createUnmodifiable() {
+            return WidgetImpl.this.createUnmodifiable();
+        }
+
+        @Override
+        public _Widget recreate(UnmodifiableByteBufferFactory _unmodifiable) {
+            return WidgetImpl.this.recreate(_unmodifiable).asWidget();
         }
     }
 }

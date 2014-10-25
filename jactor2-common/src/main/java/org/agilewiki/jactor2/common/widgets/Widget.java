@@ -37,4 +37,11 @@ public interface Widget extends Transmutable<UnmodifiableByteBufferFactory> {
      * @return The factory.
      */
     InternalWidgetFactory getInternalWidgetFactory();
+
+    /**
+     * Create a deep copy.
+     *
+     * @return The copy.
+     */
+    Widget deepCopy();
 }

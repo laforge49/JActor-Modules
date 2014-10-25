@@ -158,6 +158,11 @@ public class WidgetImpl implements InternalWidget {
         }
 
         @Override
+        public _Widget deepCopy() {
+            return WidgetImpl.this.deepCopy(null).asWidget();
+        }
+
+        @Override
         public UnmodifiableByteBufferFactory createUnmodifiable() {
             return WidgetImpl.this.createUnmodifiable();
         }

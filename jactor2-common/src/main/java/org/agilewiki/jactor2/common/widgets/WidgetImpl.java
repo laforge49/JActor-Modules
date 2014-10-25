@@ -148,7 +148,7 @@ public class WidgetImpl implements InternalWidget {
         }
 
         @Override
-        public Widget getWidget() {
+        public Widget getWidgetParent() {
             return getInternalWidgetParent().asWidget();
         }
 

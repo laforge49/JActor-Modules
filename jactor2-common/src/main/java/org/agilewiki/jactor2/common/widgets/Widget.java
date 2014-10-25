@@ -29,7 +29,7 @@ public interface Widget extends Transmutable<UnmodifiableByteBufferFactory> {
      *
      * @return The container widget, or null.
      */
-    Widget getWidget();
+    Widget getWidgetParent();
 
     /**
      * Returns the factory that created the widget.

@@ -31,7 +31,7 @@ public class BoxImpl extends WidgetImpl {
 
     protected int byteLen;
 
-    public BoxImpl(InternalWidgetFactory _widgetFactory, InternalWidget _parent, ByteBuffer _byteBuffer) {
+    public BoxImpl(WidgetFactory _widgetFactory, InternalWidget _parent, ByteBuffer _byteBuffer) {
         super(_widgetFactory, _parent, _byteBuffer);
         CFacility facility = _widgetFactory.getFacility();
         factoryKey = (StringImpl) facility.newInternalWidget(StringFactory.FACTORY_NAME, this,
@@ -141,8 +141,8 @@ public class BoxImpl extends WidgetImpl {
                 return null;
             }
             if ("putCopy".equals(_params)) {
-                InternalWidgetFactory iwf =
-                        getWidgetFactory().getFacility().getInternalWidgetFactory(_contentType);
+                WidgetFactory iwf =
+                        getWidgetFactory().getFacility().getWidgetFactory(_contentType);
                 _Widget iw = iwf.newInternalWidget(BoxImpl.this,
                         _contentFactory.duplicateByteBuffer()).asWidget();
                 factoryKey.asWidget().setValue(iwf.getFactoryKey());

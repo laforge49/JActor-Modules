@@ -2,21 +2,21 @@ package org.agilewiki.jactor2.durable.widgets.integer;
 
 import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.widgets.InternalWidget;
-import org.agilewiki.jactor2.common.widgets.InternalWidgetFactory;
+import org.agilewiki.jactor2.common.widgets.WidgetFactory;
 import org.agilewiki.jactor2.core.requests.SOp;
 
 import java.nio.ByteBuffer;
 
-public class IntFactory extends InternalWidgetFactory {
+public class IntFactory extends WidgetFactory {
 
     public static final String FACTORY_NAME = "int";
 
     public static SOp<Void> addFactorySOp(final CFacility _facility) {
-        return _facility.addInternalWidgetFactorySOp(new IntFactory(_facility));
+        return _facility.addWidgetFactorySOp(new IntFactory(_facility));
     }
 
     public static IntFactory getFactory(final CFacility _facility) {
-        return (IntFactory) _facility.getInternalWidgetFactory(FACTORY_NAME);
+        return (IntFactory) _facility.getWidgetFactory(FACTORY_NAME);
     }
 
     public static String factoryKey(final CFacility _facility) {

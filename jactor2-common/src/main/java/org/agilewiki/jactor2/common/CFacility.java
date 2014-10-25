@@ -2,7 +2,7 @@ package org.agilewiki.jactor2.common;
 
 import org.agilewiki.jactor2.common.services.ClassLoaderService;
 import org.agilewiki.jactor2.common.widgets.InternalWidget;
-import org.agilewiki.jactor2.common.widgets.InternalWidgetFactory;
+import org.agilewiki.jactor2.common.widgets.WidgetFactory;
 import org.agilewiki.jactor2.core.blades.NamedBlade;
 import org.agilewiki.jactor2.core.blades.transmutable.TransmutableSortedMap;
 import org.agilewiki.jactor2.core.reactors.Facility;
@@ -17,8 +17,8 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 public class CFacility extends Facility {
-    private volatile SortedMap<String, InternalWidgetFactory> internalWidgetFactories = new TreeMap();
-    protected TransmutableSortedMap<String, InternalWidgetFactory> internalWidgetFactoriesTransmutable = new TransmutableSortedMap();
+    private volatile SortedMap<String, WidgetFactory> widgetFactories = new TreeMap();
+    protected TransmutableSortedMap<String, WidgetFactory> widgetFactoriesTransmutable = new TransmutableSortedMap();
 
     public CFacility(String _name) throws Exception {
         super(_name);
@@ -55,24 +55,24 @@ public class CFacility extends Facility {
         return getClassLoader().loadClass(_className);
     }
 
-    public SortedMap<String, InternalWidgetFactory> getInternalWidgetFactories() {
-        return internalWidgetFactories;
+    public SortedMap<String, WidgetFactory> getWidgetFactories() {
+        return widgetFactories;
     }
 
-    public InternalWidgetFactory getInternalWidgetFactory(String _factoryKey) {
+    public WidgetFactory getWidgetFactory(String _factoryKey) {
         if (!_factoryKey.contains("."))
             _factoryKey = name + "." + _factoryKey;
-        return (InternalWidgetFactory) internalWidgetFactories.get(_factoryKey);
+        return (WidgetFactory) widgetFactories.get(_factoryKey);
     }
 
     public InternalWidget newInternalWidget(final String _factoryKey,
                                             final InternalWidget _parentWidget,
                                             final ByteBuffer _byteBufffer) {
-        return getInternalWidgetFactory(_factoryKey).
+        return getWidgetFactory(_factoryKey).
                 newInternalWidget(_parentWidget, _byteBufffer);
     }
 
-    public SOp<Void> addInternalWidgetFactorySOp(final InternalWidgetFactory _widgetFactory) {
+    public SOp<Void> addWidgetFactorySOp(final WidgetFactory _widgetFactory) {
         final String factoryKey = _widgetFactory.getFactoryKey();
         if (factoryKey == null) {
             throw new IllegalArgumentException("factory key may not be null");
@@ -88,26 +88,26 @@ public class CFacility extends Facility {
             throw new IllegalArgumentException("factory key must start with "
                     + factoryKey);
         }
-        return new SOp<Void>("addInternalWidgetFactory", this) {
+        return new SOp<Void>("addWidgetFactory", this) {
             @Override
             protected Void processSyncOperation(RequestImpl _requestImpl) throws Exception {
-                if (internalWidgetFactories.containsKey(factoryKey)) {
+                if (widgetFactories.containsKey(factoryKey)) {
                     throw new IllegalArgumentException("duplicate widget factory key");
                 }
-                internalWidgetFactoriesTransmutable.put(factoryKey, _widgetFactory);
-                internalWidgetFactories = internalWidgetFactoriesTransmutable.createUnmodifiable();
+                widgetFactoriesTransmutable.put(factoryKey, _widgetFactory);
+                widgetFactories = widgetFactoriesTransmutable.createUnmodifiable();
                 return null;
             }
         };
     }
 
-    public SOp<Void> addInternalWidgetFactorySOp(final Collection<InternalWidgetFactory> _widgetFactories) {
-        return new SOp<Void>("addInternalWidgetFactory", this) {
+    public SOp<Void> addWidgetFactorySOp(final Collection<WidgetFactory> _widgetFactories) {
+        return new SOp<Void>("addWidgetFactory", this) {
             @Override
             protected Void processSyncOperation(RequestImpl _requestImpl) throws Exception {
-                Iterator<InternalWidgetFactory> it = _widgetFactories.iterator();
+                Iterator<WidgetFactory> it = _widgetFactories.iterator();
                 while (it.hasNext()) {
-                    InternalWidgetFactory widgetFactory = it.next();
+                    WidgetFactory widgetFactory = it.next();
                     final String factoryKey = widgetFactory.getFactoryKey();
                     if (factoryKey == null) {
                         throw new IllegalArgumentException("factory key may not be null");
@@ -123,12 +123,12 @@ public class CFacility extends Facility {
                         throw new IllegalArgumentException("factory key must start with "
                                 + name);
                     }
-                    if (internalWidgetFactories.containsKey(factoryKey)) {
+                    if (widgetFactories.containsKey(factoryKey)) {
                         throw new IllegalArgumentException("duplicate widget factory key");
                     }
-                    internalWidgetFactoriesTransmutable.put(factoryKey, widgetFactory);
+                    widgetFactoriesTransmutable.put(factoryKey, widgetFactory);
                 }
-                internalWidgetFactories = internalWidgetFactoriesTransmutable.createUnmodifiable();
+                widgetFactories = widgetFactoriesTransmutable.createUnmodifiable();
                 return null;
             }
         };

@@ -42,7 +42,7 @@ public interface InternalWidget extends Transmutable<UnmodifiableByteBufferFacto
      *
      * @return The factory.
      */
-    InternalWidgetFactory getWidgetFactory();
+    WidgetFactory getWidgetFactory();
 
     /**
      * Clear the parent reference.

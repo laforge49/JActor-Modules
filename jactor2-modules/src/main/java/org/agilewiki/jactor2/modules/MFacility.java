@@ -2,7 +2,7 @@ package org.agilewiki.jactor2.modules;
 
 import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.services.ClassLoaderService;
-import org.agilewiki.jactor2.common.widgets.InternalWidgetFactory;
+import org.agilewiki.jactor2.common.widgets.WidgetFactory;
 import org.agilewiki.jactor2.core.blades.NamedBlade;
 import org.agilewiki.jactor2.core.blades.transmutable.tssmTransactions.TSSMAppendTransaction;
 import org.agilewiki.jactor2.core.blades.transmutable.tssmTransactions.TSSMReference;
@@ -136,17 +136,17 @@ public class MFacility extends CFacility {
     }
 
     @Override
-    public InternalWidgetFactory getInternalWidgetFactory(final String _factoryKey) {
-        InternalWidgetFactory internalWidgetFactory = super.getInternalWidgetFactory(_factoryKey);
-        if (internalWidgetFactory != null)
-            return internalWidgetFactory;
+    public WidgetFactory getWidgetFactory(final String _factoryKey) {
+        WidgetFactory widgetFactory = super.getWidgetFactory(_factoryKey);
+        if (widgetFactory != null)
+            return widgetFactory;
         Iterator<String> it = dependencyNames().iterator();
         while (it.hasNext()) {
             String dependencyName = it.next();
             MFacility facility = MPlant.getFacility(dependencyName);
-            internalWidgetFactory = facility.getInternalWidgetFactory(_factoryKey);
-            if (internalWidgetFactory != null)
-                return internalWidgetFactory;
+            widgetFactory = facility.getWidgetFactory(_factoryKey);
+            if (widgetFactory != null)
+                return widgetFactory;
         }
         return null;
     }

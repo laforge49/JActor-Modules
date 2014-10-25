@@ -40,7 +40,7 @@ public class StringImpl extends WidgetImpl {
 
     protected int byteLen;
 
-    public StringImpl(InternalWidgetFactory _widgetFactory, InternalWidget _parent, ByteBuffer _byteBuffer) {
+    public StringImpl(WidgetFactory _widgetFactory, InternalWidget _parent, ByteBuffer _byteBuffer) {
         super(_widgetFactory, _parent, _byteBuffer);
         if (byteBuffer != null) {
             value = null;

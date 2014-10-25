@@ -69,7 +69,7 @@ public class BoxImpl extends WidgetImpl {
     public Transmutable<UnmodifiableByteBufferFactory> recreate(
             final UnmodifiableByteBufferFactory _unmodifiable) {
         return new BoxImpl(getInternalWidgetFactory(),
-                getParent(), _unmodifiable.duplicateByteBuffer());
+                getInternalWidgetParent(), _unmodifiable.duplicateByteBuffer());
     }
 
     @Override
@@ -123,7 +123,7 @@ public class BoxImpl extends WidgetImpl {
         public void putCopy(InternalWidget _internalWidget) throws InvalidWidgetContentException {
             factoryKey.asWidget().setValue(_internalWidget.getInternalWidgetFactory().getFactoryKey());
             int oldContentLength = content.getBufferSize();
-            content.clearParent();
+            content.clearInternalWidgetParent();
             content = _internalWidget.deepCopy(BoxImpl.this);
             byteBuffer = null;
             int delta = content.getBufferSize() - oldContentLength;
@@ -147,7 +147,7 @@ public class BoxImpl extends WidgetImpl {
                         _contentFactory.duplicateByteBuffer());
                 factoryKey.asWidget().setValue(iwf.getFactoryKey());
                 int oldContentLength = content.getBufferSize();
-                content.clearParent();
+                content.clearInternalWidgetParent();
                 content = iw;
                 byteBuffer = null;
                 int delta = content.getBufferSize() - oldContentLength;

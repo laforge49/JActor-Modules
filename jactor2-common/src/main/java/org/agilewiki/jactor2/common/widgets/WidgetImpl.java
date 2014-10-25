@@ -12,14 +12,14 @@ import java.nio.ByteBuffer;
 public class WidgetImpl implements InternalWidget {
     private final InternalWidgetFactory widgetFactory;
     private final _Widget widget;
-    private InternalWidget parent;
+    private InternalWidget internalWidgetParent;
     protected ByteBuffer byteBuffer;
 
     public WidgetImpl(final InternalWidgetFactory _widgetFactory,
                       final InternalWidget _parent,
                       final ByteBuffer _byteBuffer) {
         widgetFactory = _widgetFactory;
-        parent = _parent;
+        internalWidgetParent = _parent;
         initBuffer(_byteBuffer);
         widget = newWidget();
     }
@@ -53,12 +53,12 @@ public class WidgetImpl implements InternalWidget {
     }
 
     protected void notifyParent(int _delta) {
-        if (parent != null)
-            parent.childChange(_delta);
+        if (internalWidgetParent != null)
+            internalWidgetParent.childChange(_delta);
     }
 
-    public void clearParent() {
-        parent = null;
+    public void clearInternalWidgetParent() {
+        internalWidgetParent = null;
     }
 
     @Override
@@ -97,8 +97,8 @@ public class WidgetImpl implements InternalWidget {
      *
      * @return The container widget, or null.
      */
-    public InternalWidget getParent() {
-        return parent;
+    public InternalWidget getInternalWidgetParent() {
+        return internalWidgetParent;
     }
 
     @Override
@@ -124,7 +124,7 @@ public class WidgetImpl implements InternalWidget {
     @Override
     public Transmutable<UnmodifiableByteBufferFactory> recreate(final UnmodifiableByteBufferFactory _unmodifiable) {
         return new WidgetImpl(getInternalWidgetFactory(),
-                getParent(), _unmodifiable.duplicateByteBuffer());
+                getInternalWidgetParent(), _unmodifiable.duplicateByteBuffer());
     }
 
     public WidgetImpl deepCopy(final InternalWidget _parent) {
@@ -145,6 +145,11 @@ public class WidgetImpl implements InternalWidget {
                             final UnmodifiableByteBufferFactory _contentFactory)
                 throws WidgetException {
             throw new InvalidWidgetParamsException(_params);
+        }
+
+        @Override
+        public Widget getWidget() {
+            return getInternalWidgetParent().asWidget();
         }
     }
 }

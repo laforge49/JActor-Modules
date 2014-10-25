@@ -16,10 +16,17 @@ public interface Widget {
      * Update the widget.
      *
      * @param _params         Defines the operation.
-     * @param _contentFactory The unmodifiable data used in the operation.
+     * @param _contentFactory The unmodifiable data factory used in the operation.
      * @return A description of what happened.
      */
     String apply(final String _params, final String _contentType,
                  final UnmodifiableByteBufferFactory _contentFactory)
             throws WidgetException;
+
+    /**
+     * Returns the container widgit.
+     *
+     * @return The container widget, or null.
+     */
+    Widget getWidget();
 }

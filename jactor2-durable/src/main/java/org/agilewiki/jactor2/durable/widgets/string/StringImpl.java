@@ -81,7 +81,7 @@ public class StringImpl extends WidgetImpl {
     public Transmutable<UnmodifiableByteBufferFactory> recreate(
             final UnmodifiableByteBufferFactory _unmodifiable) {
         return new StringImpl(getInternalWidgetFactory(),
-                getParent(), _unmodifiable.duplicateByteBuffer());
+                getInternalWidgetParent(), _unmodifiable.duplicateByteBuffer());
     }
 
     @Override

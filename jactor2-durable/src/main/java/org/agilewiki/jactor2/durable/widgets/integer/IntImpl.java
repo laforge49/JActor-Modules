@@ -63,7 +63,7 @@ public class IntImpl extends WidgetImpl {
     public Transmutable<UnmodifiableByteBufferFactory> recreate(
             final UnmodifiableByteBufferFactory _unmodifiable) {
         return new IntImpl(getInternalWidgetFactory(),
-                getParent(), _unmodifiable.duplicateByteBuffer());
+                getInternalWidgetParent(), _unmodifiable.duplicateByteBuffer());
     }
 
     @Override

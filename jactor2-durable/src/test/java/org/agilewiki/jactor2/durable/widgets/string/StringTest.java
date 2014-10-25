@@ -33,9 +33,8 @@ public class StringTest extends TestCase {
             DurableString dstr2 = StringFactory.newDurableString(facility, "-");
             assertEquals("-", dstr2.getValue());
 
-            StringImpl strImpl3 = (StringImpl) facility.
-                    newInternalWidget(StringFactory.FACTORY_NAME, null, buffer1);
-            DurableString dstr3 = strImpl3.asWidget();
+            DurableString dstr3 = (DurableString) facility.
+                    newWidget(StringFactory.FACTORY_NAME, buffer1);
             assertEquals("1", dstr3.getValue());
 
             DurableTransaction setTrans = StringImpl.setValueTransaction(facility, "", "42");

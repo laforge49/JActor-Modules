@@ -31,9 +31,8 @@ public class IntTest extends TestCase {
             DurableInt dint2 = IntFactory.newDurableInt(facility, 0);
             assertEquals(Integer.valueOf(0), dint2.getValue());
 
-            IntImpl intImpl3 = (IntImpl) facility.
-                    newInternalWidget(IntFactory.FACTORY_NAME, null, buffer1);
-            DurableInt dint3 = intImpl3.asWidget();
+            DurableInt dint3 = (DurableInt) facility.
+                    newWidget(IntFactory.FACTORY_NAME, buffer1);
             assertEquals(Integer.valueOf(1), dint3.getValue());
 
             DurableTransaction setTrans = IntImpl.setValueTransaction(facility, "", 42);

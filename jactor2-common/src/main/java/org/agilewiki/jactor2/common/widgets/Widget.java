@@ -29,4 +29,11 @@ public interface Widget {
      * @return The container widget, or null.
      */
     Widget getWidget();
+
+    /**
+     * Returns the factory that created the widget.
+     *
+     * @return The factory.
+     */
+    InternalWidgetFactory getInternalWidgetFactory();
 }

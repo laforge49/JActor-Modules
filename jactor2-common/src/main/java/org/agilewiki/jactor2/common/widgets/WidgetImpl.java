@@ -151,5 +151,10 @@ public class WidgetImpl implements InternalWidget {
         public Widget getWidget() {
             return getInternalWidgetParent().asWidget();
         }
+
+        @Override
+        public InternalWidgetFactory getInternalWidgetFactory() {
+            return widgetFactory;
+        }
     }
 }

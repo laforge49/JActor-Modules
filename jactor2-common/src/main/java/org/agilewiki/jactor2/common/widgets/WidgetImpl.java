@@ -186,5 +186,16 @@ public class WidgetImpl implements InternalWidget {
         public void clearWidgetParent() {
             WidgetImpl.this.clearWidgetParent();
         }
+
+        /**
+         * Serialize to a ByteBuffer, starting at the current position.
+         * Once written, the content should not change (append only), as a view
+         * of the content is retained.
+         *
+         * @param _byteBuffer A ByteBuffer to be updated.
+         */
+        public void serialize(final ByteBuffer _byteBuffer) {
+            WidgetImpl.this.serialize(_byteBuffer);
+        }
     }
 }

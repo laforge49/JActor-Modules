@@ -25,12 +25,12 @@ public interface DurableBox extends Widget {
      *
      * @return The contents of the box.
      */
-    InternalWidget getBoxedInternalWidget();
+    Widget getContent();
 
     /**
      * Makes a deep copy of a widget and puts that copy in the box.
      *
-     * @param _internalWidget The widget to be copied.
+     * @param _widget The widget to be copied.
      */
-    void putCopy(InternalWidget _internalWidget) throws InvalidWidgetContentException;
+    void putCopy(Widget _widget) throws InvalidWidgetContentException;
 }

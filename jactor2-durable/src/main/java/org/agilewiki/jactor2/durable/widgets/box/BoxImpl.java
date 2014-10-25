@@ -115,16 +115,17 @@ public class BoxImpl extends WidgetImpl {
         }
 
         @Override
-        public InternalWidget getBoxedInternalWidget() {
-            return content;
+        public Widget getContent() {
+            return content.asWidget();
         }
 
         @Override
-        public void putCopy(InternalWidget _internalWidget) throws InvalidWidgetContentException {
-            factoryKey.asWidget().setValue(_internalWidget.getInternalWidgetFactory().getFactoryKey());
+        public void putCopy(Widget _widget) throws InvalidWidgetContentException {
+            factoryKey.asWidget().setValue(_widget.getInternalWidgetFactory().getFactoryKey());
             int oldContentLength = content.getBufferSize();
             content.clearInternalWidgetParent();
-            content = _internalWidget.deepCopy(BoxImpl.this);
+            content = new WidgetImpl(_widget.getInternalWidgetFactory(),
+                    BoxImpl.this, _widget.createUnmodifiable().duplicateByteBuffer());
             byteBuffer = null;
             int delta = content.getBufferSize() - oldContentLength;
             byteLen += delta;

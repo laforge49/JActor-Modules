@@ -11,6 +11,10 @@ public class StringFactory extends WidgetFactory {
 
     public static final String FACTORY_NAME = "str";
 
+    public static StringImpl._String newDurableString(final CFacility _facility, final String _value) {
+        return new StringImpl(_facility, null, _value).asWidget();
+    }
+
     public static SOp<Void> addFactorySOp(final CFacility _facility) {
         return _facility.addWidgetFactorySOp(new StringFactory(_facility));
     }

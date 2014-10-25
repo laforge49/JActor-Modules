@@ -32,7 +32,6 @@ public class IntImpl extends WidgetImpl {
         super(_widgetFactory, _parent, _byteBuffer);
         if (byteBuffer != null) {
             value = null;
-
         }
     }
 

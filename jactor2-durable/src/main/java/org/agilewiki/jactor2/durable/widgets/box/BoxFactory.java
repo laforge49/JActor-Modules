@@ -11,6 +11,10 @@ public class BoxFactory extends WidgetFactory {
 
     public static final String FACTORY_NAME = "box";
 
+    public static BoxImpl._Box newDurableBox(final CFacility _facility) {
+        return new BoxImpl(_facility, null).asWidget();
+    }
+
     public static SOp<Void> addFactorySOp(final CFacility _facility) {
         return _facility.addWidgetFactorySOp(new BoxFactory(_facility));
     }

@@ -16,23 +16,21 @@ public class StringTest extends TestCase {
             CFacility facility = (CFacility) CPlant.getInternalFacility();
             StringFactory.addFactorySOp(facility).call();
 
-            StringImpl strImpl = new StringImpl(facility, null, null);
-            ByteBuffer buffer = strImpl.createUnmodifiable().duplicateByteBuffer();
+            DurableString dStr = StringFactory.newDurableString(facility, null);
+            ByteBuffer buffer = dStr.createUnmodifiable().duplicateByteBuffer();
             assertEquals(4, buffer.limit());
             assertEquals("", StringImpl.readString(buffer.duplicate()));
-            DurableString dStr = strImpl.asWidget();
             assertEquals(0, dStr.length());
             assertEquals("", dStr.getValue());
 
             dStr.setValue("1");
             assertEquals(1, dStr.length());
             assertEquals("1", dStr.getValue());
-            ByteBuffer buffer1 = strImpl.createUnmodifiable().duplicateByteBuffer();
+            ByteBuffer buffer1 = dStr.createUnmodifiable().duplicateByteBuffer();
             assertEquals(6, buffer1.limit());
             assertEquals("1", StringImpl.readString(buffer1.duplicate()));
 
-            StringImpl strImpl2 = new StringImpl(facility, null, "-");
-            DurableString dstr2 = strImpl2.asWidget();
+            DurableString dstr2 = StringFactory.newDurableString(facility, "-");
             assertEquals("-", dstr2.getValue());
 
             StringImpl strImpl3 = (StringImpl) facility.

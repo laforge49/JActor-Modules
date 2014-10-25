@@ -11,6 +11,10 @@ public class IntFactory extends WidgetFactory {
 
     public static final String FACTORY_NAME = "int";
 
+    public static IntImpl._Int newDurableInt(final CFacility _facility, final Integer _value) {
+        return new IntImpl(_facility, null, _value).asWidget();
+    }
+
     public static SOp<Void> addFactorySOp(final CFacility _facility) {
         return _facility.addWidgetFactorySOp(new IntFactory(_facility));
     }

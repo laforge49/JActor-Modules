@@ -16,21 +16,19 @@ public class IntTest extends TestCase {
             CFacility facility = (CFacility) CPlant.getInternalFacility();
             IntFactory.addFactorySOp(facility).call();
 
-            IntImpl intImpl = new IntImpl(facility, null, null);
-            ByteBuffer buffer = intImpl.createUnmodifiable().duplicateByteBuffer();
+            DurableInt dint = IntFactory.newDurableInt(facility, null);
+            ByteBuffer buffer = dint.createUnmodifiable().duplicateByteBuffer();
             assertEquals(4, buffer.limit());
             assertEquals(0, buffer.duplicate().getInt());
-            DurableInt dint = intImpl.asWidget();
             assertEquals(Integer.valueOf(0), dint.getValue());
 
             dint.setValue(1);
             assertEquals(Integer.valueOf(1), dint.getValue());
-            ByteBuffer buffer1 = intImpl.createUnmodifiable().duplicateByteBuffer();
+            ByteBuffer buffer1 = dint.createUnmodifiable().duplicateByteBuffer();
             assertEquals(4, buffer1.limit());
             assertEquals(1, buffer1.duplicate().getInt());
 
-            IntImpl intImpl2 = new IntImpl(facility, null, 0);
-            DurableInt dint2 = intImpl2.asWidget();
+            DurableInt dint2 = IntFactory.newDurableInt(facility, 0);
             assertEquals(Integer.valueOf(0), dint2.getValue());
 
             IntImpl intImpl3 = (IntImpl) facility.

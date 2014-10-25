@@ -2,7 +2,6 @@ package org.agilewiki.jactor2.common.widgets;
 
 import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
-import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
 
 import java.nio.ByteBuffer;
 
@@ -57,7 +56,7 @@ public class WidgetImpl implements InternalWidget {
             internalWidgetParent.childChange(_delta);
     }
 
-    public void clearInternalWidgetParent() {
+    public void clearWidgetParent() {
         internalWidgetParent = null;
     }
 
@@ -88,7 +87,7 @@ public class WidgetImpl implements InternalWidget {
     }
 
     @Override
-    public InternalWidgetFactory getInternalWidgetFactory() {
+    public InternalWidgetFactory getWidgetFactory() {
         return widgetFactory;
     }
 
@@ -123,12 +122,12 @@ public class WidgetImpl implements InternalWidget {
 
     @Override
     public WidgetImpl recreate(final UnmodifiableByteBufferFactory _unmodifiable) {
-        return new WidgetImpl(getInternalWidgetFactory(),
+        return new WidgetImpl(getWidgetFactory(),
                 getInternalWidgetParent(), _unmodifiable.duplicateByteBuffer());
     }
 
     public WidgetImpl deepCopy(final InternalWidget _parent) {
-        return new WidgetImpl(getInternalWidgetFactory(),
+        return new WidgetImpl(getWidgetFactory(),
                 _parent, createUnmodifiable().duplicateByteBuffer());
     }
 
@@ -185,7 +184,7 @@ public class WidgetImpl implements InternalWidget {
          * Clear the parent reference.
          */
         public void clearWidgetParent() {
-            WidgetImpl.this.clearInternalWidgetParent();
+            WidgetImpl.this.clearWidgetParent();
         }
     }
 }

@@ -16,12 +16,12 @@ public class BoxImpl extends WidgetImpl {
     public static DurableTransaction expectedFactoryKeyTransaction(final CFacility facility,
                                                                    final String _path,
                                                                    final String _value) {
-        return new DurableTransaction(_path, "expectedFactoryKey", new StringImpl(facility, null, _value));
+        return new DurableTransaction(_path, "expectedFactoryKey", new StringImpl(facility, null, _value).asWidget());
     }
 
     public static DurableTransaction putCopyTransaction(final CFacility facility,
                                                         final String _path,
-                                                        final InternalWidget _value) {
+                                                        final Widget _value) {
         return new DurableTransaction(_path, "putCopy", _value);
     }
 
@@ -45,13 +45,13 @@ public class BoxImpl extends WidgetImpl {
         super(BoxFactory.getFactory(_facility), _parent, null);
         content = new WidgetImpl(_facility, this);
         factoryKey = new StringImpl(_facility, this,
-                content.getInternalWidgetFactory().getFactoryKey());
+                content.getWidgetFactory().getFactoryKey());
         byteLen = factoryKey.getBufferSize() + content.getBufferSize();
     }
 
     @Override
-    public BoxFactory getInternalWidgetFactory() {
-        return (BoxFactory) super.getInternalWidgetFactory();
+    public BoxFactory getWidgetFactory() {
+        return (BoxFactory) super.getWidgetFactory();
     }
 
     @Override
@@ -67,7 +67,7 @@ public class BoxImpl extends WidgetImpl {
     @Override
     public BoxImpl recreate(
             final UnmodifiableByteBufferFactory _unmodifiable) {
-        return new BoxImpl(getInternalWidgetFactory(),
+        return new BoxImpl(getWidgetFactory(),
                 getInternalWidgetParent(), _unmodifiable.duplicateByteBuffer());
     }
 
@@ -122,7 +122,7 @@ public class BoxImpl extends WidgetImpl {
         public void putCopy(Widget _widget) throws InvalidWidgetContentException {
             factoryKey.asWidget().setValue(_widget.getWidgetFactory().getFactoryKey());
             int oldContentLength = content.asWidget().getBufferSize();
-            content.clearInternalWidgetParent();
+            content.clearWidgetParent();
             content = new WidgetImpl(_widget.getWidgetFactory(),
                     BoxImpl.this, _widget.createUnmodifiable().duplicateByteBuffer());
             byteBuffer = null;
@@ -147,7 +147,7 @@ public class BoxImpl extends WidgetImpl {
                         _contentFactory.duplicateByteBuffer());
                 factoryKey.asWidget().setValue(iwf.getFactoryKey());
                 int oldContentLength = content.getBufferSize();
-                content.clearInternalWidgetParent();
+                content.clearWidgetParent();
                 content = iw;
                 byteBuffer = null;
                 int delta = content.getBufferSize() - oldContentLength;

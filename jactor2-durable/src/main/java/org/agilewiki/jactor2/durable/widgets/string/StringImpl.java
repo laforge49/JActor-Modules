@@ -28,12 +28,12 @@ public class StringImpl extends WidgetImpl {
 
     public static DurableTransaction setValueTransaction(final CFacility facility,
                                                          final String _path, final String _value) {
-        return new DurableTransaction(_path, "setValue", new StringImpl(facility, null, _value));
+        return new DurableTransaction(_path, "setValue", new StringImpl(facility, null, _value).asWidget());
     }
 
     public static DurableTransaction expectTransaction(final CFacility facility,
                                                        final String _path, final String _value) {
-        return new DurableTransaction(_path, "expect", new StringImpl(facility, null, _value));
+        return new DurableTransaction(_path, "expect", new StringImpl(facility, null, _value).asWidget());
     }
 
     protected String value = "";
@@ -62,8 +62,8 @@ public class StringImpl extends WidgetImpl {
     }
 
     @Override
-    public StringFactory getInternalWidgetFactory() {
-        return (StringFactory) super.getInternalWidgetFactory();
+    public StringFactory getWidgetFactory() {
+        return (StringFactory) super.getWidgetFactory();
     }
 
     @Override
@@ -79,7 +79,7 @@ public class StringImpl extends WidgetImpl {
     @Override
     public StringImpl recreate(
             final UnmodifiableByteBufferFactory _unmodifiable) {
-        return new StringImpl(getInternalWidgetFactory(),
+        return new StringImpl(getWidgetFactory(),
                 getInternalWidgetParent(), _unmodifiable.duplicateByteBuffer());
     }
 
@@ -140,7 +140,7 @@ public class StringImpl extends WidgetImpl {
                 throw new UnexpectedValueException(
                         "expected " + StringFactory.factoryKey(getWidgetFactory().getFacility()) +
                                 " content type, not " +
-                                iw.getInternalWidgetFactory().getFactoryKey());
+                                iw.getWidgetFactory().getFactoryKey());
             StringImpl ii = (StringImpl) iw;
             if ("setValue".equals(_params)) {
                 String old = value;

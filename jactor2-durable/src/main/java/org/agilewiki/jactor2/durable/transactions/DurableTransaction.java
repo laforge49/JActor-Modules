@@ -1,6 +1,6 @@
 package org.agilewiki.jactor2.durable.transactions;
 
-import org.agilewiki.jactor2.common.widgets.InternalWidget;
+import org.agilewiki.jactor2.common.widgets.Widget;
 import org.agilewiki.jactor2.common.widgets.WidgetImpl;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.core.blades.transmutable.transactions.SyncTransaction;
@@ -19,19 +19,19 @@ public class DurableTransaction
 
     public DurableTransaction(final String _path,
                               final String _params,
-                              final InternalWidget _internalWidget) {
-        this(_path, _params, _internalWidget, null);
+                              final Widget _widget) {
+        this(_path, _params, _widget, null);
     }
 
     public DurableTransaction(final String _path,
                               final String _params,
-                              final InternalWidget _internalWidget,
+                              final Widget _widget,
                               final DurableTransaction _parent) {
         super(_parent);
         path = _path;
         params = _params;
-        contentType = _internalWidget.getInternalWidgetFactory().getFactoryKey();
-        contentFactory = _internalWidget.createUnmodifiable();
+        contentType = _widget.getWidgetFactory().getFactoryKey();
+        contentFactory = _widget.createUnmodifiable();
     }
 
     @Override

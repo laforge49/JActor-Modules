@@ -16,12 +16,12 @@ public class IntImpl extends WidgetImpl {
 
     public static DurableTransaction setValueTransaction(final CFacility facility,
                                                          final String _path, final int _value) {
-        return new DurableTransaction(_path, "setValue", new IntImpl(facility, null, _value));
+        return new DurableTransaction(_path, "setValue", new IntImpl(facility, null, _value).asWidget());
     }
 
     public static DurableTransaction expectTransaction(final CFacility facility,
                                                        final String _path, final int _value) {
-        return new DurableTransaction(_path, "expect", new IntImpl(facility, null, _value));
+        return new DurableTransaction(_path, "expect", new IntImpl(facility, null, _value).asWidget());
     }
 
     protected Integer value = 0;
@@ -44,8 +44,8 @@ public class IntImpl extends WidgetImpl {
     }
 
     @Override
-    public IntFactory getInternalWidgetFactory() {
-        return (IntFactory) super.getInternalWidgetFactory();
+    public IntFactory getWidgetFactory() {
+        return (IntFactory) super.getWidgetFactory();
     }
 
     @Override
@@ -61,7 +61,7 @@ public class IntImpl extends WidgetImpl {
     @Override
     public IntImpl recreate(
             final UnmodifiableByteBufferFactory _unmodifiable) {
-        return new IntImpl(getInternalWidgetFactory(),
+        return new IntImpl(getWidgetFactory(),
                 getInternalWidgetParent(), _unmodifiable.duplicateByteBuffer());
     }
 
@@ -114,7 +114,7 @@ public class IntImpl extends WidgetImpl {
             if (!(iw instanceof IntImpl))
                 throw new UnexpectedValueException("expected " +
                         IntFactory.factoryKey(getWidgetFactory().getFacility()) + " content type, not " +
-                        iw.getInternalWidgetFactory().getFactoryKey());
+                        iw.getWidgetFactory().getFactoryKey());
             IntImpl ii = (IntImpl) iw;
             if ("setValue".equals(_params)) {
                 int old = value;

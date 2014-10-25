@@ -22,7 +22,7 @@ public class BoxImpl extends WidgetImpl {
 
     public static DurableTransaction putCopyTransaction(final CFacility facility,
                                                         final String _path,
-                                                                   final InternalWidget _value) {
+                                                        final InternalWidget _value) {
         return new DurableTransaction(_path, "putCopy", _value);
     }
 

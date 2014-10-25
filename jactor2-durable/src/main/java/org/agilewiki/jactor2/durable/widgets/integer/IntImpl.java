@@ -113,8 +113,8 @@ public class IntImpl extends WidgetImpl {
             InternalWidget iw = getInternalWidgetFactory().getFacility().newInternalWidget(_contentType, null,
                     _contentFactory.duplicateByteBuffer());
             if (!(iw instanceof IntImpl))
-                throw new UnexpectedValueException("expected "+
-                        IntFactory.factoryKey(getInternalWidgetFactory().getFacility())+" content type, not "+
+                throw new UnexpectedValueException("expected " +
+                        IntFactory.factoryKey(getInternalWidgetFactory().getFacility()) + " content type, not " +
                         iw.getInternalWidgetFactory().getFactoryKey());
             IntImpl ii = (IntImpl) iw;
             if ("setValue".equals(_params)) {

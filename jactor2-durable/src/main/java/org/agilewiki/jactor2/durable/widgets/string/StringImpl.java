@@ -139,8 +139,8 @@ public class StringImpl extends WidgetImpl {
                     _contentFactory.duplicateByteBuffer());
             if (!(iw instanceof StringImpl))
                 throw new UnexpectedValueException(
-                        "expected "+StringFactory.factoryKey(getInternalWidgetFactory().getFacility())+
-                                " content type, not "+
+                        "expected " + StringFactory.factoryKey(getInternalWidgetFactory().getFacility()) +
+                                " content type, not " +
                                 iw.getInternalWidgetFactory().getFactoryKey());
             StringImpl ii = (StringImpl) iw;
             if ("setValue".equals(_params)) {

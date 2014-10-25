@@ -10,7 +10,7 @@ import org.agilewiki.jactor2.core.blades.transmutable.transactions.Transaction;
  * A DurableWidget transaction.
  */
 public class DurableTransaction
-        extends SyncTransaction<UnmodifiableByteBufferFactory, WidgetImpl> {
+        extends SyncTransaction<UnmodifiableByteBufferFactory, Widget> {
     protected DurableChangeManager durableChangeManager;
     protected final String path;
     protected final String params;
@@ -35,7 +35,7 @@ public class DurableTransaction
     }
 
     @Override
-    protected final void update(WidgetImpl transmutable) throws Exception {
+    protected final void update(Widget transmutable) throws Exception {
         String result = durableChangeManager.apply(path, params, contentType, contentFactory);
         if (result != null)
             trace.insert(0, "\nRESULT; " + result);
@@ -58,7 +58,7 @@ public class DurableTransaction
 
     @Override
     protected void applySourceTransaction(
-            final Transaction<UnmodifiableByteBufferFactory, WidgetImpl> _transaction) {
+            final Transaction<UnmodifiableByteBufferFactory, Widget> _transaction) {
         super.applySourceTransaction(_transaction);
         @SuppressWarnings("unchecked")
         final DurableTransaction durableTransaction = (DurableTransaction) _transaction;

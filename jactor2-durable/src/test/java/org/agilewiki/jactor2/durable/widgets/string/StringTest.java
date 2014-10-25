@@ -41,7 +41,7 @@ public class StringTest extends TestCase {
             assertEquals("1", dstr3.getValue());
 
             DurableTransaction setTrans = StringImpl.setValueTransaction(facility, "", "42");
-            DurableReference durableReference = new DurableReference(strImpl3);
+            DurableReference durableReference = new DurableReference(dstr3);
             durableReference.applyAOp(setTrans).call();
             assertEquals("42", dstr3.getValue());
             System.out.println(setTrans.toString());

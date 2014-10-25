@@ -39,7 +39,7 @@ public class IntTest extends TestCase {
             assertEquals(Integer.valueOf(1), dint3.getValue());
 
             DurableTransaction setTrans = IntImpl.setValueTransaction(facility, "", 42);
-            DurableReference durableReference = new DurableReference(intImpl3);
+            DurableReference durableReference = new DurableReference(dint3);
             durableReference.applyAOp(setTrans).call();
             assertEquals(Integer.valueOf(42), dint3.getValue());
             System.out.println(setTrans.toString());

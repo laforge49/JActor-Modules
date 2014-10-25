@@ -3,7 +3,6 @@ package org.agilewiki.jactor2.durable.widgets.string;
 import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.widgets.*;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
-import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
 import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
 import org.agilewiki.jactor2.durable.widgets.InvalidWidgetContentException;
 import org.agilewiki.jactor2.durable.widgets.UnexpectedValueException;
@@ -135,11 +134,11 @@ public class StringImpl extends WidgetImpl {
         public String apply(final String _params, final String _contentType,
                             final UnmodifiableByteBufferFactory _contentFactory)
                 throws WidgetException {
-            InternalWidget iw = getInternalWidgetFactory().getFacility().newInternalWidget(_contentType, null,
+            InternalWidget iw = getWidgetFactory().getFacility().newInternalWidget(_contentType, null,
                     _contentFactory.duplicateByteBuffer());
             if (!(iw instanceof StringImpl))
                 throw new UnexpectedValueException(
-                        "expected " + StringFactory.factoryKey(getInternalWidgetFactory().getFacility()) +
+                        "expected " + StringFactory.factoryKey(getWidgetFactory().getFacility()) +
                                 " content type, not " +
                                 iw.getInternalWidgetFactory().getFactoryKey());
             StringImpl ii = (StringImpl) iw;

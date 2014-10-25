@@ -3,7 +3,6 @@ package org.agilewiki.jactor2.durable.widgets.box;
 import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.widgets.*;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
-import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
 import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
 import org.agilewiki.jactor2.durable.widgets.InvalidWidgetContentException;
 import org.agilewiki.jactor2.durable.widgets.UnexpectedValueException;
@@ -121,10 +120,10 @@ public class BoxImpl extends WidgetImpl {
 
         @Override
         public void putCopy(Widget _widget) throws InvalidWidgetContentException {
-            factoryKey.asWidget().setValue(_widget.getInternalWidgetFactory().getFactoryKey());
-            int oldContentLength = content.getBufferSize();
+            factoryKey.asWidget().setValue(_widget.getWidgetFactory().getFactoryKey());
+            int oldContentLength = content.asWidget().getBufferSize();
             content.clearInternalWidgetParent();
-            content = new WidgetImpl(_widget.getInternalWidgetFactory(),
+            content = new WidgetImpl(_widget.getWidgetFactory(),
                     BoxImpl.this, _widget.createUnmodifiable().duplicateByteBuffer());
             byteBuffer = null;
             int delta = content.getBufferSize() - oldContentLength;
@@ -143,7 +142,7 @@ public class BoxImpl extends WidgetImpl {
             }
             if ("putCopy".equals(_params)) {
                 InternalWidgetFactory iwf =
-                        getInternalWidgetFactory().getFacility().getInternalWidgetFactory(_contentType);
+                        getWidgetFactory().getFacility().getInternalWidgetFactory(_contentType);
                 InternalWidget iw = iwf.newInternalWidget(BoxImpl.this,
                         _contentFactory.duplicateByteBuffer());
                 factoryKey.asWidget().setValue(iwf.getFactoryKey());

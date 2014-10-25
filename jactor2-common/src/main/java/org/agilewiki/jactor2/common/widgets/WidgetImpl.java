@@ -153,7 +153,7 @@ public class WidgetImpl implements InternalWidget {
         }
 
         @Override
-        public InternalWidgetFactory getInternalWidgetFactory() {
+        public InternalWidgetFactory getWidgetFactory() {
             return widgetFactory;
         }
 
@@ -170,6 +170,22 @@ public class WidgetImpl implements InternalWidget {
         @Override
         public _Widget recreate(UnmodifiableByteBufferFactory _unmodifiable) {
             return WidgetImpl.this.recreate(_unmodifiable).asWidget();
+        }
+
+        /**
+         * Returns the size of the serialized data.
+         *
+         * @return The number of bytes.
+         */
+        public int getBufferSize() {
+            return WidgetImpl.this.getBufferSize();
+        }
+
+        /**
+         * Clear the parent reference.
+         */
+        public void clearWidgetParent() {
+            WidgetImpl.this.clearInternalWidgetParent();
         }
     }
 }

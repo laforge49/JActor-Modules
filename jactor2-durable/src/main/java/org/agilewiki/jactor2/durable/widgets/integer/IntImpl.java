@@ -6,7 +6,6 @@ import org.agilewiki.jactor2.common.widgets.InvalidWidgetParamsException;
 import org.agilewiki.jactor2.common.widgets.WidgetException;
 import org.agilewiki.jactor2.common.widgets.WidgetImpl;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
-import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
 import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
 import org.agilewiki.jactor2.durable.widgets.InvalidWidgetContentException;
 import org.agilewiki.jactor2.durable.widgets.UnexpectedValueException;
@@ -110,11 +109,11 @@ public class IntImpl extends WidgetImpl {
         public String apply(final String _params, final String _contentType,
                             final UnmodifiableByteBufferFactory _contentFactory)
                 throws WidgetException {
-            InternalWidget iw = getInternalWidgetFactory().getFacility().newInternalWidget(_contentType, null,
+            InternalWidget iw = getWidgetFactory().getFacility().newInternalWidget(_contentType, null,
                     _contentFactory.duplicateByteBuffer());
             if (!(iw instanceof IntImpl))
                 throw new UnexpectedValueException("expected " +
-                        IntFactory.factoryKey(getInternalWidgetFactory().getFacility()) + " content type, not " +
+                        IntFactory.factoryKey(getWidgetFactory().getFacility()) + " content type, not " +
                         iw.getInternalWidgetFactory().getFactoryKey());
             IntImpl ii = (IntImpl) iw;
             if ("setValue".equals(_params)) {

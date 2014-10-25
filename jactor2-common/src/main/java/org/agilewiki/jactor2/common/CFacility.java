@@ -68,7 +68,7 @@ public class CFacility extends Facility {
     public InternalWidget newInternalWidget(final String _factoryKey,
                                             final InternalWidget _parentWidget,
                                             final ByteBuffer _byteBufffer) {
-        return ((InternalWidgetFactory) getInternalWidgetFactory(_factoryKey)).
+        return getInternalWidgetFactory(_factoryKey).
                 newInternalWidget(_parentWidget, _byteBufffer);
     }
 

@@ -136,7 +136,7 @@ public class BoxImpl extends WidgetImpl {
                             final UnmodifiableByteBufferFactory _contentFactory)
                 throws WidgetException {
             if ("expectedFactoryKey".equals(_params)) {
-                String newValue = StringImpl.readString(_contentFactory.duplicateByteBuffer());
+                String newValue = StringFactory.readString(_contentFactory.duplicateByteBuffer());
                 asWidget().expectedFactoryKey(newValue);
                 return null;
             }

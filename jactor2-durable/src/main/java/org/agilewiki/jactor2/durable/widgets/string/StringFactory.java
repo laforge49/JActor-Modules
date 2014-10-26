@@ -15,6 +15,21 @@ public class StringFactory extends WidgetFactory {
         return new StringImpl(_facility, null, _value).asWidget();
     }
 
+    public static String readString(final ByteBuffer _bb) {
+        int len = _bb.getInt();
+        char[] chars = new char[len / 2];
+        _bb.asCharBuffer().get(chars);
+        _bb.position(_bb.position() + len);
+        return new String(chars);
+    }
+
+    public static void writeString(final ByteBuffer _bb, final String _str) {
+        int len = _str.length() * 2;
+        _bb.putInt(len);
+        _bb.asCharBuffer().put(_str);
+        _bb.position(_bb.position() + len);
+    }
+
     public static SOp<Void> addFactorySOp(final CFacility _facility) {
         return _facility.addWidgetFactorySOp(new StringFactory(_facility));
     }

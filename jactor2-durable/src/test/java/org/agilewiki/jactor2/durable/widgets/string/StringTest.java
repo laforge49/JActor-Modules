@@ -19,7 +19,7 @@ public class StringTest extends TestCase {
             DurableString dStr = StringFactory.newDurableString(facility, null);
             ByteBuffer buffer = dStr.createUnmodifiable().duplicateByteBuffer();
             assertEquals(4, buffer.limit());
-            assertEquals("", StringImpl.readString(buffer.duplicate()));
+            assertEquals("", StringFactory.readString(buffer.duplicate()));
             assertEquals(0, dStr.length());
             assertEquals("", dStr.getValue());
 
@@ -28,7 +28,7 @@ public class StringTest extends TestCase {
             assertEquals("1", dStr.getValue());
             ByteBuffer buffer1 = dStr.createUnmodifiable().duplicateByteBuffer();
             assertEquals(6, buffer1.limit());
-            assertEquals("1", StringImpl.readString(buffer1.duplicate()));
+            assertEquals("1", StringFactory.readString(buffer1.duplicate()));
 
             DurableString dstr2 = StringFactory.newDurableString(facility, "-");
             assertEquals("-", dstr2.getValue());

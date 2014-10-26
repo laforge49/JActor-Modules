@@ -1,7 +1,6 @@
 package org.agilewiki.jactor2.durable.transactions;
 
 import org.agilewiki.jactor2.common.widgets.Widget;
-import org.agilewiki.jactor2.common.widgets.WidgetImpl;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.core.blades.pubSub.RequestBus;
 import org.agilewiki.jactor2.core.blades.transmutable.transactions.Transaction;

@@ -11,21 +11,6 @@ import java.nio.ByteBuffer;
 
 public class StringImpl extends WidgetImpl {
 
-    public static String readString(final ByteBuffer _bb) {
-        int len = _bb.getInt();
-        char[] chars = new char[len / 2];
-        _bb.asCharBuffer().get(chars);
-        _bb.position(_bb.position() + len);
-        return new String(chars);
-    }
-
-    public static void writeString(final ByteBuffer _bb, final String _str) {
-        int len = _str.length() * 2;
-        _bb.putInt(len);
-        _bb.asCharBuffer().put(_str);
-        _bb.position(_bb.position() + len);
-    }
-
     public static DurableTransaction setValueTransaction(final CFacility facility,
                                                          final String _path, final String _value) {
         return new DurableTransaction(_path, "setValue", new StringImpl(facility, null, _value).asWidget());
@@ -90,12 +75,12 @@ public class StringImpl extends WidgetImpl {
 
     @Override
     protected void _serialize(final ByteBuffer _byteBuffer) {
-        writeString(_byteBuffer, value);
+        StringFactory.writeString(_byteBuffer, value);
     }
 
     @Override
     protected void _deserialize() {
-        value = readString(byteBuffer);
+        value = StringFactory.readString(byteBuffer);
     }
 
     public class _String extends _Widget implements DurableString {

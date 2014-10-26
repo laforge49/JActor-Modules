@@ -14,7 +14,7 @@ public interface DurableString extends Widget {
      *
      * @return The value.
      */
-    String getValue() throws Exception;
+    String getValue();
 
     /**
      * Returns the string length.

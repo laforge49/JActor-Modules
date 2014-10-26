@@ -133,7 +133,7 @@ public class WidgetImpl implements InternalWidget {
 
     public class _Widget implements Widget {
         @Override
-        public _Widget resolve(final String _path) {
+        public Widget resolve(final String _path) {
             if (_path.length() == 0)
                 return this;
             return null;

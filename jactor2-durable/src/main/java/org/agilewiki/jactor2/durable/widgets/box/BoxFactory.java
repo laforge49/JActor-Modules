@@ -6,7 +6,7 @@ import org.agilewiki.jactor2.common.widgets.Widget;
 import org.agilewiki.jactor2.common.widgets.WidgetFactory;
 import org.agilewiki.jactor2.core.requests.SOp;
 import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
-import org.agilewiki.jactor2.durable.widgets.string.StringImpl;
+import org.agilewiki.jactor2.durable.widgets.string.StringFactory;
 
 import java.nio.ByteBuffer;
 
@@ -21,7 +21,8 @@ public class BoxFactory extends WidgetFactory {
     public static DurableTransaction expectedFactoryKeyTransaction(final CFacility facility,
                                                                    final String _path,
                                                                    final String _value) {
-        return new DurableTransaction(_path, "expectedFactoryKey", new StringImpl(facility, null, _value).asWidget());
+        return new DurableTransaction(_path, "expectedFactoryKey",
+                StringFactory.newDurableString(facility, _value));
     }
 
     public static DurableTransaction putCopyTransaction(final CFacility facility,

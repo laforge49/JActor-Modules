@@ -6,6 +6,7 @@ import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactor
 import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
 import org.agilewiki.jactor2.durable.widgets.InvalidWidgetContentException;
 import org.agilewiki.jactor2.durable.widgets.UnexpectedValueException;
+import org.agilewiki.jactor2.durable.widgets.string.DurableString;
 import org.agilewiki.jactor2.durable.widgets.string.StringFactory;
 import org.agilewiki.jactor2.durable.widgets.string.StringImpl;
 
@@ -15,16 +16,16 @@ public class BoxImpl extends WidgetImpl {
 
     protected _Widget content;
 
-    protected StringImpl factoryKey;
+    protected DurableString factoryKey;
 
     protected int byteLen;
 
     public BoxImpl(WidgetFactory _widgetFactory, InternalWidget _parent, ByteBuffer _byteBuffer) {
         super(_widgetFactory, _parent, _byteBuffer);
         CFacility facility = _widgetFactory.getFacility();
-        factoryKey = (StringImpl) facility.newInternalWidget(StringFactory.FACTORY_NAME, this,
-                _byteBuffer);
-        content = facility.newInternalWidget(factoryKey.asWidget().getValue(), this,
+        factoryKey = (DurableString) facility.newInternalWidget(StringFactory.FACTORY_NAME, this,
+                _byteBuffer).asWidget();
+        content = facility.newInternalWidget(factoryKey.getValue(), this,
                 _byteBuffer).asWidget();
         byteLen = factoryKey.getBufferSize() + content.getBufferSize();
     }
@@ -33,7 +34,7 @@ public class BoxImpl extends WidgetImpl {
         super(BoxFactory.getFactory(_facility), _parent, null);
         content = new WidgetImpl(_facility, this).asWidget();
         factoryKey = new StringImpl(_facility, this,
-                content.getWidgetFactory().getFactoryKey());
+                content.getWidgetFactory().getFactoryKey()).asWidget();
         byteLen = factoryKey.getBufferSize() + content.getBufferSize();
     }
 
@@ -78,11 +79,11 @@ public class BoxImpl extends WidgetImpl {
 
     public class _Box extends _Widget implements DurableBox {
         @Override
-        public _Widget resolve(final String _path) {
+        public Widget resolve(final String _path) {
             if (_path.length() == 0)
                 return this;
             if ("factoryKey".equals(_path))
-                return factoryKey.asWidget();
+                return factoryKey;
             if ("content".equals(_path))
                 return content;
             if (_path.startsWith("content/"))
@@ -92,13 +93,13 @@ public class BoxImpl extends WidgetImpl {
 
         @Override
         public String boxedFactoryKey() {
-            return factoryKey.asWidget().getValue();
+            return factoryKey.getValue();
         }
 
         @Override
         public void expectedFactoryKey(String _value) throws UnexpectedValueException {
-            if (!_value.equals(factoryKey.asWidget().getValue()))
-                throw new UnexpectedValueException("expected " + _value + ", not " + factoryKey.asWidget().getValue());
+            if (!_value.equals(factoryKey.getValue()))
+                throw new UnexpectedValueException("expected " + _value + ", not " + factoryKey.getValue());
         }
 
         @Override
@@ -108,7 +109,7 @@ public class BoxImpl extends WidgetImpl {
 
         @Override
         public void putCopy(Widget _widget) throws InvalidWidgetContentException {
-            factoryKey.asWidget().setValue(_widget.getWidgetFactory().getFactoryKey());
+            factoryKey.setValue(_widget.getWidgetFactory().getFactoryKey());
             int oldContentLength = content.getBufferSize();
             content.clearWidgetParent();
             content = new WidgetImpl(_widget.getWidgetFactory(),
@@ -125,7 +126,7 @@ public class BoxImpl extends WidgetImpl {
                 throws WidgetException {
             if ("expectedFactoryKey".equals(_params)) {
                 String newValue = StringFactory.readString(_contentFactory.duplicateByteBuffer());
-                asWidget().expectedFactoryKey(newValue);
+                expectedFactoryKey(newValue);
                 return null;
             }
             if ("putCopy".equals(_params)) {
@@ -133,7 +134,7 @@ public class BoxImpl extends WidgetImpl {
                         getWidgetFactory().getFacility().getWidgetFactory(_contentType);
                 _Widget iw = iwf.newInternalWidget(BoxImpl.this,
                         _contentFactory.duplicateByteBuffer()).asWidget();
-                factoryKey.asWidget().setValue(iwf.getFactoryKey());
+                factoryKey.setValue(iwf.getFactoryKey());
                 int oldContentLength = content.getBufferSize();
                 content.clearWidgetParent();
                 content = iw;

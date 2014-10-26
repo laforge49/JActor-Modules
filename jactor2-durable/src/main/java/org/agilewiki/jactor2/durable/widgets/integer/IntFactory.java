@@ -15,21 +15,21 @@ public class IntFactory extends WidgetFactory {
     public static DurableInt newDurableInt(final CFacility _facility,
                                            final Widget _parent,
                                            final Integer _value) {
-        return new IntImpl(_facility, _parent, _value).asWidget();
+        return new IntImpl(getFactory(_facility), _parent, _value).asWidget();
     }
 
     public static DurableInt newDurableInt(final CFacility _facility, final Integer _value) {
-        return new IntImpl(_facility, null, _value).asWidget();
+        return new IntImpl(getFactory(_facility), null, _value).asWidget();
     }
 
-    public static DurableTransaction setValueTransaction(final CFacility facility,
+    public static DurableTransaction setValueTransaction(final CFacility _facility,
                                                          final String _path, final int _value) {
-        return new DurableTransaction(_path, "setValue", new IntImpl(facility, null, _value).asWidget());
+        return new DurableTransaction(_path, "setValue", new IntImpl(getFactory(_facility), null, _value).asWidget());
     }
 
-    public static DurableTransaction expectTransaction(final CFacility facility,
+    public static DurableTransaction expectTransaction(final CFacility _facility,
                                                        final String _path, final int _value) {
-        return new DurableTransaction(_path, "expect", new IntImpl(facility, null, _value).asWidget());
+        return new DurableTransaction(_path, "expect", new IntImpl(getFactory(_facility), null, _value).asWidget());
     }
 
     public static SOp<Void> addFactorySOp(final CFacility _facility) {

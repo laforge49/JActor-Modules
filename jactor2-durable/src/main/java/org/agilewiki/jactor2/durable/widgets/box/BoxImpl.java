@@ -28,10 +28,11 @@ public class BoxImpl extends WidgetImpl {
         byteLen = factoryKey.getBufferSize() + content.getBufferSize();
     }
 
-    public BoxImpl(CFacility _facility, Widget _parent) {
-        super(BoxFactory.getFactory(_facility), _parent, null);
-        content = WidgetFactory.newWidget(_facility, this.asWidget());
-        factoryKey = StringFactory.newDurableString(_facility, this.asWidget(),
+    public BoxImpl(WidgetFactory _widgetFactory, Widget _parent) {
+        super(_widgetFactory, _parent, null);
+        CFacility facility = _widgetFactory.getFacility();
+        content = WidgetFactory.newWidget(facility, this.asWidget());
+        factoryKey = StringFactory.newDurableString(facility, this.asWidget(),
                 content.getWidgetFactory().getFactoryKey());
         byteLen = factoryKey.getBufferSize() + content.getBufferSize();
     }

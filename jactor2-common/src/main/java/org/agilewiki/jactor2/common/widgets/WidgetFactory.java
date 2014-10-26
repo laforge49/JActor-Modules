@@ -10,11 +10,11 @@ public class WidgetFactory {
     public static final String FACTORY_NAME = "null";
 
     public static Widget newWidget(final CFacility _facility, final Widget _parent) {
-        return new WidgetImpl(_facility, _parent).asWidget();
+        return new WidgetImpl(getFactory(_facility), _parent).asWidget();
     }
 
     public static Widget newWidget(final CFacility _facility) {
-        return new WidgetImpl(_facility, null).asWidget();
+        return new WidgetImpl(getFactory(_facility), null).asWidget();
     }
 
     public static SOp<Void> addFactorySOp(final CFacility _facility) {

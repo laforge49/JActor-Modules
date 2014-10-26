@@ -14,11 +14,11 @@ public class BoxFactory extends WidgetFactory {
     public static final String FACTORY_NAME = "box";
 
     public static DurableBox newDurableBox(final CFacility _facility, final Widget _parent) {
-        return new BoxImpl(_facility, _parent).asWidget();
+        return new BoxImpl(getFactory(_facility), _parent).asWidget();
     }
 
     public static DurableBox newDurableBox(final CFacility _facility) {
-        return new BoxImpl(_facility, null).asWidget();
+        return new BoxImpl(getFactory(_facility), null).asWidget();
     }
 
     public static DurableTransaction expectedFactoryKeyTransaction(final CFacility facility,

@@ -15,21 +15,21 @@ public class StringFactory extends WidgetFactory {
     public static DurableString newDurableString(final CFacility _facility,
                                                  final Widget _parent,
                                                  final String _value) {
-        return new StringImpl(_facility, _parent, _value).asWidget();
+        return new StringImpl(getFactory(_facility), _parent, _value).asWidget();
     }
 
     public static DurableString newDurableString(final CFacility _facility, final String _value) {
-        return new StringImpl(_facility, null, _value).asWidget();
+        return new StringImpl(getFactory(_facility), null, _value).asWidget();
     }
 
-    public static DurableTransaction setValueTransaction(final CFacility facility,
+    public static DurableTransaction setValueTransaction(final CFacility _facility,
                                                          final String _path, final String _value) {
-        return new DurableTransaction(_path, "setValue", new StringImpl(facility, null, _value).asWidget());
+        return new DurableTransaction(_path, "setValue", new StringImpl(getFactory(_facility), null, _value).asWidget());
     }
 
-    public static DurableTransaction expectTransaction(final CFacility facility,
+    public static DurableTransaction expectTransaction(final CFacility _facility,
                                                        final String _path, final String _value) {
-        return new DurableTransaction(_path, "expect", new StringImpl(facility, null, _value).asWidget());
+        return new DurableTransaction(_path, "expect", new StringImpl(getFactory(_facility), null, _value).asWidget());
     }
 
     public static String readString(final ByteBuffer _bb) {

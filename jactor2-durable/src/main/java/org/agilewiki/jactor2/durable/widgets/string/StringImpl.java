@@ -24,10 +24,10 @@ public class StringImpl extends WidgetImpl {
             byteLen = 4 + 2 * value.length();
     }
 
-    public StringImpl(final CFacility _facility,
+    public StringImpl(final WidgetFactory _widgetFactory,
                       final Widget _parent,
                       final String _value) {
-        super(StringFactory.getFactory(_facility), _parent, null);
+        super(_widgetFactory, _parent, null);
         value = _value == null ? "" : _value;
         byteLen = 4 + 2 * value.length();
     }

@@ -23,9 +23,9 @@ public class WidgetImpl {
         widget = newWidget();
     }
 
-    public WidgetImpl(final CFacility _facility,
+    public WidgetImpl(final WidgetFactory _widgetFactory,
                       final Widget _parent) {
-        this(WidgetFactory.getFactory(_facility), _parent, null);
+        this(_widgetFactory, _parent, null);
     }
 
     protected void initBuffer(final ByteBuffer _byteBuffer) {

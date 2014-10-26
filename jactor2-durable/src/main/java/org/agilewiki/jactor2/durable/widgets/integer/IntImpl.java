@@ -24,10 +24,10 @@ public class IntImpl extends WidgetImpl {
         }
     }
 
-    public IntImpl(final CFacility _facility,
+    public IntImpl(final IntFactory _widgetFactory,
                    final Widget _parent,
                    final Integer _value) {
-        super(IntFactory.getFactory(_facility), _parent, null);
+        super(_widgetFactory, _parent, null);
         value = _value == null ? 0 : _value;
     }
 

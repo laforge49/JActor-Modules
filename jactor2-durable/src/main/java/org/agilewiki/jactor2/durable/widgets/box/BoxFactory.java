@@ -14,7 +14,11 @@ public class BoxFactory extends WidgetFactory {
 
     public static final String FACTORY_NAME = "box";
 
-    public static BoxImpl._Box newDurableBox(final CFacility _facility) {
+    public static DurableBox newDurableBox(final CFacility _facility, final InternalWidget _parent) {
+        return new BoxImpl(_facility, _parent).asWidget();
+    }
+
+    public static DurableBox newDurableBox(final CFacility _facility) {
         return new BoxImpl(_facility, null).asWidget();
     }
 

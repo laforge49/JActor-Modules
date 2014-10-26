@@ -12,7 +12,13 @@ public class StringFactory extends WidgetFactory {
 
     public static final String FACTORY_NAME = "str";
 
-    public static StringImpl._String newDurableString(final CFacility _facility, final String _value) {
+    public static DurableString newDurableString(final CFacility _facility,
+                                                 final InternalWidget _parent,
+                                                 final String _value) {
+        return new StringImpl(_facility, _parent, _value).asWidget();
+    }
+
+    public static DurableString newDurableString(final CFacility _facility, final String _value) {
         return new StringImpl(_facility, null, _value).asWidget();
     }
 

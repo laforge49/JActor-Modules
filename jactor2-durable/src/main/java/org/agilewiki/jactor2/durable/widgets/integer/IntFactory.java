@@ -12,7 +12,13 @@ public class IntFactory extends WidgetFactory {
 
     public static final String FACTORY_NAME = "int";
 
-    public static IntImpl._Int newDurableInt(final CFacility _facility, final Integer _value) {
+    public static DurableInt newDurableInt(final CFacility _facility,
+                                           final InternalWidget _parent,
+                                           final Integer _value) {
+        return new IntImpl(_facility, _parent, _value).asWidget();
+    }
+
+    public static DurableInt newDurableInt(final CFacility _facility, final Integer _value) {
         return new IntImpl(_facility, null, _value).asWidget();
     }
 

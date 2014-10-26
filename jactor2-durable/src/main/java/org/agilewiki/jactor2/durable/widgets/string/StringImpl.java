@@ -3,7 +3,6 @@ package org.agilewiki.jactor2.durable.widgets.string;
 import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.widgets.*;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
-import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
 import org.agilewiki.jactor2.durable.widgets.InvalidWidgetContentException;
 import org.agilewiki.jactor2.durable.widgets.UnexpectedValueException;
 
@@ -15,7 +14,9 @@ public class StringImpl extends WidgetImpl {
 
     protected int byteLen;
 
-    public StringImpl(WidgetFactory _widgetFactory, InternalWidget _parent, ByteBuffer _byteBuffer) {
+    public StringImpl(final WidgetFactory _widgetFactory,
+                      final InternalWidget _parent,
+                      final ByteBuffer _byteBuffer) {
         super(_widgetFactory, _parent, _byteBuffer);
         if (byteBuffer != null) {
             value = null;

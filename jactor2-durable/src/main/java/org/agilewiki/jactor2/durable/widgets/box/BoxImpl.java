@@ -3,18 +3,16 @@ package org.agilewiki.jactor2.durable.widgets.box;
 import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.widgets.*;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
-import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
 import org.agilewiki.jactor2.durable.widgets.InvalidWidgetContentException;
 import org.agilewiki.jactor2.durable.widgets.UnexpectedValueException;
 import org.agilewiki.jactor2.durable.widgets.string.DurableString;
 import org.agilewiki.jactor2.durable.widgets.string.StringFactory;
-import org.agilewiki.jactor2.durable.widgets.string.StringImpl;
 
 import java.nio.ByteBuffer;
 
 public class BoxImpl extends WidgetImpl {
 
-    protected _Widget content;
+    protected Widget content;
 
     protected DurableString factoryKey;
 
@@ -32,9 +30,9 @@ public class BoxImpl extends WidgetImpl {
 
     public BoxImpl(CFacility _facility, InternalWidget _parent) {
         super(BoxFactory.getFactory(_facility), _parent, null);
-        content = new WidgetImpl(_facility, this).asWidget();
-        factoryKey = new StringImpl(_facility, this,
-                content.getWidgetFactory().getFactoryKey()).asWidget();
+        content = WidgetFactory.newWidget(_facility, this);
+        factoryKey = StringFactory.newDurableString(_facility, this,
+                content.getWidgetFactory().getFactoryKey());
         byteLen = factoryKey.getBufferSize() + content.getBufferSize();
     }
 

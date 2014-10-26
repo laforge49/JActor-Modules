@@ -68,14 +68,14 @@ public class WidgetFactory {
         private Widget widgetParent;
         protected ByteBuffer byteBuffer;
 
-        public WidgetImpl(final Widget _parent,
+        protected WidgetImpl(final Widget _parent,
                           final ByteBuffer _byteBuffer) {
             widgetParent = _parent;
             initBuffer(_byteBuffer);
             widget = newWidget();
         }
 
-        public WidgetImpl(final Widget _parent) {
+        protected WidgetImpl(final Widget _parent) {
             this(_parent, null);
         }
 

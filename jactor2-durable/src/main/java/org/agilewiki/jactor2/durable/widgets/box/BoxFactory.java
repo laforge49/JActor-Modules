@@ -148,7 +148,8 @@ public class BoxFactory extends WidgetFactory {
                 factoryKey.setValue(_widget.getWidgetFactory().getFactoryKey());
                 int oldContentLength = content.getBufferSize();
                 content.clearWidgetParent();
-                content = new WidgetImpl(BoxImpl.this.asWidget(), _widget.createUnmodifiable().duplicateByteBuffer()).asWidget();
+                content = _widget.getWidgetFactory().newWidget(BoxImpl.this.asWidget(),
+                        _widget.createUnmodifiable().duplicateByteBuffer());
                 byteBuffer = null;
                 int delta = content.getBufferSize() - oldContentLength;
                 byteLen += delta;

@@ -67,4 +67,11 @@ public interface Widget extends Transmutable<UnmodifiableByteBufferFactory> {
      * @param _byteBuffer A ByteBuffer to be updated.
      */
     void serialize(final ByteBuffer _byteBuffer);
+
+    /**
+     * Signals the change of a child.
+     *
+     * @param _delta The difference in size of the serialized data.
+     */
+    void childChange(int _delta);
 }

@@ -8,14 +8,14 @@ import java.nio.ByteBuffer;
 /**
  * Implements Widget as a nested class.
  */
-public class WidgetImpl implements InternalWidget {
+public class WidgetImpl {
     private final WidgetFactory widgetFactory;
     private final _Widget widget;
-    private InternalWidget internalWidgetParent;
+    private Widget internalWidgetParent;
     protected ByteBuffer byteBuffer;
 
     public WidgetImpl(final WidgetFactory _widgetFactory,
-                      final InternalWidget _parent,
+                      final Widget _parent,
                       final ByteBuffer _byteBuffer) {
         widgetFactory = _widgetFactory;
         internalWidgetParent = _parent;
@@ -24,7 +24,7 @@ public class WidgetImpl implements InternalWidget {
     }
 
     public WidgetImpl(final CFacility _facility,
-                      final InternalWidget _parent) {
+                      final Widget _parent) {
         this(WidgetFactory.getFactory(_facility), _parent, null);
     }
 
@@ -41,12 +41,10 @@ public class WidgetImpl implements InternalWidget {
     protected void readLength(final ByteBuffer _bb) {
     }
 
-    @Override
     public int getBufferSize() {
         return 0;
     }
 
-    @Override
     public void childChange(int _delta) {
         throw new UnsupportedOperationException("not a container");
     }
@@ -60,7 +58,6 @@ public class WidgetImpl implements InternalWidget {
         internalWidgetParent = null;
     }
 
-    @Override
     public void serialize(final ByteBuffer _byteBuffer) {
         byte[] bytes = null;
         if (byteBuffer != null) {
@@ -86,7 +83,6 @@ public class WidgetImpl implements InternalWidget {
     protected void _deserialize() {
     }
 
-    @Override
     public WidgetFactory getWidgetFactory() {
         return widgetFactory;
     }
@@ -96,11 +92,10 @@ public class WidgetImpl implements InternalWidget {
      *
      * @return The container widget, or null.
      */
-    public InternalWidget getInternalWidgetParent() {
+    public Widget getInternalWidgetParent() {
         return internalWidgetParent;
     }
 
-    @Override
     public _Widget asWidget() {
         return widget;
     }
@@ -109,7 +104,6 @@ public class WidgetImpl implements InternalWidget {
         return new _Widget();
     }
 
-    @Override
     public UnmodifiableByteBufferFactory createUnmodifiable() {
         if (byteBuffer == null) {
             ByteBuffer _byteBuffer = ByteBuffer.allocate(getBufferSize());
@@ -120,15 +114,14 @@ public class WidgetImpl implements InternalWidget {
         return new UnmodifiableByteBufferFactory(byteBuffer);
     }
 
-    @Override
     public WidgetImpl recreate(final UnmodifiableByteBufferFactory _unmodifiable) {
         return new WidgetImpl(getWidgetFactory(),
                 getInternalWidgetParent(), _unmodifiable.duplicateByteBuffer());
     }
 
-    public WidgetImpl deepCopy(final InternalWidget _parent) {
+    public Widget deepCopy(final Widget _parent) {
         return new WidgetImpl(getWidgetFactory(),
-                _parent, createUnmodifiable().duplicateByteBuffer());
+                _parent, createUnmodifiable().duplicateByteBuffer()).asWidget();
     }
 
     public class _Widget implements Widget {
@@ -148,7 +141,7 @@ public class WidgetImpl implements InternalWidget {
 
         @Override
         public Widget getWidgetParent() {
-            return getInternalWidgetParent().asWidget();
+            return getInternalWidgetParent();
         }
 
         @Override
@@ -157,8 +150,8 @@ public class WidgetImpl implements InternalWidget {
         }
 
         @Override
-        public _Widget deepCopy() {
-            return WidgetImpl.this.deepCopy(null).asWidget();
+        public Widget deepCopy() {
+            return WidgetImpl.this.deepCopy(null);
         }
 
         @Override
@@ -184,6 +177,11 @@ public class WidgetImpl implements InternalWidget {
         @Override
         public void serialize(final ByteBuffer _byteBuffer) {
             WidgetImpl.this.serialize(_byteBuffer);
+        }
+
+        @Override
+        public void childChange(final int _delta) {
+            WidgetImpl.this.childChange(_delta);
         }
     }
 }

@@ -1,7 +1,7 @@
 package org.agilewiki.jactor2.durable.widgets.string;
 
 import org.agilewiki.jactor2.common.CFacility;
-import org.agilewiki.jactor2.common.widgets.InternalWidget;
+import org.agilewiki.jactor2.common.widgets.Widget;
 import org.agilewiki.jactor2.common.widgets.WidgetFactory;
 import org.agilewiki.jactor2.core.requests.SOp;
 import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
@@ -13,7 +13,7 @@ public class StringFactory extends WidgetFactory {
     public static final String FACTORY_NAME = "str";
 
     public static DurableString newDurableString(final CFacility _facility,
-                                                 final InternalWidget _parent,
+                                                 final Widget _parent,
                                                  final String _value) {
         return new StringImpl(_facility, _parent, _value).asWidget();
     }
@@ -68,8 +68,8 @@ public class StringFactory extends WidgetFactory {
     }
 
     @Override
-    public StringImpl newInternalWidget(final InternalWidget _parent,
+    public StringImpl newInternalWidget(final Widget _parent,
                                         final ByteBuffer _byteBuffer) {
-        return new StringImpl(this, (StringImpl) _parent, _byteBuffer);
+        return new StringImpl(this, _parent, _byteBuffer);
     }
 }

@@ -15,7 +15,7 @@ public class StringImpl extends WidgetImpl {
     protected int byteLen;
 
     public StringImpl(final WidgetFactory _widgetFactory,
-                      final InternalWidget _parent,
+                      final Widget _parent,
                       final ByteBuffer _byteBuffer) {
         super(_widgetFactory, _parent, _byteBuffer);
         if (byteBuffer != null) {
@@ -25,7 +25,7 @@ public class StringImpl extends WidgetImpl {
     }
 
     public StringImpl(final CFacility _facility,
-                      final InternalWidget _parent,
+                      final Widget _parent,
                       final String _value) {
         super(StringFactory.getFactory(_facility), _parent, null);
         value = _value == null ? "" : _value;
@@ -110,21 +110,21 @@ public class StringImpl extends WidgetImpl {
         public String apply(final String _params, final String _contentType,
                             final UnmodifiableByteBufferFactory _contentFactory)
                 throws WidgetException {
-            InternalWidget iw = getWidgetFactory().getFacility().newInternalWidget(_contentType, null,
+            Widget iw = getWidgetFactory().getFacility().newInternalWidget(_contentType, null,
                     _contentFactory.duplicateByteBuffer());
-            if (!(iw instanceof StringImpl))
+            if (!(iw instanceof DurableString))
                 throw new UnexpectedValueException(
                         "expected " + StringFactory.factoryKey(getWidgetFactory().getFacility()) +
                                 " content type, not " +
                                 iw.getWidgetFactory().getFactoryKey());
-            StringImpl ii = (StringImpl) iw;
+            DurableString ii = (DurableString) iw;
             if ("setValue".equals(_params)) {
                 String old = value;
-                asWidget().setValue(ii.asWidget().getValue());
+                asWidget().setValue(ii.getValue());
                 return "" + old + " -> " + value;
             }
             if ("expect".equals(_params)) {
-                asWidget().expect(ii.asWidget().getValue());
+                asWidget().expect(ii.getValue());
                 return null;
             }
             throw new InvalidWidgetParamsException(_params);

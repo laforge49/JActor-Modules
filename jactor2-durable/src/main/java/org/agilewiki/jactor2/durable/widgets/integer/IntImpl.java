@@ -1,8 +1,8 @@
 package org.agilewiki.jactor2.durable.widgets.integer;
 
 import org.agilewiki.jactor2.common.CFacility;
-import org.agilewiki.jactor2.common.widgets.InternalWidget;
 import org.agilewiki.jactor2.common.widgets.InvalidWidgetParamsException;
+import org.agilewiki.jactor2.common.widgets.Widget;
 import org.agilewiki.jactor2.common.widgets.WidgetException;
 import org.agilewiki.jactor2.common.widgets.WidgetImpl;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
@@ -16,7 +16,7 @@ public class IntImpl extends WidgetImpl {
     protected Integer value = 0;
 
     public IntImpl(final IntFactory _widgetFactory,
-                   final InternalWidget _parent,
+                   final Widget _parent,
                    final ByteBuffer _byteBuffer) {
         super(_widgetFactory, _parent, _byteBuffer);
         if (byteBuffer != null) {
@@ -25,7 +25,7 @@ public class IntImpl extends WidgetImpl {
     }
 
     public IntImpl(final CFacility _facility,
-                   final InternalWidget _parent,
+                   final Widget _parent,
                    final Integer _value) {
         super(IntFactory.getFactory(_facility), _parent, null);
         value = _value == null ? 0 : _value;
@@ -97,21 +97,21 @@ public class IntImpl extends WidgetImpl {
         public String apply(final String _params, final String _contentType,
                             final UnmodifiableByteBufferFactory _contentFactory)
                 throws WidgetException {
-            InternalWidget iw = getWidgetFactory().getFacility().newInternalWidget(_contentType, null,
+            Widget iw = getWidgetFactory().getFacility().newInternalWidget(_contentType, null,
                     _contentFactory.duplicateByteBuffer());
-            if (!(iw instanceof IntImpl))
+            if (!(iw instanceof DurableInt))
                 throw new UnexpectedValueException("expected " +
                         IntFactory.factoryKey(getWidgetFactory().getFacility()) + " content type, not " +
                         iw.getWidgetFactory().getFactoryKey());
-            IntImpl ii = (IntImpl) iw;
+            DurableInt ii = (DurableInt) iw;
             if ("setValue".equals(_params)) {
                 int old = value;
-                asWidget().setValue(ii.asWidget().getValue());
+                asWidget().setValue(ii.getValue());
                 return "" + old + " -> " + value;
             }
             if ("expect".equals(_params)) {
                 int old = value;
-                asWidget().expect(ii.asWidget().getValue());
+                asWidget().expect(ii.getValue());
                 return null;
             }
             throw new InvalidWidgetParamsException(_params);

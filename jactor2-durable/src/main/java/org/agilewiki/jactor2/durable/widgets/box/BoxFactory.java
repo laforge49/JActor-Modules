@@ -1,7 +1,6 @@
 package org.agilewiki.jactor2.durable.widgets.box;
 
 import org.agilewiki.jactor2.common.CFacility;
-import org.agilewiki.jactor2.common.widgets.InternalWidget;
 import org.agilewiki.jactor2.common.widgets.Widget;
 import org.agilewiki.jactor2.common.widgets.WidgetFactory;
 import org.agilewiki.jactor2.core.requests.SOp;
@@ -14,7 +13,7 @@ public class BoxFactory extends WidgetFactory {
 
     public static final String FACTORY_NAME = "box";
 
-    public static DurableBox newDurableBox(final CFacility _facility, final InternalWidget _parent) {
+    public static DurableBox newDurableBox(final CFacility _facility, final Widget _parent) {
         return new BoxImpl(_facility, _parent).asWidget();
     }
 
@@ -56,8 +55,8 @@ public class BoxFactory extends WidgetFactory {
     }
 
     @Override
-    public BoxImpl newInternalWidget(final InternalWidget _parent,
+    public BoxImpl newInternalWidget(final Widget _parent,
                                      final ByteBuffer _byteBuffer) {
-        return new BoxImpl(this, (BoxImpl) _parent, _byteBuffer);
+        return new BoxImpl(this, _parent, _byteBuffer);
     }
 }

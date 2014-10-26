@@ -9,7 +9,7 @@ public class WidgetFactory {
 
     public static final String FACTORY_NAME = "null";
 
-    public static Widget newWidget(final CFacility _facility, final InternalWidget _parent) {
+    public static Widget newWidget(final CFacility _facility, final Widget _parent) {
         return new WidgetImpl(_facility, _parent).asWidget();
     }
 
@@ -55,8 +55,8 @@ public class WidgetFactory {
         return getFacility().name + "." + name;
     }
 
-    public InternalWidget newInternalWidget(final InternalWidget _parent,
-                                            ByteBuffer _byteBuffer) {
+    public WidgetImpl newInternalWidget(final Widget _parent,
+                                        ByteBuffer _byteBuffer) {
         return new WidgetImpl(this, _parent, _byteBuffer);
     }
 }

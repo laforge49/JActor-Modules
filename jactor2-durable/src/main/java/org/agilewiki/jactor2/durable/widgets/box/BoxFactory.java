@@ -2,8 +2,11 @@ package org.agilewiki.jactor2.durable.widgets.box;
 
 import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.widgets.InternalWidget;
+import org.agilewiki.jactor2.common.widgets.Widget;
 import org.agilewiki.jactor2.common.widgets.WidgetFactory;
 import org.agilewiki.jactor2.core.requests.SOp;
+import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
+import org.agilewiki.jactor2.durable.widgets.string.StringImpl;
 
 import java.nio.ByteBuffer;
 
@@ -13,6 +16,18 @@ public class BoxFactory extends WidgetFactory {
 
     public static BoxImpl._Box newDurableBox(final CFacility _facility) {
         return new BoxImpl(_facility, null).asWidget();
+    }
+
+    public static DurableTransaction expectedFactoryKeyTransaction(final CFacility facility,
+                                                                   final String _path,
+                                                                   final String _value) {
+        return new DurableTransaction(_path, "expectedFactoryKey", new StringImpl(facility, null, _value).asWidget());
+    }
+
+    public static DurableTransaction putCopyTransaction(final CFacility facility,
+                                                        final String _path,
+                                                        final Widget _value) {
+        return new DurableTransaction(_path, "putCopy", _value);
     }
 
     public static SOp<Void> addFactorySOp(final CFacility _facility) {

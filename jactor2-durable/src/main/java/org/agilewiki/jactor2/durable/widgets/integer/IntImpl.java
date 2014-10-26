@@ -14,16 +14,6 @@ import java.nio.ByteBuffer;
 
 public class IntImpl extends WidgetImpl {
 
-    public static DurableTransaction setValueTransaction(final CFacility facility,
-                                                         final String _path, final int _value) {
-        return new DurableTransaction(_path, "setValue", new IntImpl(facility, null, _value).asWidget());
-    }
-
-    public static DurableTransaction expectTransaction(final CFacility facility,
-                                                       final String _path, final int _value) {
-        return new DurableTransaction(_path, "expect", new IntImpl(facility, null, _value).asWidget());
-    }
-
     protected Integer value = 0;
 
     public IntImpl(final IntFactory _widgetFactory,

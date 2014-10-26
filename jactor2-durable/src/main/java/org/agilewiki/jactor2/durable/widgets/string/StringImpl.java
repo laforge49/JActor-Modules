@@ -11,16 +11,6 @@ import java.nio.ByteBuffer;
 
 public class StringImpl extends WidgetImpl {
 
-    public static DurableTransaction setValueTransaction(final CFacility facility,
-                                                         final String _path, final String _value) {
-        return new DurableTransaction(_path, "setValue", new StringImpl(facility, null, _value).asWidget());
-    }
-
-    public static DurableTransaction expectTransaction(final CFacility facility,
-                                                       final String _path, final String _value) {
-        return new DurableTransaction(_path, "expect", new StringImpl(facility, null, _value).asWidget());
-    }
-
     protected String value = "";
 
     protected int byteLen;

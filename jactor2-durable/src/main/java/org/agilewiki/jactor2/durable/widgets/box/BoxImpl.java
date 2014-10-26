@@ -13,18 +13,6 @@ import java.nio.ByteBuffer;
 
 public class BoxImpl extends WidgetImpl {
 
-    public static DurableTransaction expectedFactoryKeyTransaction(final CFacility facility,
-                                                                   final String _path,
-                                                                   final String _value) {
-        return new DurableTransaction(_path, "expectedFactoryKey", new StringImpl(facility, null, _value).asWidget());
-    }
-
-    public static DurableTransaction putCopyTransaction(final CFacility facility,
-                                                        final String _path,
-                                                        final Widget _value) {
-        return new DurableTransaction(_path, "putCopy", _value);
-    }
-
     protected _Widget content;
 
     protected StringImpl factoryKey;

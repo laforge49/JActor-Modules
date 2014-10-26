@@ -35,13 +35,13 @@ public class IntTest extends TestCase {
                     newWidget(IntFactory.FACTORY_NAME, buffer1);
             assertEquals(Integer.valueOf(1), dint3.getValue());
 
-            DurableTransaction setTrans = IntImpl.setValueTransaction(facility, "", 42);
+            DurableTransaction setTrans = IntFactory.setValueTransaction(facility, "", 42);
             DurableReference durableReference = new DurableReference(dint3);
             durableReference.applyAOp(setTrans).call();
             assertEquals(Integer.valueOf(42), dint3.getValue());
             System.out.println(setTrans.toString());
 
-            DurableTransaction expectTrans = IntImpl.expectTransaction(facility, "", 43);
+            DurableTransaction expectTrans = IntFactory.expectTransaction(facility, "", 43);
             try {
                 durableReference.applyAOp(expectTrans).call();
             } catch (WidgetException ide) {

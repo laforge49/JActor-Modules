@@ -4,6 +4,7 @@ import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.widgets.InternalWidget;
 import org.agilewiki.jactor2.common.widgets.WidgetFactory;
 import org.agilewiki.jactor2.core.requests.SOp;
+import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
 
 import java.nio.ByteBuffer;
 
@@ -13,6 +14,16 @@ public class StringFactory extends WidgetFactory {
 
     public static StringImpl._String newDurableString(final CFacility _facility, final String _value) {
         return new StringImpl(_facility, null, _value).asWidget();
+    }
+
+    public static DurableTransaction setValueTransaction(final CFacility facility,
+                                                         final String _path, final String _value) {
+        return new DurableTransaction(_path, "setValue", new StringImpl(facility, null, _value).asWidget());
+    }
+
+    public static DurableTransaction expectTransaction(final CFacility facility,
+                                                       final String _path, final String _value) {
+        return new DurableTransaction(_path, "expect", new StringImpl(facility, null, _value).asWidget());
     }
 
     public static String readString(final ByteBuffer _bb) {

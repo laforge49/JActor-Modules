@@ -37,13 +37,13 @@ public class StringTest extends TestCase {
                     newWidget(StringFactory.FACTORY_NAME, buffer1);
             assertEquals("1", dstr3.getValue());
 
-            DurableTransaction setTrans = StringImpl.setValueTransaction(facility, "", "42");
+            DurableTransaction setTrans = StringFactory.setValueTransaction(facility, "", "42");
             DurableReference durableReference = new DurableReference(dstr3);
             durableReference.applyAOp(setTrans).call();
             assertEquals("42", dstr3.getValue());
             System.out.println(setTrans.toString());
 
-            DurableTransaction expectTrans = StringImpl.expectTransaction(facility, "", "43");
+            DurableTransaction expectTrans = StringFactory.expectTransaction(facility, "", "43");
             try {
                 durableReference.applyAOp(expectTrans).call();
             } catch (WidgetException ide) {

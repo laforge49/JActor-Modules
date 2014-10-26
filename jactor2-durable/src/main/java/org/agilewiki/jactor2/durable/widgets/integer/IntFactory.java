@@ -68,7 +68,7 @@ public class IntFactory extends WidgetFactory {
 
         protected Integer value = 0;
 
-        public IntImpl(final Widget _parent,
+        protected IntImpl(final Widget _parent,
                        final ByteBuffer _byteBuffer) {
             super(_parent, _byteBuffer);
             if (byteBuffer != null) {
@@ -76,7 +76,7 @@ public class IntFactory extends WidgetFactory {
             }
         }
 
-        public IntImpl(final Widget _parent,
+        protected IntImpl(final Widget _parent,
                        final Integer _value) {
             super(_parent, null);
             value = _value == null ? 0 : _value;

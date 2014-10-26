@@ -73,7 +73,7 @@ public class BoxFactory extends WidgetFactory {
 
         protected int byteLen;
 
-        public BoxImpl(Widget _parent, ByteBuffer _byteBuffer) {
+        protected BoxImpl(Widget _parent, ByteBuffer _byteBuffer) {
             super(_parent, _byteBuffer);
             CFacility facility = getFacility();
             factoryKey = (DurableString) facility.newWidget(StringFactory.FACTORY_NAME, this.asWidget(),
@@ -83,7 +83,7 @@ public class BoxFactory extends WidgetFactory {
             byteLen = factoryKey.getBufferSize() + content.getBufferSize();
         }
 
-        public BoxImpl(Widget _parent) {
+        protected BoxImpl(Widget _parent) {
             super(_parent, null);
             CFacility facility = getFacility();
             content = WidgetFactory.newWidget(facility, this.asWidget());

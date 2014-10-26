@@ -83,7 +83,7 @@ public class StringFactory extends WidgetFactory {
 
         protected int byteLen;
 
-        public StringImpl(final Widget _parent,
+        protected StringImpl(final Widget _parent,
                           final ByteBuffer _byteBuffer) {
             super(_parent, _byteBuffer);
             if (byteBuffer != null) {
@@ -92,7 +92,7 @@ public class StringFactory extends WidgetFactory {
                 byteLen = 4 + 2 * value.length();
         }
 
-        public StringImpl(final Widget _parent,
+        protected StringImpl(final Widget _parent,
                           final String _value) {
             super(_parent, null);
             value = _value == null ? "" : _value;

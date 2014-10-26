@@ -115,12 +115,6 @@ public class StringFactory extends WidgetFactory {
         }
 
         @Override
-        public StringImpl recreate(
-                final UnmodifiableByteBufferFactory _unmodifiable) {
-            return new StringImpl(getWidgetParent(), _unmodifiable.duplicateByteBuffer());
-        }
-
-        @Override
         public int getBufferSize() {
             return byteLen;
         }
@@ -189,6 +183,11 @@ public class StringFactory extends WidgetFactory {
                     return null;
                 }
                 throw new InvalidWidgetParamsException(_params);
+            }
+
+            @Override
+            public _Widget recreate(UnmodifiableByteBufferFactory _unmodifiable) {
+                return new StringImpl(getWidgetParent(), _unmodifiable.duplicateByteBuffer()).asWidget();
             }
         }
     }

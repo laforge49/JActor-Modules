@@ -103,12 +103,6 @@ public class BoxFactory extends WidgetFactory {
         }
 
         @Override
-        public BoxImpl recreate(
-                final UnmodifiableByteBufferFactory _unmodifiable) {
-            return new BoxImpl(getWidgetParent(), _unmodifiable.duplicateByteBuffer());
-        }
-
-        @Override
         public int getBufferSize() {
             return byteLen;
         }
@@ -192,6 +186,11 @@ public class BoxFactory extends WidgetFactory {
                     return null;
                 }
                 throw new InvalidWidgetParamsException(_params);
+            }
+
+            @Override
+            public _Widget recreate(UnmodifiableByteBufferFactory _unmodifiable) {
+                return new BoxImpl(getWidgetParent(), _unmodifiable.duplicateByteBuffer()).asWidget();
             }
         }
     }

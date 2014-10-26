@@ -93,12 +93,6 @@ public class IntFactory extends WidgetFactory {
         }
 
         @Override
-        public IntImpl recreate(
-                final UnmodifiableByteBufferFactory _unmodifiable) {
-            return new IntImpl(getWidgetParent(), _unmodifiable.duplicateByteBuffer());
-        }
-
-        @Override
         public int getBufferSize() {
             return 4;
         }
@@ -160,6 +154,11 @@ public class IntFactory extends WidgetFactory {
                     return null;
                 }
                 throw new InvalidWidgetParamsException(_params);
+            }
+
+            @Override
+            public _Widget recreate(UnmodifiableByteBufferFactory _unmodifiable) {
+                return new IntImpl(getWidgetParent(), _unmodifiable.duplicateByteBuffer()).asWidget();
             }
         }
     }

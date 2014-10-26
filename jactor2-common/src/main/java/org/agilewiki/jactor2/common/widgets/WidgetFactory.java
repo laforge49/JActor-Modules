@@ -92,7 +92,7 @@ public class WidgetFactory {
         protected void readLength(final ByteBuffer _bb) {
         }
 
-        public int getBufferSize() {
+        protected int getBufferSize() {
             return 0;
         }
 

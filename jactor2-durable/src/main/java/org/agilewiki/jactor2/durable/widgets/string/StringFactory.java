@@ -115,7 +115,7 @@ public class StringFactory extends WidgetFactory {
         }
 
         @Override
-        public int getBufferSize() {
+        protected int getBufferSize() {
             return byteLen;
         }
 

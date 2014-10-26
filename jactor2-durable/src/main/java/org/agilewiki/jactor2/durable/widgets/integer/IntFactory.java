@@ -93,7 +93,7 @@ public class IntFactory extends WidgetFactory {
         }
 
         @Override
-        public int getBufferSize() {
+        protected int getBufferSize() {
             return 4;
         }
 

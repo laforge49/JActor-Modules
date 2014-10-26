@@ -64,7 +64,7 @@ public class IntFactory extends WidgetFactory {
         return new IntImpl(_parent, _byteBuffer).asWidget();
     }
 
-    public class IntImpl extends WidgetImpl {
+    protected class IntImpl extends WidgetImpl {
 
         protected Integer value = 0;
 

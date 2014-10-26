@@ -63,7 +63,7 @@ public class WidgetFactory {
         return new WidgetImpl(_parent, _byteBuffer).asWidget();
     }
 
-    public class WidgetImpl {
+    protected class WidgetImpl {
         private final _Widget widget;
         private Widget widgetParent;
         protected ByteBuffer byteBuffer;
@@ -169,7 +169,7 @@ public class WidgetFactory {
             return new WidgetImpl(_parent, createUnmodifiable().duplicateByteBuffer()).asWidget();
         }
 
-        public class _Widget implements Widget {
+        protected class _Widget implements Widget {
             @Override
             public Widget resolve(final String _path) {
                 if (_path.length() == 0)

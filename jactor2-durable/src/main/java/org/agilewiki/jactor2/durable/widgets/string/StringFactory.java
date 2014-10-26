@@ -77,7 +77,7 @@ public class StringFactory extends WidgetFactory {
         return new StringImpl(_parent, _byteBuffer).asWidget();
     }
 
-    public class StringImpl extends WidgetImpl {
+    protected class StringImpl extends WidgetImpl {
 
         protected String value = "";
 
@@ -135,7 +135,7 @@ public class StringFactory extends WidgetFactory {
             value = StringFactory.readString(byteBuffer);
         }
 
-        public class _String extends _Widget implements DurableString {
+        protected class _String extends _Widget implements DurableString {
             @Override
             public String getValue() {
                 if (value == null)

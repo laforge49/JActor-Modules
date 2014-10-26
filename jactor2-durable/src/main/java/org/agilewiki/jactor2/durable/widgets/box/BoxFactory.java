@@ -65,7 +65,7 @@ public class BoxFactory extends WidgetFactory {
         return new BoxImpl(_parent, _byteBuffer).asWidget();
     }
 
-    public class BoxImpl extends WidgetImpl {
+    protected class BoxImpl extends WidgetImpl {
 
         protected Widget content;
 
@@ -125,7 +125,7 @@ public class BoxFactory extends WidgetFactory {
             notifyParent(_delta);
         }
 
-        public class _Box extends _Widget implements DurableBox {
+        protected class _Box extends _Widget implements DurableBox {
             @Override
             public Widget resolve(final String _path) {
                 if (_path.length() == 0)

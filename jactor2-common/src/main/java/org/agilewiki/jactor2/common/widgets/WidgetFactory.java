@@ -151,16 +151,6 @@ public class WidgetFactory {
             return new _Widget();
         }
 
-        public UnmodifiableByteBufferFactory createUnmodifiable() {
-            if (byteBuffer == null) {
-                ByteBuffer _byteBuffer = ByteBuffer.allocate(getBufferSize());
-                serialize(_byteBuffer);
-                _byteBuffer.rewind();
-                return new UnmodifiableByteBufferFactory(_byteBuffer);
-            }
-            return new UnmodifiableByteBufferFactory(byteBuffer);
-        }
-
         protected class _Widget implements Widget {
             @Override
             public Widget resolve(final String _path) {
@@ -193,7 +183,13 @@ public class WidgetFactory {
 
             @Override
             public UnmodifiableByteBufferFactory createUnmodifiable() {
-                return WidgetImpl.this.createUnmodifiable();
+                if (byteBuffer == null) {
+                    ByteBuffer _byteBuffer = ByteBuffer.allocate(getBufferSize());
+                    serialize(_byteBuffer);
+                    _byteBuffer.rewind();
+                    return new UnmodifiableByteBufferFactory(_byteBuffer);
+                }
+                return new UnmodifiableByteBufferFactory(byteBuffer);
             }
 
             @Override

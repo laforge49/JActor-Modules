@@ -83,7 +83,7 @@ public class IntFactory extends WidgetFactory {
         }
 
         @Override
-        public _Int asWidget() {
+        protected _Int asWidget() {
             return (_Int) super.asWidget();
         }
 

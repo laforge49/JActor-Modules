@@ -112,7 +112,7 @@ public class WidgetFactory {
         protected void _deserialize() {
         }
 
-        public _Widget asWidget() {
+        protected _Widget asWidget() {
             return widget;
         }
 

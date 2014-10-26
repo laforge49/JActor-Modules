@@ -93,7 +93,7 @@ public class BoxFactory extends WidgetFactory {
         }
 
         @Override
-        public _Box asWidget() {
+        protected _Box asWidget() {
             return (_Box) super.asWidget();
         }
 

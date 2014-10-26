@@ -105,7 +105,7 @@ public class StringFactory extends WidgetFactory {
         }
 
         @Override
-        public _String asWidget() {
+        protected _String asWidget() {
             return (_String) super.asWidget();
         }
 

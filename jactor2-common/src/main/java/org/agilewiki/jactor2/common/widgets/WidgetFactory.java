@@ -161,10 +161,6 @@ public class WidgetFactory {
             return new UnmodifiableByteBufferFactory(byteBuffer);
         }
 
-        public Widget deepCopy(final Widget _parent) {
-            return new WidgetImpl(_parent, createUnmodifiable().duplicateByteBuffer()).asWidget();
-        }
-
         protected class _Widget implements Widget {
             @Override
             public Widget resolve(final String _path) {
@@ -192,7 +188,7 @@ public class WidgetFactory {
 
             @Override
             public Widget deepCopy() {
-                return WidgetImpl.this.deepCopy(null);
+                return new WidgetImpl(null, createUnmodifiable().duplicateByteBuffer()).asWidget();
             }
 
             @Override

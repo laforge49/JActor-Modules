@@ -134,15 +134,6 @@ public class WidgetFactory {
         protected void _deserialize() {
         }
 
-        /**
-         * Returns the container widget.
-         *
-         * @return The container widget, or null.
-         */
-        public Widget getWidgetParent() {
-            return widgetParent;
-        }
-
         public _Widget asWidget() {
             return widget;
         }
@@ -168,7 +159,7 @@ public class WidgetFactory {
 
             @Override
             public Widget getWidgetParent() {
-                return WidgetImpl.this.getWidgetParent();
+                return widgetParent;
             }
 
             @Override

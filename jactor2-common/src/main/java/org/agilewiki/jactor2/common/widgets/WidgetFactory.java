@@ -55,8 +55,8 @@ public class WidgetFactory {
         return getFacility().name + "." + name;
     }
 
-    public WidgetImpl newInternalWidget(final Widget _parent,
-                                        ByteBuffer _byteBuffer) {
-        return new WidgetImpl(this, _parent, _byteBuffer);
+    public Widget newWidget(final Widget _parent,
+                            ByteBuffer _byteBuffer) {
+        return new WidgetImpl(this, _parent, _byteBuffer).asWidget();
     }
 }

@@ -21,9 +21,9 @@ public class BoxImpl extends WidgetImpl {
     public BoxImpl(WidgetFactory _widgetFactory, Widget _parent, ByteBuffer _byteBuffer) {
         super(_widgetFactory, _parent, _byteBuffer);
         CFacility facility = _widgetFactory.getFacility();
-        factoryKey = (DurableString) facility.newInternalWidget(StringFactory.FACTORY_NAME, this.asWidget(),
+        factoryKey = (DurableString) facility.newWidget(StringFactory.FACTORY_NAME, this.asWidget(),
                 _byteBuffer);
-        content = facility.newInternalWidget(factoryKey.getValue(), this.asWidget(),
+        content = facility.newWidget(factoryKey.getValue(), this.asWidget(),
                 _byteBuffer);
         byteLen = factoryKey.getBufferSize() + content.getBufferSize();
     }
@@ -55,7 +55,7 @@ public class BoxImpl extends WidgetImpl {
     public BoxImpl recreate(
             final UnmodifiableByteBufferFactory _unmodifiable) {
         return new BoxImpl(getWidgetFactory(),
-                getInternalWidgetParent(), _unmodifiable.duplicateByteBuffer());
+                getWidgetParent(), _unmodifiable.duplicateByteBuffer());
     }
 
     @Override
@@ -130,8 +130,8 @@ public class BoxImpl extends WidgetImpl {
             if ("putCopy".equals(_params)) {
                 WidgetFactory iwf =
                         getWidgetFactory().getFacility().getWidgetFactory(_contentType);
-                _Widget iw = iwf.newInternalWidget(BoxImpl.this.asWidget(),
-                        _contentFactory.duplicateByteBuffer()).asWidget();
+                Widget iw = iwf.newWidget(BoxImpl.this.asWidget(),
+                        _contentFactory.duplicateByteBuffer());
                 factoryKey.setValue(iwf.getFactoryKey());
                 int oldContentLength = content.getBufferSize();
                 content.clearWidgetParent();

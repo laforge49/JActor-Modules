@@ -53,8 +53,8 @@ public class IntFactory extends WidgetFactory {
     }
 
     @Override
-    public IntImpl newInternalWidget(final Widget _parent,
-                                     final ByteBuffer _byteBuffer) {
-        return new IntImpl(this, _parent, _byteBuffer);
+    public DurableInt newWidget(final Widget _parent,
+                                final ByteBuffer _byteBuffer) {
+        return new IntImpl(this, _parent, _byteBuffer).asWidget();
     }
 }

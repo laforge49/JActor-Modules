@@ -3,7 +3,6 @@ package org.agilewiki.jactor2.common;
 import org.agilewiki.jactor2.common.services.ClassLoaderService;
 import org.agilewiki.jactor2.common.widgets.Widget;
 import org.agilewiki.jactor2.common.widgets.WidgetFactory;
-import org.agilewiki.jactor2.common.widgets.WidgetImpl;
 import org.agilewiki.jactor2.core.blades.NamedBlade;
 import org.agilewiki.jactor2.core.blades.transmutable.TransmutableSortedMap;
 import org.agilewiki.jactor2.core.reactors.Facility;
@@ -66,16 +65,16 @@ public class CFacility extends Facility {
         return (WidgetFactory) widgetFactories.get(_factoryKey);
     }
 
-    public Widget newInternalWidget(final String _factoryKey,
-                                    final Widget _parentWidget,
-                                    final ByteBuffer _byteBufffer) {
+    public Widget newWidget(final String _factoryKey,
+                            final Widget _parentWidget,
+                            final ByteBuffer _byteBufffer) {
         return getWidgetFactory(_factoryKey).
-                newInternalWidget(_parentWidget, _byteBufffer).asWidget();
+                newWidget(_parentWidget, _byteBufffer);
     }
 
-    public WidgetImpl._Widget newWidget(final String _factoryKey, final ByteBuffer _byteBufffer) {
+    public Widget newWidget(final String _factoryKey, final ByteBuffer _byteBufffer) {
         return getWidgetFactory(_factoryKey).
-                newInternalWidget(null, _byteBufffer).asWidget();
+                newWidget(null, _byteBufffer);
     }
 
     public SOp<Void> addWidgetFactorySOp(final WidgetFactory _widgetFactory) {

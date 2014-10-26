@@ -55,8 +55,8 @@ public class BoxFactory extends WidgetFactory {
     }
 
     @Override
-    public BoxImpl newInternalWidget(final Widget _parent,
-                                     final ByteBuffer _byteBuffer) {
-        return new BoxImpl(this, _parent, _byteBuffer);
+    public DurableBox newWidget(final Widget _parent,
+                                final ByteBuffer _byteBuffer) {
+        return new BoxImpl(this, _parent, _byteBuffer).asWidget();
     }
 }

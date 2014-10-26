@@ -50,7 +50,7 @@ public class IntImpl extends WidgetImpl {
     public IntImpl recreate(
             final UnmodifiableByteBufferFactory _unmodifiable) {
         return new IntImpl(getWidgetFactory(),
-                getInternalWidgetParent(), _unmodifiable.duplicateByteBuffer());
+                getWidgetParent(), _unmodifiable.duplicateByteBuffer());
     }
 
     @Override
@@ -97,7 +97,7 @@ public class IntImpl extends WidgetImpl {
         public String apply(final String _params, final String _contentType,
                             final UnmodifiableByteBufferFactory _contentFactory)
                 throws WidgetException {
-            Widget iw = getWidgetFactory().getFacility().newInternalWidget(_contentType, null,
+            Widget iw = getWidgetFactory().getFacility().newWidget(_contentType, null,
                     _contentFactory.duplicateByteBuffer());
             if (!(iw instanceof DurableInt))
                 throw new UnexpectedValueException("expected " +

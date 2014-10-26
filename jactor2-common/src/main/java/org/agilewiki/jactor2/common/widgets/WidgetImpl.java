@@ -11,14 +11,14 @@ import java.nio.ByteBuffer;
 public class WidgetImpl {
     private final WidgetFactory widgetFactory;
     private final _Widget widget;
-    private Widget internalWidgetParent;
+    private Widget widgetParent;
     protected ByteBuffer byteBuffer;
 
     public WidgetImpl(final WidgetFactory _widgetFactory,
                       final Widget _parent,
                       final ByteBuffer _byteBuffer) {
         widgetFactory = _widgetFactory;
-        internalWidgetParent = _parent;
+        widgetParent = _parent;
         initBuffer(_byteBuffer);
         widget = newWidget();
     }
@@ -50,12 +50,12 @@ public class WidgetImpl {
     }
 
     protected void notifyParent(int _delta) {
-        if (internalWidgetParent != null)
-            internalWidgetParent.childChange(_delta);
+        if (widgetParent != null)
+            widgetParent.childChange(_delta);
     }
 
     public void clearWidgetParent() {
-        internalWidgetParent = null;
+        widgetParent = null;
     }
 
     public void serialize(final ByteBuffer _byteBuffer) {
@@ -92,8 +92,8 @@ public class WidgetImpl {
      *
      * @return The container widget, or null.
      */
-    public Widget getInternalWidgetParent() {
-        return internalWidgetParent;
+    public Widget getWidgetParent() {
+        return widgetParent;
     }
 
     public _Widget asWidget() {
@@ -116,7 +116,7 @@ public class WidgetImpl {
 
     public WidgetImpl recreate(final UnmodifiableByteBufferFactory _unmodifiable) {
         return new WidgetImpl(getWidgetFactory(),
-                getInternalWidgetParent(), _unmodifiable.duplicateByteBuffer());
+                getWidgetParent(), _unmodifiable.duplicateByteBuffer());
     }
 
     public Widget deepCopy(final Widget _parent) {
@@ -141,7 +141,7 @@ public class WidgetImpl {
 
         @Override
         public Widget getWidgetParent() {
-            return getInternalWidgetParent();
+            return WidgetImpl.this.getWidgetParent();
         }
 
         @Override

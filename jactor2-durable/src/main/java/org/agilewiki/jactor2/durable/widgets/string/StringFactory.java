@@ -68,8 +68,8 @@ public class StringFactory extends WidgetFactory {
     }
 
     @Override
-    public StringImpl newInternalWidget(final Widget _parent,
-                                        final ByteBuffer _byteBuffer) {
-        return new StringImpl(this, _parent, _byteBuffer);
+    public DurableString newWidget(final Widget _parent,
+                                   final ByteBuffer _byteBuffer) {
+        return new StringImpl(this, _parent, _byteBuffer).asWidget();
     }
 }

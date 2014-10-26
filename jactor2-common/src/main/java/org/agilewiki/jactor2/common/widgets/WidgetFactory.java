@@ -105,10 +105,6 @@ public class WidgetFactory {
                 widgetParent.childChange(_delta);
         }
 
-        public void clearWidgetParent() {
-            widgetParent = null;
-        }
-
         public void serialize(final ByteBuffer _byteBuffer) {
             byte[] bytes = null;
             if (byteBuffer != null) {
@@ -195,7 +191,7 @@ public class WidgetFactory {
 
             @Override
             public void clearWidgetParent() {
-                WidgetImpl.this.clearWidgetParent();
+                widgetParent = null;
             }
 
             @Override

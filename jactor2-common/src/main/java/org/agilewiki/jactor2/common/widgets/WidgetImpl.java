@@ -171,29 +171,17 @@ public class WidgetImpl implements InternalWidget {
             return WidgetImpl.this.recreate(_unmodifiable).asWidget();
         }
 
-        /**
-         * Returns the size of the serialized data.
-         *
-         * @return The number of bytes.
-         */
+        @Override
         public int getBufferSize() {
             return WidgetImpl.this.getBufferSize();
         }
 
-        /**
-         * Clear the parent reference.
-         */
+        @Override
         public void clearWidgetParent() {
             WidgetImpl.this.clearWidgetParent();
         }
 
-        /**
-         * Serialize to a ByteBuffer, starting at the current position.
-         * Once written, the content should not change (append only), as a view
-         * of the content is retained.
-         *
-         * @param _byteBuffer A ByteBuffer to be updated.
-         */
+        @Override
         public void serialize(final ByteBuffer _byteBuffer) {
             WidgetImpl.this.serialize(_byteBuffer);
         }

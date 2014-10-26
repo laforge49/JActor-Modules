@@ -3,6 +3,8 @@ package org.agilewiki.jactor2.common.widgets;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
 
+import java.nio.ByteBuffer;
+
 public interface Widget extends Transmutable<UnmodifiableByteBufferFactory> {
     /**
      * Returns the widget identified by the path.
@@ -44,4 +46,25 @@ public interface Widget extends Transmutable<UnmodifiableByteBufferFactory> {
      * @return The copy.
      */
     Widget deepCopy();
+
+    /**
+     * Returns the size of the serialized data.
+     *
+     * @return The number of bytes.
+     */
+    int getBufferSize();
+
+    /**
+     * Clear the parent reference.
+     */
+    void clearWidgetParent();
+
+    /**
+     * Serialize to a ByteBuffer, starting at the current position.
+     * Once written, the content should not change (append only), as a view
+     * of the content is retained.
+     *
+     * @param _byteBuffer A ByteBuffer to be updated.
+     */
+    void serialize(final ByteBuffer _byteBuffer);
 }

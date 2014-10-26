@@ -113,12 +113,6 @@ public class BoxFactory extends WidgetFactory {
             content.serialize(_byteBuffer);
         }
 
-        @Override
-        public void childChange(final int _delta) {
-            byteLen += _delta;
-            notifyParent(_delta);
-        }
-
         protected class _Box extends _Widget implements DurableBox {
             @Override
             public Widget resolve(final String _path) {
@@ -191,6 +185,12 @@ public class BoxFactory extends WidgetFactory {
             @Override
             public _Widget recreate(UnmodifiableByteBufferFactory _unmodifiable) {
                 return new BoxImpl(getWidgetParent(), _unmodifiable.duplicateByteBuffer()).asWidget();
+            }
+
+            @Override
+            public void childChange(final int _delta) {
+                byteLen += _delta;
+                notifyParent(_delta);
             }
         }
     }

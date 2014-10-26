@@ -96,10 +96,6 @@ public class WidgetFactory {
             return 0;
         }
 
-        public void childChange(int _delta) {
-            throw new UnsupportedOperationException("not a container");
-        }
-
         protected void notifyParent(int _delta) {
             if (widgetParent != null)
                 widgetParent.childChange(_delta);
@@ -197,7 +193,7 @@ public class WidgetFactory {
 
             @Override
             public void childChange(final int _delta) {
-                WidgetImpl.this.childChange(_delta);
+                throw new UnsupportedOperationException("not a container");
             }
         }
     }

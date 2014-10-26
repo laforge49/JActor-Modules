@@ -105,20 +105,6 @@ public class WidgetFactory {
                 widgetParent.childChange(_delta);
         }
 
-        public void serialize(final ByteBuffer _byteBuffer) {
-            byte[] bytes = null;
-            if (byteBuffer != null) {
-                bytes = new byte[getBufferSize()];
-                byteBuffer.get(bytes);
-            }
-            byteBuffer = _byteBuffer.asReadOnlyBuffer().slice();
-            byteBuffer.limit(getBufferSize());
-            if (bytes == null)
-                _serialize(_byteBuffer);
-            else
-                _byteBuffer.put(bytes);
-        }
-
         protected void _serialize(final ByteBuffer _byteBuffer) {
         }
 
@@ -196,7 +182,17 @@ public class WidgetFactory {
 
             @Override
             public void serialize(final ByteBuffer _byteBuffer) {
-                WidgetImpl.this.serialize(_byteBuffer);
+                byte[] bytes = null;
+                if (byteBuffer != null) {
+                    bytes = new byte[getBufferSize()];
+                    byteBuffer.get(bytes);
+                }
+                byteBuffer = _byteBuffer.asReadOnlyBuffer().slice();
+                byteBuffer.limit(getBufferSize());
+                if (bytes == null)
+                    _serialize(_byteBuffer);
+                else
+                    _byteBuffer.put(bytes);
             }
 
             @Override

@@ -96,12 +96,12 @@ public class BoxFactory extends WidgetFactory {
         }
 
         @Override
-        protected _Box asWidget() {
-            return (_Box) super.asWidget();
+        protected DurableBox asWidget() {
+            return (DurableBox) super.asWidget();
         }
 
         @Override
-        protected _Box newWidget() {
+        protected DurableBox newWidget() {
             return new _Box();
         }
 
@@ -183,7 +183,7 @@ public class BoxFactory extends WidgetFactory {
             }
 
             @Override
-            public _Widget recreate(UnmodifiableByteBufferFactory _unmodifiable) {
+            public DurableBox recreate(UnmodifiableByteBufferFactory _unmodifiable) {
                 return new BoxImpl(getWidgetParent(), _unmodifiable.duplicateByteBuffer()).asWidget();
             }
 

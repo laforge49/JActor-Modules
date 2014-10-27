@@ -108,12 +108,12 @@ public class StringFactory extends WidgetFactory {
         }
 
         @Override
-        protected _String asWidget() {
+        protected DurableString asWidget() {
             return (_String) super.asWidget();
         }
 
         @Override
-        protected _String newWidget() {
+        protected DurableString newWidget() {
             return new _String();
         }
 
@@ -189,7 +189,7 @@ public class StringFactory extends WidgetFactory {
             }
 
             @Override
-            public _Widget recreate(UnmodifiableByteBufferFactory _unmodifiable) {
+            public DurableString recreate(UnmodifiableByteBufferFactory _unmodifiable) {
                 return new StringImpl(getWidgetParent(), _unmodifiable.duplicateByteBuffer()).asWidget();
             }
         }

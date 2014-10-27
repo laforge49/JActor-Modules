@@ -86,12 +86,12 @@ public class IntFactory extends WidgetFactory {
         }
 
         @Override
-        protected _Int asWidget() {
-            return (_Int) super.asWidget();
+        protected DurableInt asWidget() {
+            return (DurableInt) super.asWidget();
         }
 
         @Override
-        protected _Int newWidget() {
+        protected DurableInt newWidget() {
             return new _Int();
         }
 
@@ -160,7 +160,7 @@ public class IntFactory extends WidgetFactory {
             }
 
             @Override
-            public _Widget recreate(UnmodifiableByteBufferFactory _unmodifiable) {
+            public DurableInt recreate(UnmodifiableByteBufferFactory _unmodifiable) {
                 return new IntImpl(getWidgetParent(), _unmodifiable.duplicateByteBuffer()).asWidget();
             }
         }

@@ -73,9 +73,6 @@ public class WidgetFactory {
             widgetParent = _parent;
             initBuffer(_byteBuffer);
             widget = newWidget();
-            if (byteBuffer != null) {
-                //byteBuffer.limit(getBufferSize());
-            }
         }
 
         protected WidgetImpl(final Widget _parent) {

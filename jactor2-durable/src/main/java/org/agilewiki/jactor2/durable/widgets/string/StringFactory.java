@@ -91,6 +91,7 @@ public class StringFactory extends WidgetFactory {
             super(_parent, _byteBuffer);
             if (byteBuffer != null) {
                 value = null;
+                byteBuffer.limit(getBufferSize());
             } else
                 byteLen = 4 + 2 * value.length();
         }

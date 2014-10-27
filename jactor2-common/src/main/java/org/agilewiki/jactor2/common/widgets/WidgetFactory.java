@@ -64,15 +64,18 @@ public class WidgetFactory {
     }
 
     protected class WidgetImpl {
-        private final _Widget widget;
+        private final Widget widget;
         private Widget widgetParent;
         protected ByteBuffer byteBuffer;
 
         protected WidgetImpl(final Widget _parent,
-                          final ByteBuffer _byteBuffer) {
+                             final ByteBuffer _byteBuffer) {
             widgetParent = _parent;
             initBuffer(_byteBuffer);
             widget = newWidget();
+            if (byteBuffer != null) {
+                //byteBuffer.limit(getBufferSize());
+            }
         }
 
         protected WidgetImpl(final Widget _parent) {
@@ -86,7 +89,6 @@ public class WidgetFactory {
             byteBuffer = _byteBuffer.asReadOnlyBuffer().slice();
             readLength(_byteBuffer);
             _byteBuffer.position(startPosition + getBufferSize());
-            byteBuffer.limit(getBufferSize());
         }
 
         protected void readLength(final ByteBuffer _bb) {
@@ -112,12 +114,13 @@ public class WidgetFactory {
         protected void _deserialize() {
         }
 
-        protected _Widget asWidget() {
+        protected Widget asWidget() {
             return widget;
         }
 
-        protected _Widget newWidget() {
-            return new _Widget();
+        protected Widget newWidget() {
+            Widget w = new _Widget();
+            return w;
         }
 
         protected class _Widget implements Widget {
@@ -162,7 +165,7 @@ public class WidgetFactory {
             }
 
             @Override
-            public _Widget recreate(UnmodifiableByteBufferFactory _unmodifiable) {
+            public Widget recreate(UnmodifiableByteBufferFactory _unmodifiable) {
                 return new WidgetImpl(getWidgetParent(), _unmodifiable.duplicateByteBuffer()).asWidget();
             }
 
@@ -180,15 +183,17 @@ public class WidgetFactory {
             public void serialize(final ByteBuffer _byteBuffer) {
                 byte[] bytes = null;
                 if (byteBuffer != null) {
+                    int rem = byteBuffer.limit() - byteBuffer.position();
                     bytes = new byte[getBufferSize()];
                     byteBuffer.get(bytes);
                 }
                 byteBuffer = _byteBuffer.asReadOnlyBuffer().slice();
                 byteBuffer.limit(getBufferSize());
-                if (bytes == null)
+                if (bytes == null) {
                     _serialize(_byteBuffer);
-                else
+                } else {
                     _byteBuffer.put(bytes);
+                }
             }
 
             @Override

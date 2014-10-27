@@ -1,7 +1,10 @@
 package org.agilewiki.jactor2.durable.widgets.box;
 
 import org.agilewiki.jactor2.common.CFacility;
-import org.agilewiki.jactor2.common.widgets.*;
+import org.agilewiki.jactor2.common.widgets.InvalidWidgetParamsException;
+import org.agilewiki.jactor2.common.widgets.Widget;
+import org.agilewiki.jactor2.common.widgets.WidgetException;
+import org.agilewiki.jactor2.common.widgets.WidgetFactory;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.core.requests.SOp;
 import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
@@ -186,6 +189,7 @@ public class BoxFactory extends WidgetFactory {
 
             @Override
             public void childChange(final int _delta) {
+                byteBuffer = null;
                 byteLen += _delta;
                 notifyParent(_delta);
             }

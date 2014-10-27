@@ -1,7 +1,10 @@
 package org.agilewiki.jactor2.durable.widgets.string;
 
 import org.agilewiki.jactor2.common.CFacility;
-import org.agilewiki.jactor2.common.widgets.*;
+import org.agilewiki.jactor2.common.widgets.InvalidWidgetParamsException;
+import org.agilewiki.jactor2.common.widgets.Widget;
+import org.agilewiki.jactor2.common.widgets.WidgetException;
+import org.agilewiki.jactor2.common.widgets.WidgetFactory;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.core.requests.SOp;
 import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
@@ -84,7 +87,7 @@ public class StringFactory extends WidgetFactory {
         protected int byteLen;
 
         protected StringImpl(final Widget _parent,
-                          final ByteBuffer _byteBuffer) {
+                             final ByteBuffer _byteBuffer) {
             super(_parent, _byteBuffer);
             if (byteBuffer != null) {
                 value = null;
@@ -93,7 +96,7 @@ public class StringFactory extends WidgetFactory {
         }
 
         protected StringImpl(final Widget _parent,
-                          final String _value) {
+                             final String _value) {
             super(_parent, null);
             value = _value == null ? "" : _value;
             byteLen = 4 + 2 * value.length();

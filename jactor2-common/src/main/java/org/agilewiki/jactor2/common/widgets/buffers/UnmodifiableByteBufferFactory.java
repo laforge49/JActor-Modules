@@ -17,8 +17,7 @@ public class UnmodifiableByteBufferFactory {
     public UnmodifiableByteBufferFactory(final ByteBuffer _byteBuffer) {
         int startPosition = _byteBuffer.position();
         byte[] bytes = new byte[_byteBuffer.limit() - startPosition];
-        _byteBuffer.get(bytes);
-        _byteBuffer.position(startPosition);
+        _byteBuffer.duplicate().get(bytes);
         readOnly = ByteBuffer.wrap(bytes).asReadOnlyBuffer();
     }
 

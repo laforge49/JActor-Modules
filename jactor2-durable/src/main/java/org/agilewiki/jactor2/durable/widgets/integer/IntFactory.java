@@ -1,7 +1,10 @@
 package org.agilewiki.jactor2.durable.widgets.integer;
 
 import org.agilewiki.jactor2.common.CFacility;
-import org.agilewiki.jactor2.common.widgets.*;
+import org.agilewiki.jactor2.common.widgets.InvalidWidgetParamsException;
+import org.agilewiki.jactor2.common.widgets.Widget;
+import org.agilewiki.jactor2.common.widgets.WidgetException;
+import org.agilewiki.jactor2.common.widgets.WidgetFactory;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
 import org.agilewiki.jactor2.core.requests.SOp;
 import org.agilewiki.jactor2.durable.transactions.DurableTransaction;
@@ -69,7 +72,7 @@ public class IntFactory extends WidgetFactory {
         protected Integer value = 0;
 
         protected IntImpl(final Widget _parent,
-                       final ByteBuffer _byteBuffer) {
+                          final ByteBuffer _byteBuffer) {
             super(_parent, _byteBuffer);
             if (byteBuffer != null) {
                 value = null;
@@ -77,7 +80,7 @@ public class IntFactory extends WidgetFactory {
         }
 
         protected IntImpl(final Widget _parent,
-                       final Integer _value) {
+                          final Integer _value) {
             super(_parent, null);
             value = _value == null ? 0 : _value;
         }

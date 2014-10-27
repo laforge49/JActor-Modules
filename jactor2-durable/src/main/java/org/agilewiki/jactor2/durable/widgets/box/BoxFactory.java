@@ -118,12 +118,8 @@ public class BoxFactory extends WidgetFactory {
             public Widget resolve(final String _path) {
                 if (_path.length() == 0)
                     return this;
-                if ("factoryKey".equals(_path))
-                    return factoryKey;
-                if ("content".equals(_path))
-                    return content;
-                if (_path.startsWith("content/"))
-                    return content.resolve(_path.substring(8));
+                if (_path.startsWith("/"))
+                    return content.resolve(_path.substring(1));
                 return null;
             }
 

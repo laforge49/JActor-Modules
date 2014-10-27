@@ -106,7 +106,7 @@ public class CFacility extends Facility {
         };
     }
 
-    public SOp<Void> addWidgetFactorySOp(final Collection<WidgetFactory> _widgetFactories) {
+    public SOp<Void> addWidgetFactoriesSOp(final Collection<WidgetFactory> _widgetFactories) {
         return new SOp<Void>("addWidgetFactory", this) {
             @Override
             protected Void processSyncOperation(RequestImpl _requestImpl) throws Exception {

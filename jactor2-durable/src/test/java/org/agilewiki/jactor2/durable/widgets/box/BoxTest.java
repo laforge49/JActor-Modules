@@ -10,7 +10,7 @@ public class BoxTest extends TestCase {
         new CPlant();
         try {
             CFacility facility = (CFacility) CPlant.getInternalFacility();
-            facility.addWidgetFactorySOp(new Factories(facility).set).call();
+            facility.addWidgetFactoriesSOp(new Factories(facility).set).call();
         } finally {
             CPlant.close();
         }

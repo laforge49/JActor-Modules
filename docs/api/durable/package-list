@@ -1,0 +1,5 @@
+org.agilewiki.jactor2.durable.transactions
+org.agilewiki.jactor2.durable.widgets
+org.agilewiki.jactor2.durable.widgets.box
+org.agilewiki.jactor2.durable.widgets.integer
+org.agilewiki.jactor2.durable.widgets.string

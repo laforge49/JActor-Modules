@@ -10,6 +10,7 @@ import org.agilewiki.jactor2.core.impl.mtPlant.PlantMtImpl;
 import org.agilewiki.jactor2.core.plant.impl.PlantImpl;
 import org.agilewiki.jactor2.core.reactors.Facility;
 import org.agilewiki.jactor2.core.reactors.ReactorClosedException;
+import org.agilewiki.jactor2.core.requests.AIOp;
 import org.agilewiki.jactor2.core.requests.AOp;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.ExceptionHandler;
@@ -120,13 +121,13 @@ public class MPlantImpl extends PlantMtImpl {
                 reactorPollMillis);
     }
 
-    public AOp<Void> updateFacilityStatusAOp(final MFacility _Mfacility,
+    public AIOp<Void> updateFacilityStatusAOp(final MFacility _Mfacility,
                                              final String _facilityName,
                                              final boolean _stop,
                                              final String _reasonForFailure) {
         final String stop = _stop ? "true" : null;
         final MFacility internalMFacility = getInternalFacility();
-        return new AOp<Void>("updateFacilityStatus", internalMFacility) {
+        return new AIOp<Void>("updateFacilityStatus", internalMFacility) {
             @Override
             protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
                                                  final AsyncResponseProcessor<Void> _asyncResponseProcessor)
@@ -238,11 +239,7 @@ public class MPlantImpl extends PlantMtImpl {
                     }
                 }
             }
-        }
-
-                .
-
-                        signal();
+        }.signal();
     }
 
     public void changes() throws Exception {
@@ -308,8 +305,8 @@ public class MPlantImpl extends PlantMtImpl {
         };
     }
 
-    private AOp<String> autoStartAOp(final String _facilityName) {
-        return new AOp<String>("autoStart", getInternalFacility()) {
+    private AIOp<String> autoStartAOp(final String _facilityName) {
+        return new AIOp<String>("autoStart", getInternalFacility()) {
             @Override
             protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
                                                  final AsyncResponseProcessor<String> _asyncResponseProcessor)

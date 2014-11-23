@@ -5,6 +5,7 @@ import org.agilewiki.jactor2.core.blades.NonBlockingBladeBase;
 import org.agilewiki.jactor2.core.impl.Plant;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 import org.agilewiki.jactor2.core.reactors.ReactorClosedException;
+import org.agilewiki.jactor2.core.requests.AIOp;
 import org.agilewiki.jactor2.core.requests.AOp;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.ExceptionHandler;
@@ -25,7 +26,7 @@ public class ServiceTest extends TestCase {
             NonBlockingReactor clientReactor = new NonBlockingReactor(clientMFacility);
             final Client client = new Client(clientReactor, server);
             NonBlockingReactor testReactor = new NonBlockingReactor();
-            new AOp<Void>("bingo", testReactor) {
+            new AIOp<Void>("bingo", testReactor) {
                 @Override
                 protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
                                                      final AsyncResponseProcessor<Void> _asyncResponseProcessor)

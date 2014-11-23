@@ -9,6 +9,7 @@ import org.agilewiki.jactor2.core.blades.transmutable.tssmTransactions.TSSMRefer
 import org.agilewiki.jactor2.core.blades.transmutable.tssmTransactions.TSSMUpdateTransaction;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 import org.agilewiki.jactor2.core.reactors.Reactor;
+import org.agilewiki.jactor2.core.requests.AIOp;
 import org.agilewiki.jactor2.core.requests.AOp;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.impl.AsyncRequestImpl;
@@ -88,7 +89,7 @@ public class MFacility extends CFacility {
         return configuration.getUnmodifiable().get(propertyName);
     }
 
-    public AOp<Void> putPropertyAOp(final String _propertyName,
+    public AIOp<Void> putPropertyAOp(final String _propertyName,
                                     final String _propertyValue) {
         return configuration.
                 applyAOp(new TSSMUpdateTransaction<String>(_propertyName, _propertyValue));
@@ -100,7 +101,7 @@ public class MFacility extends CFacility {
                 applyAOp(new TSSMAppendTransaction<String>(_prefix, _propertyValue));
     }
 
-    public AOp<Void> putPropertyAOp(final String _propertyName,
+    public AIOp<Void> putPropertyAOp(final String _propertyName,
                                     final String _expectedValue,
                                     final String _propertyValue) {
         return configuration.

@@ -13,6 +13,7 @@ import org.agilewiki.jactor2.core.impl.mtReactors.ReactorMtImpl;
 import org.agilewiki.jactor2.core.plant.impl.PlantImpl;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 import org.agilewiki.jactor2.core.reactors.Reactor;
+import org.agilewiki.jactor2.core.requests.AIOp;
 import org.agilewiki.jactor2.core.requests.AOp;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.ExceptionHandler;
@@ -195,7 +196,7 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
         };
     }
 
-    public AOp<Subscription<TSSMChanges<String>>> tracePropertyChangesAOp() {
+    public AIOp<Subscription<TSSMChanges<String>>> tracePropertyChangesAOp() {
         return new SubscribeAOp<TSSMChanges<String>>(plantConfiguration.changeBus, asReactor()) {
             @Override
             protected void processContent(final TSSMChanges<String> _content)

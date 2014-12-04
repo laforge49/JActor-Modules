@@ -6,7 +6,6 @@ import org.agilewiki.jactor2.core.blades.pubSub.RequestBus;
 import org.agilewiki.jactor2.core.blades.transmutable.transactions.Transaction;
 import org.agilewiki.jactor2.core.blades.transmutable.transactions.TransmutableReference;
 import org.agilewiki.jactor2.core.reactors.IsolationReactor;
-import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 import org.agilewiki.jactor2.core.requests.AOp;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
 import org.agilewiki.jactor2.core.requests.impl.AsyncRequestImpl;
@@ -29,24 +28,15 @@ public class DurableReference
 
     public DurableReference(Widget _transmutable) throws Exception {
         super(_transmutable);
-        final NonBlockingReactor parentReactor = (NonBlockingReactor) getReactor()
-                .getParentReactor();
-        validationBus = new RequestBus<DurableChanges>(parentReactor);
-        changeBus = new RequestBus<DurableChanges>(parentReactor);
+        final IsolationReactor reactor = getReactor();
+        validationBus = new RequestBus<DurableChanges>(reactor);
+        changeBus = new RequestBus<DurableChanges>(reactor);
     }
 
     public DurableReference(Widget _transmutable, IsolationReactor _reactor) {
         super(_transmutable, _reactor);
-        final NonBlockingReactor parentReactor = (NonBlockingReactor) getReactor()
-                .getParentReactor();
-        validationBus = new RequestBus<DurableChanges>(parentReactor);
-        changeBus = new RequestBus<DurableChanges>(parentReactor);
-    }
-
-    public DurableReference(Widget _transmutable, NonBlockingReactor _parentReactor) throws Exception {
-        super(_transmutable, _parentReactor);
-        validationBus = new RequestBus<DurableChanges>(_parentReactor);
-        changeBus = new RequestBus<DurableChanges>(_parentReactor);
+        validationBus = new RequestBus<DurableChanges>(_reactor);
+        changeBus = new RequestBus<DurableChanges>(_reactor);
     }
 
     @Override

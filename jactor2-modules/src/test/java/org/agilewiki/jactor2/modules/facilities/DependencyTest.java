@@ -16,8 +16,10 @@ public class DependencyTest extends TestCase {
             MPlant.dependencyPropertyAOp("C", "B").call();
             final MFacility a = MPlant.createMFacilityAOp("A")
                     .call();
+            Thread.sleep(200);
             final MFacility b = MPlant.createMFacilityAOp("B")
                     .call();
+            Thread.sleep(200);
             final MFacility c = MPlant.createMFacilityAOp("C")
                     .call();
             MPlant.getInternalFacility().unregisterBladeSOp("C").call();
@@ -29,6 +31,7 @@ public class DependencyTest extends TestCase {
             properties = propertiesReference.getUnmodifiable();
             System.out.println("after: " + properties);
         } finally {
+            Thread.sleep(200);
             Plant.close();
         }
     }

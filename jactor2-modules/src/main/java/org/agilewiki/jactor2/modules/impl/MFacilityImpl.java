@@ -8,9 +8,11 @@ import org.agilewiki.jactor2.core.blades.transmutable.tssmTransactions.TSSMChang
 import org.agilewiki.jactor2.core.blades.transmutable.tssmTransactions.TSSMChanges;
 import org.agilewiki.jactor2.core.blades.transmutable.tssmTransactions.TSSMReference;
 import org.agilewiki.jactor2.core.closeable.Closeable;
-import org.agilewiki.jactor2.core.impl.mtReactors.NonBlockingReactorMtImpl;
+import org.agilewiki.jactor2.core.impl.mtReactors.IsolationReactorMtImpl;
 import org.agilewiki.jactor2.core.impl.mtReactors.ReactorMtImpl;
 import org.agilewiki.jactor2.core.plant.impl.PlantImpl;
+import org.agilewiki.jactor2.core.reactors.Facility;
+import org.agilewiki.jactor2.core.reactors.IsolationReactor;
 import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
 import org.agilewiki.jactor2.core.reactors.Reactor;
 import org.agilewiki.jactor2.core.requests.AIOp;
@@ -28,7 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.SortedMap;
 
-public class MFacilityImpl extends NonBlockingReactorMtImpl {
+public class MFacilityImpl extends IsolationReactorMtImpl {
     private MPlantImpl plantImpl;
 
     MFacility plantFacility;
@@ -66,8 +68,8 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
         }
     }
 
-    public AOp<Void> startFacilityAOp() {
-        return new AOp<Void>("startFacility", asReactor()) {
+    public AIOp<Void> startFacilityAOp() {
+        return new AIOp<Void>("startFacility", asReactor()) {
             @Override
             protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
                                                  final AsyncResponseProcessor<Void> _asyncResponseProcessor)
@@ -189,8 +191,8 @@ public class MFacilityImpl extends NonBlockingReactorMtImpl {
                 });
                 final Class<?> initiatorClass = asMFacility().loadClass(
                         _activatorClassName);
-                final Constructor<?> constructor = initiatorClass.getConstructor(NonBlockingReactor.class);
-                final Activator activator = (Activator) constructor.newInstance(asReactor());
+                final Constructor<?> constructor = initiatorClass.getConstructor(Facility.class);
+                final Activator activator = (Activator) constructor.newInstance((Facility) asReactor());
                 _asyncRequestImpl.send(activator.startAOp(), _asyncResponseProcessor, null);
             }
         };

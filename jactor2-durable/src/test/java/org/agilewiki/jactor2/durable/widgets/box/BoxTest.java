@@ -19,7 +19,9 @@ public class BoxTest extends TestCase {
             facility.addWidgetFactoriesSOp(new Factories(facility).set).call();
             DurableBox dBox = BoxFactory.newDurableBox(facility);
             String expectedKey = facility.name + ".null";
-            assertEquals(expectedKey, dBox.boxedFactoryKey());
+            String resultKey = dBox.boxedFactoryKey();
+            System.out.println(expectedKey+" "+resultKey);
+            assertEquals(expectedKey, resultKey);
             int expectedBufferSize = 4 + 2 * expectedKey.length();
             assertEquals(expectedBufferSize, dBox.getBufferSize());
             assertTrue(dBox.getContent() instanceof Widget);

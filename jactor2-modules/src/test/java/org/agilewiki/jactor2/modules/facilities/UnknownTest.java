@@ -26,8 +26,8 @@ public class UnknownTest extends TestCase {
             propertiesReference.getReactor().nullSOp().call(); //synchronize for the properties update
             SortedMap<String, String> properties = propertiesReference.getUnmodifiable();
             System.out.println(properties);
-            Thread.sleep(100); //give the activator a chance to run
         } finally {
+            Thread.sleep(100); //give the activator a chance to run
             Plant.close();
         }
     }

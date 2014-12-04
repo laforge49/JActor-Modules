@@ -9,11 +9,9 @@ import org.agilewiki.jactor2.core.impl.mtPlant.PlantConfiguration;
 import org.agilewiki.jactor2.core.impl.mtPlant.PlantMtImpl;
 import org.agilewiki.jactor2.core.plant.impl.PlantImpl;
 import org.agilewiki.jactor2.core.reactors.Facility;
-import org.agilewiki.jactor2.core.reactors.ReactorClosedException;
 import org.agilewiki.jactor2.core.requests.AIOp;
 import org.agilewiki.jactor2.core.requests.AOp;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
-import org.agilewiki.jactor2.core.requests.ExceptionHandler;
 import org.agilewiki.jactor2.core.requests.impl.AsyncRequestImpl;
 import org.agilewiki.jactor2.modules.MFacility;
 
@@ -305,11 +303,11 @@ public class MPlantImpl extends PlantMtImpl {
         };
     }
 
-    private AIOp<String> autoStartAOp(final String _facilityName) {
-        return new AIOp<String>("autoStart", getInternalFacility()) {
+    private AIOp<MFacility> autoStartAOp(final String _facilityName) {
+        return new AIOp<MFacility>("autoStart", getInternalFacility()) {
             @Override
             protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
-                                                 final AsyncResponseProcessor<String> _asyncResponseProcessor)
+                                                 final AsyncResponseProcessor<MFacility> _asyncResponseProcessor)
                     throws Exception {
                 if (getMFacilityImpl(_facilityName) != null) {
                     _asyncResponseProcessor.processAsyncResponse(null);
@@ -338,16 +336,8 @@ public class MPlantImpl extends PlantMtImpl {
                     if (getMFacilityImpl(dependencyName) == null)
                         _asyncResponseProcessor.processAsyncResponse(null);
                 }
-                _asyncRequestImpl.setExceptionHandler(new ExceptionHandler<String>() {
-                    @Override
-                    public String processException(Exception e) throws Exception {
-                        if (e instanceof ReactorClosedException)
-                            return null;
-                        else
-                            return "create facility exception: " + e;
-                    }
-                });
-                _asyncRequestImpl.send(MFacility.createMFacilityAOp(_facilityName), _asyncResponseProcessor, null);
+                MFacility.createMFacilityAOp(_facilityName).signal();
+                _asyncResponseProcessor.processAsyncResponse(null);
             }
         };
     }

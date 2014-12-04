@@ -7,8 +7,9 @@ import org.agilewiki.jactor2.core.blades.NamedBlade;
 import org.agilewiki.jactor2.core.blades.transmutable.tssmTransactions.TSSMAppendTransaction;
 import org.agilewiki.jactor2.core.blades.transmutable.tssmTransactions.TSSMReference;
 import org.agilewiki.jactor2.core.blades.transmutable.tssmTransactions.TSSMUpdateTransaction;
-import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
+import org.agilewiki.jactor2.core.reactors.IsolationReactor;
 import org.agilewiki.jactor2.core.reactors.Reactor;
+import org.agilewiki.jactor2.core.reactors.impl.ReactorImpl;
 import org.agilewiki.jactor2.core.requests.AIOp;
 import org.agilewiki.jactor2.core.requests.AOp;
 import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
@@ -21,7 +22,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 public class MFacility extends CFacility {
-    public static AOp<MFacility> createMFacilityAOp(final String _name) throws Exception {
+    public static AIOp<MFacility> createMFacilityAOp(final String _name) throws Exception {
         MPlantImpl plantImpl = MPlantImpl.getSingleton();
         final int initialBufferSize;
         Integer v = (Integer) plantImpl.getProperty(MPlantImpl.initialBufferSizeKey(_name));
@@ -36,12 +37,13 @@ public class MFacility extends CFacility {
         else
             initialLocalQueueSize = plantImpl.getInternalFacility().asFacilityImpl().getInitialLocalQueueSize();
         final MFacility mFacility = new MFacility(_name, initialBufferSize, initialLocalQueueSize);
-        return new AOp<MFacility>("startFacility", mFacility) {
+        return new AIOp<MFacility>("startFacility", mFacility) {
             @Override
             protected void processAsyncOperation(final AsyncRequestImpl _asyncRequestImpl,
                                                  final AsyncResponseProcessor<MFacility> _asyncResponseProcessor)
                     throws Exception {
-                _asyncRequestImpl.send(mFacility.asFacilityImpl().startFacilityAOp(), _asyncResponseProcessor, mFacility);
+                mFacility.asFacilityImpl().startFacilityAOp().signal();
+                _asyncResponseProcessor.processAsyncResponse(mFacility);
             }
         };
     }
@@ -66,8 +68,9 @@ public class MFacility extends CFacility {
     }
 
     @Override
-    protected MFacilityImpl createReactorImpl(final NonBlockingReactor _parentReactorImpl,
-                                              final int _initialOutboxSize, final int _initialLocalQueueSize) {
+    protected ReactorImpl createReactorImpl(
+            final IsolationReactor _parentReactor,
+            final int _initialOutboxSize, final int _initialLocalQueueSize) {
         return new MFacilityImpl(_initialOutboxSize, _initialLocalQueueSize);
     }
 

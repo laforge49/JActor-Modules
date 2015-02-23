@@ -1,7 +1,7 @@
 package org.agilewiki.jactor2.common;
 
 import org.agilewiki.jactor2.core.impl.mtPlant.PlantConfiguration;
-import org.agilewiki.jactor2.core.plant.PlantBase;
+import org.agilewiki.jactor2.core.plant.impl.PlantBase;
 import org.agilewiki.jactor2.core.reactors.Reactor;
 
 public class CPlant extends PlantBase {

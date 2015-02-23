@@ -1,8 +1,8 @@
 package org.agilewiki.jactor2.common;
 
 import org.agilewiki.jactor2.core.blades.IsolationBladeBase;
-import org.agilewiki.jactor2.core.reactors.Facility;
-import org.agilewiki.jactor2.core.requests.AOp;
+import org.agilewiki.jactor2.core.messages.AOp;
+import org.agilewiki.jactor2.core.reactors.facilities.Facility;
 
 public abstract class Activator extends IsolationBladeBase {
     public Activator(Facility _reactor) throws Exception {

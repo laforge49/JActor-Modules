@@ -1,8 +1,8 @@
 package org.agilewiki.jactor2.modules;
 
 import org.agilewiki.jactor2.core.impl.mtPlant.PlantConfiguration;
-import org.agilewiki.jactor2.core.plant.PlantBase;
-import org.agilewiki.jactor2.core.requests.AOp;
+import org.agilewiki.jactor2.core.messages.AOp;
+import org.agilewiki.jactor2.core.plant.impl.PlantBase;
 import org.agilewiki.jactor2.modules.impl.MFacilityImpl;
 import org.agilewiki.jactor2.modules.impl.MPlantImpl;
 

@@ -3,10 +3,10 @@ package org.agilewiki.jactor2.common.services;
 import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.CPlant;
 import org.agilewiki.jactor2.common.CPlantImpl;
+import org.agilewiki.jactor2.core.messages.SOp;
+import org.agilewiki.jactor2.core.messages.impl.RequestImpl;
 import org.agilewiki.jactor2.core.reactors.BlockingReactor;
 import org.agilewiki.jactor2.core.reactors.Reactor;
-import org.agilewiki.jactor2.core.requests.SOp;
-import org.agilewiki.jactor2.core.requests.impl.RequestImpl;
 
 public class PrinterService extends Service {
     public static final String PRINTER_SERVICE_NAME = "printer";

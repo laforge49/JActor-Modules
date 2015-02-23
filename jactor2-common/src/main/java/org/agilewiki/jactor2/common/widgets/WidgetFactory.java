@@ -2,7 +2,7 @@ package org.agilewiki.jactor2.common.widgets;
 
 import org.agilewiki.jactor2.common.CFacility;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
-import org.agilewiki.jactor2.core.requests.SOp;
+import org.agilewiki.jactor2.core.messages.SOp;
 
 import java.nio.ByteBuffer;
 

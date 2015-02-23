@@ -2,11 +2,10 @@ package org.agilewiki.jactor2.modules.facilities;
 
 import org.agilewiki.jactor2.common.Activator;
 import org.agilewiki.jactor2.common.services.Service;
-import org.agilewiki.jactor2.core.reactors.Facility;
-import org.agilewiki.jactor2.core.reactors.NonBlockingReactor;
-import org.agilewiki.jactor2.core.requests.AOp;
-import org.agilewiki.jactor2.core.requests.AsyncResponseProcessor;
-import org.agilewiki.jactor2.core.requests.impl.AsyncRequestImpl;
+import org.agilewiki.jactor2.core.messages.AOp;
+import org.agilewiki.jactor2.core.messages.AsyncResponseProcessor;
+import org.agilewiki.jactor2.core.messages.impl.AsyncRequestImpl;
+import org.agilewiki.jactor2.core.reactors.facilities.Facility;
 import org.agilewiki.jactor2.modules.MFacility;
 import org.agilewiki.jactor2.modules.MPlant;
 

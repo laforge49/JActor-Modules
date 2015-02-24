@@ -1,9 +1,9 @@
 package org.agilewiki.jactor2.durable.transactions;
 
+import org.agilewiki.jactor2.common.transmutable.transactions.SyncTransaction;
+import org.agilewiki.jactor2.common.transmutable.transactions.Transaction;
 import org.agilewiki.jactor2.common.widgets.Widget;
 import org.agilewiki.jactor2.common.widgets.buffers.UnmodifiableByteBufferFactory;
-import org.agilewiki.jactor2.core.blades.transmutable.transactions.SyncTransaction;
-import org.agilewiki.jactor2.core.blades.transmutable.transactions.Transaction;
 
 /**
  * A DurableWidget transaction.

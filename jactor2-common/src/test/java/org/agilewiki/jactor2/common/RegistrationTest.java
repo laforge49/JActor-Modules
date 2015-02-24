@@ -1,8 +1,8 @@
 package org.agilewiki.jactor2.common;
 
 import junit.framework.TestCase;
+import org.agilewiki.jactor2.common.pubSub.SubscribeAOp;
 import org.agilewiki.jactor2.core.blades.NamedBlade;
-import org.agilewiki.jactor2.core.blades.pubSub.SubscribeAOp;
 import org.agilewiki.jactor2.core.impl.Plant;
 import org.agilewiki.jactor2.core.reactors.facilities.RegistrationNotification;
 

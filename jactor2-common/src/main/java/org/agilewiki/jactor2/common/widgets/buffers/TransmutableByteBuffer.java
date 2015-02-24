@@ -1,6 +1,6 @@
 package org.agilewiki.jactor2.common.widgets.buffers;
 
-import org.agilewiki.jactor2.core.blades.transmutable.Transmutable;
+import org.agilewiki.jactor2.common.transmutable.Transmutable;
 
 import java.nio.ByteBuffer;
 

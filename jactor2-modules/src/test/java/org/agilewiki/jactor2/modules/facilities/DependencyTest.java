@@ -1,7 +1,7 @@
 package org.agilewiki.jactor2.modules.facilities;
 
 import junit.framework.TestCase;
-import org.agilewiki.jactor2.core.blades.transmutable.tssmTransactions.TSSMReference;
+import org.agilewiki.jactor2.common.transmutable.tssmTransactions.TSSMReference;
 import org.agilewiki.jactor2.core.impl.Plant;
 import org.agilewiki.jactor2.modules.MFacility;
 import org.agilewiki.jactor2.modules.MPlant;

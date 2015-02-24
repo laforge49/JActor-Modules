@@ -1,12 +1,12 @@
 package org.agilewiki.jactor2.modules.impl;
 
 import org.agilewiki.jactor2.common.Activator;
+import org.agilewiki.jactor2.common.pubSub.SubscribeAOp;
+import org.agilewiki.jactor2.common.pubSub.Subscription;
 import org.agilewiki.jactor2.common.services.ClassLoaderService;
-import org.agilewiki.jactor2.core.blades.pubSub.SubscribeAOp;
-import org.agilewiki.jactor2.core.blades.pubSub.Subscription;
-import org.agilewiki.jactor2.core.blades.transmutable.tssmTransactions.TSSMChange;
-import org.agilewiki.jactor2.core.blades.transmutable.tssmTransactions.TSSMChanges;
-import org.agilewiki.jactor2.core.blades.transmutable.tssmTransactions.TSSMReference;
+import org.agilewiki.jactor2.common.transmutable.tssmTransactions.TSSMChange;
+import org.agilewiki.jactor2.common.transmutable.tssmTransactions.TSSMChanges;
+import org.agilewiki.jactor2.common.transmutable.tssmTransactions.TSSMReference;
 import org.agilewiki.jactor2.core.impl.mtReactors.IsolationReactorMtImpl;
 import org.agilewiki.jactor2.core.impl.mtReactors.ReactorMtImpl;
 import org.agilewiki.jactor2.core.messages.AIOp;

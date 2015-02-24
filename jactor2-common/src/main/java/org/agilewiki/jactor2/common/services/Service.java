@@ -6,7 +6,6 @@ import org.agilewiki.jactor2.core.blades.BladeBase;
 import org.agilewiki.jactor2.core.blades.NamedBlade;
 import org.agilewiki.jactor2.core.messages.SOp;
 import org.agilewiki.jactor2.core.reactors.Reactor;
-import org.agilewiki.jactor2.core.reactors.facilities.Facility;
 
 public abstract class Service extends BladeBase implements NamedBlade {
     private final String name;
